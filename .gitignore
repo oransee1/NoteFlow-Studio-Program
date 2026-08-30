@@ -1,0 +1,18 @@
+﻿# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# PyCharm / IDEs
+.idea/
+.vscode/
+
+# Environments
+.venv/
+venv/
+env/
+
+# Temp files
+_temp_mxl/
+error_log.txt
+*.log
