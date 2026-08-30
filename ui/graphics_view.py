@@ -6,7 +6,7 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt, QRectF, QPointF, pyqtSignal
 from PyQt6.QtGui import QPen, QBrush, QColor, QFont, QPainter, QCursor, QTransform
-from typing import List, Optional, Callable, Tuple
+from typing import List, Optional, Callable, Tuple, Any, Dict
 from core.musicxml_parser import MeasureData, NoteData
 from core.undo_manager import MoveAction, EditAction, GroupAction
 
@@ -21,14 +21,23 @@ class InteractiveNoteItem(QGraphicsEllipseItem):
         self.on_moved_callback = on_moved_callback
         self.press_pos: Optional[QPointF] = None
 
-        # MIDI 노트 번호 계산 (피아노 건반 번호)
-        midi_num = self._pitch_to_midi(note_data.pitch) if not note_data.is_rest else "N/A"
+        self.setFlags(
+            QGraphicsItem.GraphicsItemFlag.ItemIsMovable |
+            QGraphicsItem.GraphicsItemFlag.ItemIsSelectable |
+            QGraphicsItem.GraphicsItemFlag.ItemSendsGeometryChanges
+        )
+        self.setAcceptHoverEvents(True)
+        self.update_appearance()
+
+    def update_appearance(self):
+        """음표 데이터(Pitch, Staff, Rest, 좌표)에 맞춰 시각적 브러시 색상 및 툴팁 갱신"""
+        midi_num = self._pitch_to_midi(self.note_data.pitch) if not self.note_data.is_rest else "N/A"
 
         # 색상 구분: 쉼표(노란색/황색), 오른손/높은음자리(녹색), 왼손/낮은음자리(파란색/민트색)
-        if note_data.is_rest:
+        if self.note_data.is_rest:
             color = QColor(255, 180, 0, 220)       # 쉼표: 황색/노란색
-            staff_label = "쉼표"
-        elif note_data.staff == 2:
+            staff_label = "쉼표 (Rest)"
+        elif self.note_data.staff == 2:
             color = QColor(0, 170, 255, 220)       # 왼손/낮은음자리: 파란색/민트
             staff_label = "낮은음자리 (왼손)"
         else:
@@ -38,14 +47,8 @@ class InteractiveNoteItem(QGraphicsEllipseItem):
         self.color = color
         self.setPen(QPen(QColor(0, 40, 20), 1.5))
         self.setBrush(QBrush(color))
-
-        self.setFlags(
-            QGraphicsItem.GraphicsItemFlag.ItemIsMovable |
-            QGraphicsItem.GraphicsItemFlag.ItemIsSelectable |
-            QGraphicsItem.GraphicsItemFlag.ItemSendsGeometryChanges
-        )
-        self.setAcceptHoverEvents(True)
-        self.setToolTip(f"M{note_data.measure_number} | 음높이: {note_data.pitch} (🎹 건반 MIDI {midi_num}) | {staff_label} | 좌표: ({int(rx)}, {int(ry)})")
+        rx, ry = self.note_data.mapped_x or self.pos().x(), self.note_data.mapped_y or self.pos().y()
+        self.setToolTip(f"M{self.note_data.measure_number} | 음높이: {self.note_data.pitch} (🎹 건반 MIDI {midi_num}) | {staff_label} | 좌표: ({int(rx)}, {int(ry)})")
 
     def _pitch_to_midi(self, pitch_str: str) -> int:
         if not pitch_str or pitch_str == "Rest": return 60
@@ -71,6 +74,7 @@ class InteractiveNoteItem(QGraphicsEllipseItem):
         if self.press_pos is not None and (self.press_pos.x() != self.pos().x() or self.press_pos.y() != self.pos().y()):
             self.note_data.mapped_x = float(self.pos().x())
             self.note_data.mapped_y = float(self.pos().y())
+            self.update_appearance()
             if self.on_moved_callback:
                 self.on_moved_callback(self.note_data, self.press_pos.x(), self.press_pos.y(), self.pos().x(), self.pos().y())
         self.press_pos = None
@@ -78,11 +82,22 @@ class InteractiveNoteItem(QGraphicsEllipseItem):
     def itemChange(self, change: QGraphicsItem.GraphicsItemChange, value):
         if change == QGraphicsItem.GraphicsItemChange.ItemPositionChange and self.scene():
             new_pos = value
-            # Shift 키를 누르고 드래그하면 수평(X축) 전용 고정 이동 (음높이 Y 보존)
             modifiers = QApplication.keyboardModifiers()
+
+            # Shift 키를 누르고 드래그 시: 수직(Y축) 음계별 오선지 줄/칸 자석 스냅 + 수평(X축) 고정
             if (modifiers & Qt.KeyboardModifier.ShiftModifier) and self.press_pos is not None:
-                lock_y = self.press_pos.y()
-                new_pos = QPointF(new_pos.x(), lock_y)
+                lock_x = self.press_pos.x()
+                cand_y = new_pos.y()
+
+                views = self.scene().views()
+                if views and hasattr(views[0], 'get_pitch_snap_y'):
+                    snapped_y, pitch_str, staff = views[0].get_pitch_snap_y(cand_y, self.note_data.pitch)
+                    new_pos = QPointF(lock_x, snapped_y)
+                    self.note_data.pitch = pitch_str
+                    self.note_data.staff = staff
+                    self.update_appearance()
+                else:
+                    new_pos = QPointF(lock_x, cand_y)
 
             self.note_data.mapped_x = float(new_pos.x())
             self.note_data.mapped_y = float(new_pos.y())
@@ -339,6 +354,7 @@ class ScoreGraphicsView(QGraphicsView):
         self.measure_items: List[InteractiveMeasureItem] = []
         self.note_items: List[InteractiveNoteItem] = []
         self.snap_barlines_x: List[float] = []
+        self.systems: List[Any] = []
 
         self.show_measures: bool = True
         self.show_notes: bool = True
@@ -358,6 +374,73 @@ class ScoreGraphicsView(QGraphicsView):
         """)
 
         self.zoom_factor: float = 1.05
+
+    def set_systems(self, systems: List[Any]):
+        """현재 페이지의 탐지된 악보 시스템(오선지 5줄 정보 포함) 설정"""
+        self.systems = systems or []
+
+    def get_pitch_snap_y(self, y_val: float, note_pitch: str = "") -> Tuple[float, str, int]:
+        """
+        Y 픽셀 좌표로부터 가장 가까운 오선지 줄(Line 1~5) 및 칸(Space 1~4)으로 자석 스냅(Magnet Snap)하고
+        역산된 음높이(예: C4, G4, E5) 및 Staff 번호(1: 높은음자리, 2: 낮은음자리)를 반환합니다.
+        """
+        step_chars = ['C', 'D', 'E', 'F', 'G', 'A', 'B']
+
+        best_sys = None
+        if hasattr(self, 'systems') and self.systems:
+            min_dist = float('inf')
+            for sys in self.systems:
+                if sys.y_min - 60 <= y_val <= sys.y_max + 60:
+                    best_sys = sys
+                    break
+                mid_y = (sys.y_min + sys.y_max) / 2.0
+                d = abs(y_val - mid_y)
+                if d < min_dist:
+                    min_dist = d
+                    best_sys = sys
+
+        if best_sys and best_sys.treble_staff:
+            t_lines = best_sys.treble_staff.y_lines
+            b_lines = best_sys.bass_staff.y_lines if best_sys.bass_staff else t_lines
+            t_sp = best_sys.treble_staff.line_spacing
+            b_sp = best_sys.bass_staff.line_spacing if best_sys.bass_staff else t_sp
+
+            has_bass = best_sys.bass_staff is not None
+            split_y = (t_lines[4] + b_lines[0]) / 2.0 if has_bass else (t_lines[4] + 35.0)
+
+            if has_bass and y_val >= split_y:
+                staff = 2
+                ref_y = float(b_lines[0])
+                ref_idx = 26  # A3 (Top line of bass staff)
+                step_sp = max(1.0, b_sp / 2.0)
+            else:
+                staff = 1
+                ref_y = float(t_lines[0])
+                ref_idx = 38  # F5 (Top line of treble staff)
+                step_sp = max(1.0, t_sp / 2.0)
+        else:
+            staff = 1
+            ref_y = 200.0
+            ref_idx = 38
+            step_sp = 5.0
+
+        diff_steps = round((y_val - ref_y) / step_sp)
+        snapped_y = ref_y + (diff_steps * step_sp)
+
+        target_idx = max(0, ref_idx - int(diff_steps))
+        octave = target_idx // 7
+        step_char = step_chars[target_idx % 7]
+
+        # 기존 임시표(Sharp/Flat) 유지
+        acc = ""
+        if note_pitch and len(note_pitch) > 1 and note_pitch != "Rest":
+            old_step = note_pitch[0].upper()
+            if old_step == step_char:
+                if '#' in note_pitch: acc = "#"
+                elif 'b' in note_pitch: acc = "b"
+
+        pitch_str = f"{step_char}{acc}{octave}"
+        return float(snapped_y), pitch_str, staff
 
     def set_snap_barlines(self, barlines_x: List[float]):
         """PDF 악보 탐지 세로 마디선 X 좌표 목록 설정"""
@@ -581,7 +664,7 @@ class ScoreGraphicsView(QGraphicsView):
             super().wheelEvent(event)
 
     def keyPressEvent(self, event):
-        """Space 키 누름 시 캔버스 이동, Shift + 방향키 시 1px 미세 조절, Delete 키 시 삭제"""
+        """Space 키 누름 시 캔버스 이동, 방향키 시 음계 줄/칸 스냅 이동, Delete 키 시 삭제"""
         if event.key() == Qt.Key.Key_Space and not event.isAutoRepeat():
             self.setDragMode(QGraphicsView.DragMode.ScrollHandDrag)
             event.accept()
@@ -599,6 +682,57 @@ class ScoreGraphicsView(QGraphicsView):
             event.accept()
             return
 
+        # 선택된 음표 점 ↑ / ↓ 방향키 수직 음계 스냅 이동
+        if event.key() in (Qt.Key.Key_Up, Qt.Key.Key_Down):
+            selected_notes = [i for i in self.scene_obj.selectedItems() if isinstance(i, InteractiveNoteItem)]
+            if selected_notes:
+                direction = -1 if event.key() == Qt.Key.Key_Up else 1
+                moved_actions = []
+                for ni in selected_notes:
+                    old_x, old_y = ni.pos().x(), ni.pos().y()
+                    old_pitch = ni.note_data.pitch
+                    # 1 pitch step move (~5.0px)
+                    cand_y = old_y + direction * 5.0
+                    snapped_y, pitch_str, staff = self.get_pitch_snap_y(cand_y, ni.note_data.pitch)
+                    ni.setPos(old_x, snapped_y)
+                    ni.note_data.mapped_x = old_x
+                    ni.note_data.mapped_y = snapped_y
+                    ni.note_data.pitch = pitch_str
+                    ni.note_data.staff = staff
+                    ni.update_appearance()
+
+                    moved_actions.append(EditAction(
+                        action_type="move_note",
+                        description=f"음표 음계 이동 ({old_pitch} → {pitch_str})",
+                        item_id=ni.note_data.id,
+                        measure_num=ni.note_data.measure_number,
+                        note_data=ni.note_data,
+                        old_x=old_x, old_y=old_y,
+                        new_x=old_x, new_y=snapped_y
+                    ))
+                if len(moved_actions) == 1:
+                    self.action_recorded_signal.emit(moved_actions[0])
+                elif len(moved_actions) > 1:
+                    self.action_recorded_signal.emit(GroupAction(description=f"{len(moved_actions)}개 음표 음계 수직 이동", actions=moved_actions))
+                event.accept()
+                return
+
+        # 선택된 음표 점 ← / → 방향키 수평 이동
+        if event.key() in (Qt.Key.Key_Left, Qt.Key.Key_Right):
+            selected_notes = [i for i in self.scene_obj.selectedItems() if isinstance(i, InteractiveNoteItem)]
+            if selected_notes:
+                if event.key() == Qt.Key.Key_Left:
+                    dx = -1.0 if (event.modifiers() & Qt.KeyboardModifier.ShiftModifier) else -3.0
+                else:
+                    dx = 1.0 if (event.modifiers() & Qt.KeyboardModifier.ShiftModifier) else 3.0
+                for ni in selected_notes:
+                    ni.setPos(ni.pos().x() + dx, ni.pos().y())
+                    ni.note_data.mapped_x = float(ni.pos().x())
+                    ni.note_data.mapped_y = float(ni.pos().y())
+                    ni.update_appearance()
+                event.accept()
+                return
+
         if event.modifiers() == Qt.KeyboardModifier.ShiftModifier:
             selected_items = self.scene_obj.selectedItems()
             if selected_items:
@@ -614,6 +748,7 @@ class ScoreGraphicsView(QGraphicsView):
                         if isinstance(item, InteractiveNoteItem):
                             item.note_data.mapped_x = float(item.pos().x())
                             item.note_data.mapped_y = float(item.pos().y())
+                            item.update_appearance()
                         elif isinstance(item, InteractiveMeasureItem):
                             w = item.rect().width()
                             h = item.rect().height()

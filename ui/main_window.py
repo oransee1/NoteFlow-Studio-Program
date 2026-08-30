@@ -117,7 +117,7 @@ class MainWindow(QMainWindow):
         """)
         self.btn_mode_toggle.toggled.connect(self._on_mode_toggled)
 
-        tip_lbl = QLabel("💡 팁: Shift+드래그: 수평 고정 이동 (음높이 Y보존) / Space+드래그: 화면 이동")
+        tip_lbl = QLabel("💡 팁: Shift+드래그: 수직 음계 스냅 이동 (줄/칸 착 붙임) / Space+드래그: 화면 이동 / ↑↓ 방향키: 음계 1단계 이동")
         tip_lbl.setStyleSheet("color: #64748B; font-size: 11px; font-style: italic;")
 
         lg_layout.addWidget(title_lbl)
@@ -452,11 +452,12 @@ class MainWindow(QMainWindow):
         pixmap, bgr_img, _ = self.pdf_renderer.render_page_pixmap(self.current_page_idx, dpi=200)
         self.canvas_view.set_pdf_pixmap(pixmap)
 
-        # PDF 세로 마디선 자석 스냅 위치 탐지 & 전달
+        # PDF 세로 마디선 및 오선지 줄/칸 자석 스냅 위치 탐지 & 전달
         if bgr_img is not None:
             try:
                 systems = self.layout_detector.detect_staff_lines_and_systems(bgr_img)
                 self.layout_detector.detect_barlines_and_measures(bgr_img, systems)
+                self.canvas_view.set_systems(systems)
                 barlines_x = sorted(list(set(float(bx) for sys in systems for bx in sys.barline_xs if bx > 0)))
                 self.canvas_view.set_snap_barlines(barlines_x)
             except Exception:
