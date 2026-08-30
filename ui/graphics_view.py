@@ -84,20 +84,33 @@ class InteractiveNoteItem(QGraphicsEllipseItem):
             new_pos = value
             modifiers = QApplication.keyboardModifiers()
 
-            # Shift 키를 누르고 드래그 시: 수직(Y축) 음계별 오선지 줄/칸 자석 스냅 + 수평(X축) 고정
+            # Shift 키를 누르고 드래그 시: 상/하(수직 음계 스냅) 또는 좌/우(수평 박자 스냅) 직교 스냅 이동
             if (modifiers & Qt.KeyboardModifier.ShiftModifier) and self.press_pos is not None:
-                lock_x = self.press_pos.x()
-                cand_y = new_pos.y()
+                orig_x = self.press_pos.x()
+                orig_y = self.press_pos.y()
+                dx = new_pos.x() - orig_x
+                dy = new_pos.y() - orig_y
 
                 views = self.scene().views()
-                if views and hasattr(views[0], 'get_pitch_snap_y'):
-                    snapped_y, pitch_str, staff = views[0].get_pitch_snap_y(cand_y, self.note_data.pitch)
-                    new_pos = QPointF(lock_x, snapped_y)
-                    self.note_data.pitch = pitch_str
-                    self.note_data.staff = staff
-                    self.update_appearance()
+                if abs(dy) >= abs(dx):
+                    # 1. 수직(상/하) 방향 이동: X축 고정 + Y축 오선지 줄/칸 음계별 자석 스냅
+                    if views and hasattr(views[0], 'get_pitch_snap_y'):
+                        snapped_y, pitch_str, staff = views[0].get_pitch_snap_y(new_pos.y(), self.note_data.pitch)
+                        new_pos = QPointF(orig_x, snapped_y)
+                        self.note_data.pitch = pitch_str
+                        self.note_data.staff = staff
+                        self.update_appearance()
+                    else:
+                        new_pos = QPointF(orig_x, new_pos.y())
                 else:
-                    new_pos = QPointF(lock_x, cand_y)
+                    # 2. 수평(좌/우) 방향 이동: Y축(음높이) 고정 + X축 음악적 박자 그리드 자석 스냅
+                    if views and hasattr(views[0], 'get_beat_snap_x'):
+                        snapped_x, beat_val = views[0].get_beat_snap_x(new_pos.x(), self.note_data.measure_number)
+                        new_pos = QPointF(snapped_x, orig_y)
+                        self.note_data.beat_position = beat_val
+                        self.update_appearance()
+                    else:
+                        new_pos = QPointF(new_pos.x(), orig_y)
 
             self.note_data.mapped_x = float(new_pos.x())
             self.note_data.mapped_y = float(new_pos.y())
@@ -441,6 +454,70 @@ class ScoreGraphicsView(QGraphicsView):
 
         pitch_str = f"{step_char}{acc}{octave}"
         return float(snapped_y), pitch_str, staff
+
+    def get_beat_snap_x(self, x_val: float, measure_num: int = -1) -> Tuple[float, float]:
+        """
+        X 픽셀 좌표로부터 해당 마디 내의 음악적 박자 그리드(1/4박, 1/3박, 1/2박, 1박 등)로 자석 스냅(Magnet Snap)하고
+        (스냅된 X 좌표, 계산된 박자 위치)를 반환합니다.
+        """
+        # 1. 대상 마디 박스(InteractiveMeasureItem) 탐색
+        target_m_item = None
+        for mi in self.measure_items:
+            if measure_num > 0 and mi.measure_data.number == measure_num:
+                target_m_item = mi
+                break
+            elif mi.pos().x() <= x_val <= mi.pos().x() + mi.rect().width():
+                target_m_item = mi
+                break
+
+        if not target_m_item and self.measure_items:
+            target_m_item = min(self.measure_items, key=lambda mi: abs(x_val - (mi.pos().x() + mi.rect().width() * 0.5)))
+
+        if target_m_item:
+            m_data = target_m_item.measure_data
+            x1 = target_m_item.pos().x()
+            width = max(15.0, target_m_item.rect().width())
+            total_beats = max(1.0, float(getattr(m_data, 'beats', 4) or 4))
+
+            # 첫 마디 여부 확인
+            is_first = (m_data.number == 1)
+            left_pad = width * 0.22 if is_first else width * 0.08
+            right_pad = width * 0.05
+            usable_w = max(10.0, width - left_pad - right_pad)
+
+            # 박자 그리드 후보군 (0.0, 0.25, 0.333, 0.5, 0.667, 0.75, 1.0 ...)
+            candidates = []
+            b = 0.0
+            while b <= total_beats + 0.01:
+                candidates.extend([
+                    b,
+                    b + 0.25,
+                    b + 1.0 / 3.0,
+                    b + 0.375,
+                    b + 0.5,
+                    b + 2.0 / 3.0,
+                    b + 0.75,
+                    b + 0.875
+                ])
+                b += 1.0
+            candidates = sorted(list(set([round(c, 4) for c in candidates if c <= total_beats])))
+
+            cand_rel_x = x_val - (x1 + left_pad)
+            raw_beat = max(0.0, min(total_beats, (cand_rel_x / usable_w) * total_beats))
+
+            # 가장 가까운 박자 후보 탐색
+            best_cand = min(candidates, key=lambda c: abs(raw_beat - c))
+            snapped_x = (x1 + left_pad) + (best_cand / total_beats) * usable_w
+
+            # 동일 마디 내 다른 음표들의 X좌표(화음 결합용)와도 8px 이내면 자석 스냅
+            for ni in self.note_items:
+                if ni.note_data.measure_number == m_data.number and abs(ni.pos().x() - x_val) > 0.1:
+                    if abs(x_val - ni.pos().x()) <= 8.0:
+                        return float(ni.pos().x()), round(best_cand, 3)
+
+            return float(snapped_x), round(best_cand, 3)
+
+        return float(x_val), 0.0
 
     def set_snap_barlines(self, barlines_x: List[float]):
         """PDF 악보 탐지 세로 마디선 X 좌표 목록 설정"""

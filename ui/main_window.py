@@ -117,7 +117,7 @@ class MainWindow(QMainWindow):
         """)
         self.btn_mode_toggle.toggled.connect(self._on_mode_toggled)
 
-        tip_lbl = QLabel("💡 팁: Shift+드래그: 수직 음계 스냅 이동 (줄/칸 착 붙임) / Space+드래그: 화면 이동 / ↑↓ 방향키: 음계 1단계 이동")
+        tip_lbl = QLabel("💡 팁: Shift+드래그: 상하 음계 / 좌우 박자 직교 스냅 이동 | ↑↓←→ 방향키: 음계/박자 이동 | Space+드래그: 화면 이동")
         tip_lbl.setStyleSheet("color: #64748B; font-size: 11px; font-style: italic;")
 
         lg_layout.addWidget(title_lbl)
