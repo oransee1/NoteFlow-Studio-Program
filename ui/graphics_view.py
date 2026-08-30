@@ -78,8 +78,9 @@ class InteractiveNoteItem(QGraphicsEllipseItem):
     def itemChange(self, change: QGraphicsItem.GraphicsItemChange, value):
         if change == QGraphicsItem.GraphicsItemChange.ItemPositionChange and self.scene():
             new_pos = value
-            # 악보 음표의 줄/칸(Pitch) 절대 보정을 위해 마우스 드래그 이동 시 Y 픽셀 위치 100% 완전 고정 (수평 X축 전용 이동)
-            if self.press_pos is not None:
+            # Shift 키를 누르고 드래그하면 수평(X축) 전용 고정 이동 (음높이 Y 보존)
+            modifiers = QApplication.keyboardModifiers()
+            if (modifiers & Qt.KeyboardModifier.ShiftModifier) and self.press_pos is not None:
                 lock_y = self.press_pos.y()
                 new_pos = QPointF(new_pos.x(), lock_y)
 
@@ -326,6 +327,9 @@ class ScoreGraphicsView(QGraphicsView):
     align_measure_notes_signal = pyqtSignal(object)
     delete_measure_signal = pyqtSignal(object)
 
+    recalculate_measure_signal = pyqtSignal(object)
+    recalculate_all_signal = pyqtSignal()
+
     def __init__(self, parent=None):
         super().__init__(parent)
         self.scene_obj = QGraphicsScene(self)
@@ -376,7 +380,7 @@ class ScoreGraphicsView(QGraphicsView):
             self.setDragMode(QGraphicsView.DragMode.ScrollHandDrag)
 
     def contextMenuEvent(self, event):
-        """우클릭 컨텍스트 메뉴: 마디 음표 자동 맞춤, 원하는 위치에 음표/마디 추가, 음표 색상 변경, 복제 및 삭제"""
+        """우클릭 컨텍스트 메뉴: 마디 정밀 계산, 자동 맞춤, 원하는 위치에 음표/마디 추가, 음표 색상 변경, 복제 및 삭제"""
         pos = event.pos()
         scene_pos = self.mapToScene(pos)
         item = self.itemAt(pos)
@@ -390,11 +394,14 @@ class ScoreGraphicsView(QGraphicsView):
             to_bass = menu.addAction("🔵 낮은음자리표 (왼손) 파트로 변경 [파란색]")
             to_rest = menu.addAction("🟡 쉼표 (Rest)로 변경 [노란색]")
             menu.addSeparator()
+            recalc_act = menu.addAction("🔬 전체 악보 정밀 계산 (음계/건반/박자 일괄 동기화)")
             delete_act = menu.addAction("🗑️ 이 음표 점 삭제 (Delete)")
 
             action = menu.exec(self.mapToGlobal(pos))
             if action == dup_act:
                 self.duplicate_note_signal.emit(item.note_data)
+            elif action == recalc_act:
+                self.recalculate_all_signal.emit()
             elif action in (to_treble, to_bass, to_rest):
                 old_pitch = item.note_data.pitch
                 old_staff = item.note_data.staff
@@ -427,8 +434,10 @@ class ScoreGraphicsView(QGraphicsView):
             return
 
         align_m_act = None
+        recalc_m_act = None
         del_m_act = None
         if isinstance(item, InteractiveMeasureItem):
+            recalc_m_act = menu.addAction(f"🔬 마디 M{item.measure_data.number} 정밀 계산 (음계/건반/박자 동기화)")
             align_m_act = menu.addAction(f"🎯 마디 M{item.measure_data.number} 음표 자동 맞춤 & 새로 채우기")
             del_m_act = menu.addAction(f"🗑️ 마디 M{item.measure_data.number} 영역 삭제")
             menu.addSeparator()
@@ -436,13 +445,19 @@ class ScoreGraphicsView(QGraphicsView):
         add_note_act = menu.addAction("➕ 이 위치에 새 음표 점 추가")
         add_measure_act = menu.addAction("➕ 이 위치에 새 마디 영역 추가")
         menu.addSeparator()
+        recalc_all_act = menu.addAction("🔬 전체 악보 정밀 계산 (음계/건반/박자 일괄 동기화)")
+        menu.addSeparator()
         delete_act = menu.addAction("🗑️ 선택된 음표 점 삭제 (Delete)")
 
         action = menu.exec(self.mapToGlobal(pos))
-        if align_m_act and action == align_m_act:
+        if recalc_m_act and action == recalc_m_act:
+            self.recalculate_measure_signal.emit(item.measure_data)
+        elif align_m_act and action == align_m_act:
             self.align_measure_notes_signal.emit(item.measure_data)
         elif del_m_act and action == del_m_act:
             self.delete_measure_signal.emit(item.measure_data)
+        elif action == recalc_all_act:
+            self.recalculate_all_signal.emit()
         elif action == add_note_act:
             pitch, ok = QInputDialog.getText(self, "음표 점 추가", "피치(Pitch)를 입력하세요 (예: C4, G4, E5, Rest):", text="C4")
             if ok and pitch:

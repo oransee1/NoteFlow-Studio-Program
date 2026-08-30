@@ -134,6 +134,48 @@ class TestSheetSyncStudio(unittest.TestCase):
         if os.path.exists(out_xml): os.remove(out_xml)
         if os.path.exists(out_json): os.remove(out_json)
 
+    def test_precision_calculator(self):
+        from core.precision_calculator import PrecisionCalculator
+        parser = MusicXMLParser()
+        score = parser.parse(self.sample_xml_path)
+
+        # 마디 및 음표 가상 좌표 설정 (Top Line = 100, spacing = 10)
+        # F5 = 100, E5 = 105, D5 = 110, C5 = 115, B4 = 120, A4 = 125, G4 = 130, F4 = 135, E4 = 140, D4 = 145, C4 = 150
+        score.measures[0].mapped_page = 0
+        score.measures[0].bbox_x1 = 100.0
+        score.measures[0].bbox_y1 = 80.0
+        score.measures[0].bbox_x2 = 500.0
+        score.measures[0].bbox_y2 = 250.0
+
+        # Note 1: Y=155 (C4 / Middle C), X=150 (Beat ~0.0)
+        score.measures[0].notes[0].mapped_page = 0
+        score.measures[0].notes[0].mapped_x = 150.0
+        score.measures[0].notes[0].mapped_y = 155.0
+
+        # Note 2: Y=135 (G4 / Sol), X=300 (Beat ~2.0)
+        score.measures[0].notes[1].mapped_page = 0
+        score.measures[0].notes[1].mapped_x = 300.0
+        score.measures[0].notes[1].mapped_y = 135.0
+
+        pdf_renderer = PDFRenderer()
+        layout_detector = SheetLayoutDetector()
+        calculator = PrecisionCalculator(pdf_renderer, layout_detector)
+
+        stats = calculator.recalculate_score(score, dpi=200, snap_notehead_pixels=False)
+        self.assertEqual(stats["status"], "success")
+        self.assertEqual(stats["measures_count"], 1)
+        self.assertEqual(stats["notes_count"], 2)
+
+        # Verify pitch calculation
+        self.assertEqual(score.measures[0].notes[0].pitch, "C4")
+        self.assertEqual(score.measures[0].notes[0].staff, 1)
+        self.assertEqual(score.measures[0].notes[1].pitch, "G4")
+        self.assertEqual(score.measures[0].notes[1].staff, 1)
+
+        # Verify beat and duration calculation
+        self.assertAlmostEqual(score.measures[0].notes[0].beat_position, 0.0, delta=0.2)
+        self.assertTrue(score.measures[0].notes[0].duration >= 1)
+
     def tearDown(self):
         if os.path.exists(self.sample_xml_path):
             os.remove(self.sample_xml_path)

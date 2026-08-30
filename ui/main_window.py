@@ -13,6 +13,7 @@ from core.pdf_renderer import PDFRenderer
 from core.musicxml_parser import MusicXMLParser, ParsedScore, MeasureData, NoteData
 from utils.layout_detector import SheetLayoutDetector
 from core.auto_aligner import AutoAligner, detect_pitch_from_y
+from core.precision_calculator import PrecisionCalculator
 from core.musicxml_exporter import MusicXMLExporter
 from core.undo_manager import UndoManager, EditAction, GroupAction
 from ui.graphics_view import ScoreGraphicsView, InteractiveNoteItem, InteractiveMeasureItem
@@ -29,6 +30,7 @@ class MainWindow(QMainWindow):
         self.xml_parser = MusicXMLParser()
         self.layout_detector = SheetLayoutDetector()
         self.auto_aligner = AutoAligner(self.pdf_renderer, self.layout_detector)
+        self.precision_calculator = PrecisionCalculator(self.pdf_renderer, self.layout_detector)
         self.xml_exporter = MusicXMLExporter()
         self.undo_manager = UndoManager()
 
@@ -147,6 +149,7 @@ class MainWindow(QMainWindow):
         self.control_panel.open_pdf_signal.connect(self.load_pdf_dialog)
         self.control_panel.open_xml_signal.connect(self.load_xml_dialog)
         self.control_panel.auto_sync_signal.connect(self.run_auto_sync)
+        self.control_panel.precision_calc_signal.connect(self.run_precision_calculation)
         self.control_panel.save_project_signal.connect(self.save_project_dialog)
         self.control_panel.load_project_signal.connect(self.load_project_dialog)
         self.control_panel.save_xml_signal.connect(self.save_xml_dialog)
@@ -164,6 +167,8 @@ class MainWindow(QMainWindow):
         self.canvas_view.align_measure_notes_signal.connect(self.auto_align_single_measure)
         self.canvas_view.delete_measure_signal.connect(self.delete_measure)
         self.canvas_view.delete_single_note_signal.connect(self.delete_single_note)
+        self.canvas_view.recalculate_measure_signal.connect(self.run_measure_precision_calculation)
+        self.canvas_view.recalculate_all_signal.connect(self.run_precision_calculation)
 
         # 메뉴 바 및 단축키 바인딩 생성
         self.create_menu_bar()
@@ -293,10 +298,21 @@ class MainWindow(QMainWindow):
         # 4. 도구 (Tools) 메뉴
         tools_menu = menubar.addMenu("도구(&T)")
 
-        sync_act = QAction("✨ 자동 싱크 맞추기", self)
+        sync_act = QAction("✨ 자동 싱크 맞추기 (Auto-Align)", self)
         sync_act.setShortcut("F5")
         sync_act.triggered.connect(self.run_auto_sync)
+
+        recalc_act = QAction("🔬 전체 정밀 계산 (음계·건반·박자)", self)
+        recalc_act.setShortcut("F6")
+        recalc_act.triggered.connect(self.run_precision_calculation)
+
+        recalc_page_act = QAction("🎯 현재 페이지 정밀 계산", self)
+        recalc_page_act.setShortcut("Shift+F6")
+        recalc_page_act.triggered.connect(self.run_page_precision_calculation)
+
         tools_menu.addAction(sync_act)
+        tools_menu.addAction(recalc_act)
+        tools_menu.addAction(recalc_page_act)
 
         # 5. 도움말 (Help) 메뉴
         help_menu = menubar.addMenu("도움말(&H)")
@@ -353,6 +369,8 @@ class MainWindow(QMainWindow):
   <tr><td>완성된 MusicXML 저장</td><td><b>Ctrl + S</b></td></tr>
   <tr><td>비디오 싱크 JSON 저장</td><td><b>Ctrl + Shift + S</b></td></tr>
   <tr><td>자동 싱크 맞추기</td><td><b>F5</b> 또는 <b>Ctrl + R</b></td></tr>
+  <tr><td>🔬 전체 악보 정밀 계산</td><td><b>F6</b> 또는 <b>Ctrl + Shift + R</b></td></tr>
+  <tr><td>🎯 현재 페이지 정밀 계산</td><td><b>Shift + F6</b></td></tr>
   <tr><td>이전 / 다음 페이지</td><td><b>← / →</b> 또는 <b>PageUp / PageDown</b></td></tr>
   <tr><td>첫 / 마지막 페이지</td><td><b>Home / End</b></td></tr>
   <tr><td>화면 확대 / 축소</td><td><b>Ctrl + + / Ctrl + -</b> (Ctrl+휠)</td></tr>
@@ -512,6 +530,100 @@ class MainWindow(QMainWindow):
         except Exception as e:
             self.setCursor(Qt.CursorShape.ArrowCursor)
             QMessageBox.critical(self, "오류", f"마디 음표 자동 맞춤 연산 중 오류가 발생했습니다:\n{str(e)}")
+
+    def run_precision_calculation(self):
+        """
+        수동 조정한 마디/음표 위치를 기반으로
+        전체 악보의 오선지 줄/칸 음계, 높은/낮은음자리 건반(MIDI 번호), 박자(Beat/Duration) 및 MusicXML 구조를 정밀 재계산합니다.
+        """
+        if not self.pdf_loaded or not self.score:
+            QMessageBox.warning(self, "경고", "PDF 파일과 악보 데이터(MusicXML)를 먼저 로드해 주세요.")
+            return
+
+        self.undo_manager.push_snapshot(self.score, "전체 악보 정밀 계산")
+        self.status_bar.showMessage("🔬 오선지 줄/칸 음계, 건반 위치, 박자 및 MusicXML 정밀 계산 중...")
+        self.setCursor(Qt.CursorShape.WaitCursor)
+
+        try:
+            stats = self.precision_calculator.recalculate_score(self.score, dpi=200, snap_notehead_pixels=True)
+            self.render_current_page()
+            self.setCursor(Qt.CursorShape.ArrowCursor)
+
+            m_cnt = stats.get("measures_count", 0)
+            n_cnt = stats.get("notes_count", 0)
+            t_cnt = stats.get("treble_count", 0)
+            b_cnt = stats.get("bass_count", 0)
+            r_cnt = stats.get("rests_count", 0)
+            p_chg = stats.get("pitch_changes", 0)
+
+            msg = f"✨ 정밀 계산 완료! (총 {m_cnt}마디, {n_cnt}개 음표/쉼표 동기화)"
+            self.status_bar.showMessage(msg)
+
+            summary_text = (
+                f"<h3>🔬 정밀 계산 및 MusicXML 동기화 완료</h3>"
+                f"<table border='1' cellspacing='0' cellpadding='5' style='border-collapse:collapse; width:100%;'>"
+                f"<tr style='background-color:#F1F5F9;'><th>항목</th><th>수치</th></tr>"
+                f"<tr><td>계산된 총 마디 수</td><td><b>{m_cnt} 마디</b></td></tr>"
+                f"<tr><td>계산된 총 음표/쉼표 수</td><td><b>{n_cnt} 개</b></td></tr>"
+                f"<tr><td>🟢 높은음자리표 (오른손) 음표</td><td><b>{t_cnt} 개</b></td></tr>"
+                f"<tr><td>🔵 낮은음자리표 (왼손) 음표</td><td><b>{b_cnt} 개</b></td></tr>"
+                f"<tr><td>🟡 쉼표 (Rest)</td><td><b>{r_cnt} 개</b></td></tr>"
+                f"<tr><td>🎵 위치 기반 음계(피치) 보정</td><td><b>{p_chg} 개 음표</b></td></tr>"
+                f"</table>"
+                f"<p style='color:#16A34A; margin-top:8px;'><b>모든 음표의 피아노 건반(MIDI 번호), 오선지 줄/칸 음계, 박자 및 MusicXML DOM 트리가 100% 완벽 동기화되었습니다.</b></p>"
+            )
+
+            QMessageBox.information(self, "정밀 계산 완료", summary_text)
+        except Exception as e:
+            self.setCursor(Qt.CursorShape.ArrowCursor)
+            QMessageBox.critical(self, "오류", f"정밀 계산 도중 오류가 발생했습니다:\n{str(e)}")
+
+    def run_page_precision_calculation(self):
+        """현재 페이지에 속한 마디 및 음표들의 음계, 건반, 박자를 정밀 재계산합니다."""
+        if not self.pdf_loaded or not self.score:
+            QMessageBox.warning(self, "경고", "PDF 파일과 악보 데이터(MusicXML)를 먼저 로드해 주세요.")
+            return
+
+        self.undo_manager.push_snapshot(self.score, f"페이지 {self.current_page_idx + 1} 정밀 계산")
+        self.status_bar.showMessage(f"🔬 페이지 {self.current_page_idx + 1} 정밀 계산 중...")
+        self.setCursor(Qt.CursorShape.WaitCursor)
+
+        try:
+            page_measures = [m for m in self.score.measures if m.mapped_page == self.current_page_idx]
+            total_n = 0
+            for m in page_measures:
+                m_stats = self.precision_calculator.recalculate_single_measure(self.score, m, dpi=200, snap_notehead_pixels=True)
+                total_n += m_stats.get("total_notes", 0)
+
+            self.render_current_page()
+            self.setCursor(Qt.CursorShape.ArrowCursor)
+            self.status_bar.showMessage(f"✨ 페이지 {self.current_page_idx + 1} 정밀 계산 완료 (마디 {len(page_measures)}개, 음표 {total_n}개 동기화)")
+            QMessageBox.information(
+                self, "페이지 정밀 계산 완료",
+                f"현재 페이지({self.current_page_idx + 1} 페이지)의 총 {len(page_measures)}개 마디, {total_n}개 음표에 대해\n"
+                f"음계(피치), 건반(높은/낮은음자리), 박자 및 MusicXML 동기화가 완료되었습니다!"
+            )
+        except Exception as e:
+            self.setCursor(Qt.CursorShape.ArrowCursor)
+            QMessageBox.critical(self, "오류", f"페이지 정밀 계산 도중 오류가 발생했습니다:\n{str(e)}")
+
+    def run_measure_precision_calculation(self, m_data: MeasureData):
+        """단일 마디(m_data)에 대해 음계, 건반, 박자를 정밀 재계산합니다."""
+        if not self.pdf_loaded or not self.score or not m_data:
+            return
+
+        self.undo_manager.push_snapshot(self.score, f"마디 M{m_data.number} 정밀 계산")
+        self.status_bar.showMessage(f"🔬 마디 M{m_data.number} 정밀 계산 중...")
+        self.setCursor(Qt.CursorShape.WaitCursor)
+
+        try:
+            m_stats = self.precision_calculator.recalculate_single_measure(self.score, m_data, dpi=200, snap_notehead_pixels=True)
+            self.render_current_page()
+            self.setCursor(Qt.CursorShape.ArrowCursor)
+            self.status_bar.showMessage(f"✨ 마디 M{m_data.number} 정밀 계산 완료 ({m_stats.get('total_notes', 0)}개 음표 동기화)")
+        except Exception as e:
+            self.setCursor(Qt.CursorShape.ArrowCursor)
+            QMessageBox.critical(self, "오류", f"마디 정밀 계산 도중 오류가 발생했습니다:\n{str(e)}")
 
     def _on_action_recorded(self, action: Any):
         if self.score:

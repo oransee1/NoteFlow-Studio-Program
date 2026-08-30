@@ -10,6 +10,7 @@ class ControlPanel(QWidget):
     open_pdf_signal = pyqtSignal()
     open_xml_signal = pyqtSignal()
     auto_sync_signal = pyqtSignal()
+    precision_calc_signal = pyqtSignal()
     save_xml_signal = pyqtSignal()
     save_json_signal = pyqtSignal()
     save_project_signal = pyqtSignal()
@@ -185,22 +186,36 @@ class ControlPanel(QWidget):
         ng_layout.addLayout(btn_box)
         layout.addWidget(nav_group)
 
-        # 4. 자동 싱크 맞추기 (Primary Action)
-        sync_group = QGroupBox("⚡ 3. 자동 맵핑 & 싱크")
+        # 4. 자동 싱크 및 정밀 계산 그룹 (Primary Actions)
+        sync_group = QGroupBox("⚡ 3. 자동 맵핑 & 정밀 계산")
         sg_layout = QVBoxLayout(sync_group)
 
         self.btn_auto_sync = QPushButton("✨ 싱크 맞추기 (Auto-Align)")
         self.btn_auto_sync.setStyleSheet("""
             QPushButton {
-                background-color: #059669; color: white; font-weight: bold; font-size: 13px;
-                padding: 11px; border-radius: 8px; border: none;
+                background-color: #059669; color: white; font-weight: bold; font-size: 12px;
+                padding: 9px; border-radius: 6px; border: none;
             }
             QPushButton:hover { background-color: #047857; }
             QPushButton:disabled { background-color: #334155; color: #64748B; }
         """)
+        self.btn_auto_sync.setToolTip("PDF 악보를 스캔하여 마디 및 음표를 오선지에 자동 초기 배치합니다.")
         self.btn_auto_sync.clicked.connect(self.auto_sync_signal.emit)
 
+        self.btn_precision_calc = QPushButton("🔬 정밀 계산 (음계·건반·박자)")
+        self.btn_precision_calc.setStyleSheet("""
+            QPushButton {
+                background-color: #6366F1; color: white; font-weight: bold; font-size: 13px;
+                padding: 11px; border-radius: 8px; border: none;
+            }
+            QPushButton:hover { background-color: #4F46E5; }
+            QPushButton:disabled { background-color: #334155; color: #64748B; }
+        """)
+        self.btn_precision_calc.setToolTip("수동 조정한 마디/음표 위치를 기반으로 오선지 줄/칸 음계, 건반(높은/낮은음자리), 박자 및 MusicXML을 정밀 재계산합니다.")
+        self.btn_precision_calc.clicked.connect(self.precision_calc_signal.emit)
+
         sg_layout.addWidget(self.btn_auto_sync)
+        sg_layout.addWidget(self.btn_precision_calc)
         layout.addWidget(sync_group)
 
         # 5. 오선지 위치 미세 일괄 보정 그룹

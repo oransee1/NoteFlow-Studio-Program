@@ -31,6 +31,7 @@ class MeasureData:
     beats: int = 4
     beat_type: int = 4
     divisions: int = 1
+    fifths: int = 0
     width: Optional[float] = None
     new_system: bool = False
     new_page: bool = False
@@ -83,10 +84,11 @@ class MusicXMLParser:
         # 파트(part) 추출 - 기본적으로 첫 번째 피아노/독주 파트를 기본 축으로 사용
         measures_dict: Dict[int, MeasureData] = {}
         
-        # divisions & time signature 추적
+        # divisions & time signature & key signature 추적
         current_divisions = 1
         current_beats = 4
         current_beat_type = 4
+        current_fifths = 0
 
         for part in root.findall("part"):
             for m_elem in part.findall("measure"):
@@ -96,7 +98,7 @@ class MusicXMLParser:
                 except ValueError:
                     m_num = len(measures_dict) + 1
 
-                # 속성 (divisions, time signature)
+                # 속성 (divisions, time signature, key)
                 attribs = m_elem.find("attributes")
                 if attribs is not None:
                     div_elem = attribs.find("divisions")
@@ -110,6 +112,14 @@ class MusicXMLParser:
                             current_beats = int(beats_elem.text)
                         if beat_type_elem is not None and beat_type_elem.text:
                             current_beat_type = int(beat_type_elem.text)
+                    key_elem = attribs.find("key")
+                    if key_elem is not None:
+                        f_elem = key_elem.find("fifths")
+                        if f_elem is not None and f_elem.text:
+                            try:
+                                current_fifths = int(f_elem.text)
+                            except ValueError:
+                                pass
 
                 time_sig = f"{current_beats}/{current_beat_type}"
                 width_val = m_elem.get("width")
@@ -165,6 +175,7 @@ class MusicXMLParser:
                         beats=current_beats,
                         beat_type=current_beat_type,
                         divisions=current_divisions,
+                        fifths=current_fifths,
                         width=width,
                         new_system=new_system,
                         new_page=new_page,

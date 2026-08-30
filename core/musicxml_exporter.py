@@ -80,9 +80,67 @@ class MusicXMLExporter:
                                 n_elem.set("nf-mapped-y", f"{matching_note.mapped_y:.2f}")
                                 n_elem.set("nf-page", str(matching_note.mapped_page))
                             
+                            # pitch / rest 갱신
+                            if matching_note.is_rest or matching_note.pitch == "Rest":
+                                p_elem = n_elem.find("pitch")
+                                if p_elem is not None:
+                                    n_elem.remove(p_elem)
+                                if n_elem.find("rest") is None:
+                                    n_elem.insert(0, ET.Element("rest"))
+                            else:
+                                r_elem = n_elem.find("rest")
+                                if r_elem is not None:
+                                    n_elem.remove(r_elem)
+                                
+                                p_elem = n_elem.find("pitch")
+                                if p_elem is None:
+                                    p_elem = ET.Element("pitch")
+                                    n_elem.insert(0, p_elem)
+                                
+                                step_elem = p_elem.find("step")
+                                if step_elem is None:
+                                    step_elem = ET.SubElement(p_elem, "step")
+                                step_elem.text = matching_note.pitch[0].upper() if matching_note.pitch else "C"
+                                
+                                alter_elem = p_elem.find("alter")
+                                if '#' in matching_note.pitch:
+                                    if alter_elem is None:
+                                        alter_elem = ET.SubElement(p_elem, "alter")
+                                    alter_elem.text = "1"
+                                elif 'b' in matching_note.pitch:
+                                    if alter_elem is None:
+                                        alter_elem = ET.SubElement(p_elem, "alter")
+                                    alter_elem.text = "-1"
+                                else:
+                                    if alter_elem is not None:
+                                        p_elem.remove(alter_elem)
+                                
+                                oct_elem = p_elem.find("octave")
+                                if oct_elem is None:
+                                    oct_elem = ET.SubElement(p_elem, "octave")
+                                oct_char = matching_note.pitch[-1] if (matching_note.pitch and matching_note.pitch[-1].isdigit()) else "4"
+                                oct_elem.text = oct_char
+
+                            # duration 갱신
+                            if matching_note.duration > 0:
+                                dur_elem = n_elem.find("duration")
+                                if dur_elem is None:
+                                    dur_elem = ET.SubElement(n_elem, "duration")
+                                dur_elem.text = str(matching_note.duration)
+
+                            # voice 갱신
+                            if matching_note.voice > 0:
+                                voice_elem = n_elem.find("voice")
+                                if voice_elem is None:
+                                    voice_elem = ET.SubElement(n_elem, "voice")
+                                voice_elem.text = str(matching_note.voice)
+
                             # staff 속성 갱신
                             staff_elem = n_elem.find("staff")
                             if staff_elem is not None:
+                                staff_elem.text = str(matching_note.staff)
+                            else:
+                                staff_elem = ET.SubElement(n_elem, "staff")
                                 staff_elem.text = str(matching_note.staff)
                         else:
                             # 사용자가 화면에서 삭제한 음표는 XML에서도 삭제하여 완벽 덮어쓰기 적용
