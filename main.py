@@ -1,12 +1,23 @@
 import sys
 import os
-from PyQt6.QtWidgets import QApplication
+import traceback
+from PyQt6.QtWidgets import QApplication, QMessageBox
 from PyQt6.QtCore import Qt
 from ui.main_window import MainWindow
 
+def exception_hook(exctype, value, tb):
+    """Qt 내부 이벤트 루프나 슬롯에서 발생하는 미처리 예외를 가로채어 충돌(0xC0000409) 방지 및 상세 로그 출력"""
+    err_msg = "".join(traceback.format_exception(exctype, value, tb))
+    print(err_msg, file=sys.stderr)
+    try:
+        QMessageBox.critical(None, "오류 발생 (Error)", f"프로그램 실행 중 예외가 발생했습니다:\n\n{err_msg}")
+    except Exception:
+        pass
+
 def main():
-    # High-DPI 지원 활성화
+    # High-DPI 지원 환경 변수
     os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
+    sys.excepthook = exception_hook
     
     app = QApplication(sys.argv)
     app.setStyle("Fusion")
@@ -38,7 +49,11 @@ def main():
     window = MainWindow()
     window.show()
 
-    sys.exit(app.exec())
+    exit_code = app.exec()
+    del window
+    del app
+    sys.exit(exit_code)
 
 if __name__ == "__main__":
     main()
+

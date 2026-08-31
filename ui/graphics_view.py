@@ -666,6 +666,8 @@ class ScoreGraphicsView(QGraphicsView):
 
         self.measure_items.clear()
         self.note_items.clear()
+        if hasattr(self, 'drag_start_map'):
+            self.drag_start_map.clear()
 
         for m in measures:
             if m.mapped_page != page_index:
@@ -866,30 +868,35 @@ class ScoreGraphicsView(QGraphicsView):
         super().mouseReleaseEvent(event)
         if hasattr(self, 'drag_start_map') and self.drag_start_map:
             moved_actions = []
-            for item, old_pos in self.drag_start_map.items():
-                if item.scene() and (item.pos().x() != old_pos.x() or item.pos().y() != old_pos.y()):
-                    if isinstance(item, InteractiveNoteItem):
-                        moved_actions.append(EditAction(
-                            action_type="move_note",
-                            description=f"음표 이동 ({item.note_data.pitch})",
-                            item_id=item.note_data.id,
-                            measure_num=item.note_data.measure_number,
-                            note_data=item.note_data,
-                            old_x=old_pos.x(), old_y=old_pos.y(),
-                            new_x=item.pos().x(), new_y=item.pos().y()
-                        ))
-                    elif isinstance(item, InteractiveMeasureItem):
-                        w = item.rect().width()
-                        h = item.rect().height()
-                        old_bbox = (old_pos.x(), old_pos.y(), old_pos.x() + w, old_pos.y() + h)
-                        new_bbox = (item.pos().x(), item.pos().y(), item.pos().x() + w, item.pos().y() + h)
-                        moved_actions.append(EditAction(
-                            action_type="move_measure",
-                            description=f"마디 M{item.measure_data.number} 이동",
-                            item_id=f"m_{item.measure_data.number}",
-                            measure_num=item.measure_data.number,
-                            old_bbox=old_bbox, new_bbox=new_bbox
-                        ))
+            for item, old_pos in list(self.drag_start_map.items()):
+                try:
+                    if item and item.scene() is not None:
+                        cur_pos = item.pos()
+                        if cur_pos.x() != old_pos.x() or cur_pos.y() != old_pos.y():
+                            if isinstance(item, InteractiveNoteItem):
+                                moved_actions.append(EditAction(
+                                    action_type="move_note",
+                                    description=f"음표 이동 ({item.note_data.pitch})",
+                                    item_id=item.note_data.id,
+                                    measure_num=item.note_data.measure_number,
+                                    note_data=item.note_data,
+                                    old_x=old_pos.x(), old_y=old_pos.y(),
+                                    new_x=cur_pos.x(), new_y=cur_pos.y()
+                                ))
+                            elif isinstance(item, InteractiveMeasureItem):
+                                w = item.rect().width()
+                                h = item.rect().height()
+                                old_bbox = (old_pos.x(), old_pos.y(), old_pos.x() + w, old_pos.y() + h)
+                                new_bbox = (cur_pos.x(), cur_pos.y(), cur_pos.x() + w, cur_pos.y() + h)
+                                moved_actions.append(EditAction(
+                                    action_type="move_measure",
+                                    description=f"마디 M{item.measure_data.number} 이동",
+                                    item_id=f"m_{item.measure_data.number}",
+                                    measure_num=item.measure_data.number,
+                                    old_bbox=old_bbox, new_bbox=new_bbox
+                                ))
+                except (RuntimeError, ReferenceError, AttributeError):
+                    pass
 
             if len(moved_actions) == 1:
                 self.action_recorded_signal.emit(moved_actions[0])
@@ -898,8 +905,11 @@ class ScoreGraphicsView(QGraphicsView):
                 self.action_recorded_signal.emit(GroupAction(description=group_desc, actions=moved_actions))
 
             for item in list(self.drag_start_map.keys()):
-                if isinstance(item, InteractiveNoteItem):
-                    item.press_pos = None
+                try:
+                    if isinstance(item, InteractiveNoteItem):
+                        item.press_pos = None
+                except (RuntimeError, ReferenceError, AttributeError):
+                    pass
 
             self.drag_start_map.clear()
 

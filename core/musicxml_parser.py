@@ -135,8 +135,8 @@ class MusicXMLParser:
                     if print_elem.get("new-page") == "yes":
                         new_page = True
 
-                # 원본 XML의 불필요한 쓰레기 데이터(레이아웃, 재생, 지시어 등) 원천 필터링
-                for garbage_tag in ["print", "direction", "sound", "harmony", "grouping", "figure"]:
+                # 불필요한 재생/사운드 전용 쓰레기 데이터만 안전하게 필터링 (print 태그는 레이아웃에 필수이므로 임의 삭제하지 않음)
+                for garbage_tag in ["sound", "harmony", "grouping", "figure"]:
                     for garbage in m_elem.findall(garbage_tag):
                         m_elem.remove(garbage)
 
@@ -307,74 +307,160 @@ class MusicXMLParser:
         return score
 
     def distribute_measures_across_pages(self, score: ParsedScore, page_count: int, dpi: int = 200, pdf_renderer = None):
-        """PDF 총 페이지 수에 맞춰 MusicXML 마디 및 음표를 각 페이지별로 균등 배치 및 초기 좌표 생성합니다."""
+        """
+        PDF 총 페이지 수 및 악보 레이아웃에 맞춰 MusicXML 마디 및 음표 좌표를 정밀 배치/복원합니다.
+        저장된 커스텀 좌표(nf-bbox-x1 등)가 존재하는 경우 100% 그대로 완벽 보존합니다.
+        """
         if not score or not score.measures or page_count <= 0:
             return
 
-        # 1. new-page 태그가 있는지 확인
+        # 1. 커스텀 맵핑 좌표 존재 여부 확인
+        custom_mapped_measures = [m for m in score.measures if m.bbox_x1 is not None and m.bbox_x2 is not None]
+        has_custom_mapping = len(custom_mapped_measures) > 0
+        all_custom_mapped = len(custom_mapped_measures) == len(score.measures)
+
+        # 2. new-page 태그 존재 여부 확인
         has_new_page_tags = any(m.new_page for m in score.measures)
-        # 2. 이미 XML 속성(nf-bbox-x1 등)으로 커스텀 맵핑 좌표가 로드되어 있는지 확인
-        has_custom_mapping = any(m.bbox_x1 is not None for m in score.measures)
-        
-        current_page = 0
-        total_m = len(score.measures)
-        measures_per_page = max(1, (total_m + page_count - 1) // page_count) if not has_new_page_tags else 0
 
-        for idx, m in enumerate(score.measures):
-            # 커스텀 맵핑(nf-page, nf-bbox-x1)이 이미 존재하는 경우 해당 페이지 보존
-            if has_custom_mapping and m.bbox_x1 is not None:
-                m.mapped_page = min(page_count - 1, max(0, m.mapped_page))
-            elif has_new_page_tags:
-                if m.new_page and idx > 0:
-                    current_page = min(page_count - 1, current_page + 1)
+        # 페이지 크기 계산
+        pw, ph = 1200.0, 1600.0
+        if pdf_renderer and pdf_renderer.doc:
+            w, h = pdf_renderer.get_page_size(0)
+            scale = dpi / 72.0
+            pw, ph = w * scale, h * scale
+
+        if not has_custom_mapping:
+            # 커스텀 맵핑이 아예 없는 순수 MusicXML 파일인 경우:
+            # new-page 및 new-system 태그를 최대한 활용하여 페이지/시스템별 정갈한 초기 배치
+            current_page = 0
+            current_sys = 0
+            current_col_in_sys = 0
+            measures_per_sys = 3  # 기본 1줄 3~4마디
+            
+            # 페이지별 마디 수 계산
+            total_m = len(score.measures)
+            measures_per_page = max(1, (total_m + page_count - 1) // page_count) if not has_new_page_tags else 0
+
+            for idx, m in enumerate(score.measures):
+                if has_new_page_tags:
+                    if m.new_page and idx > 0:
+                        current_page = min(page_count - 1, current_page + 1)
+                        current_sys = 0
+                        current_col_in_sys = 0
+                    elif m.new_system and idx > 0:
+                        current_sys += 1
+                        current_col_in_sys = 0
+                else:
+                    new_p = min(page_count - 1, idx // measures_per_page)
+                    if new_p != current_page:
+                        current_page = new_p
+                        current_sys = 0
+                        current_col_in_sys = 0
+
                 m.mapped_page = current_page
-            else:
-                m.mapped_page = min(page_count - 1, idx // measures_per_page)
 
-            # 초기 임시 좌표 할당 (auto_aligner 실행 전에도 오버레이 표시되도록)
-            page_m_idx = idx % max(1, measures_per_page)
-            pw, ph = 1200.0, 1600.0
-            if pdf_renderer and pdf_renderer.doc:
-                w, h = pdf_renderer.get_page_size(m.mapped_page)
-                scale = dpi / 72.0
-                pw, ph = w * scale, h * scale
+                # 시스템(줄) 줄바꿈 계산
+                if current_col_in_sys >= measures_per_sys:
+                    current_sys += 1
+                    current_col_in_sys = 0
 
-            row = (page_m_idx // 4) % 6
-            col = page_m_idx % 4
+                # 시스템 내 마디 너비 및 위치 계산
+                margin_x = pw * 0.07
+                usable_pw = pw * 0.86
+                m_w = usable_pw / float(measures_per_sys)
+                sys_top = ph * 0.12 + current_sys * (ph * 0.14)
+                sys_h = ph * 0.11
 
-            box_x1 = pw * 0.08 + col * (pw * 0.22)
-            box_x2 = box_x1 + pw * 0.20
-            box_y1 = ph * 0.12 + row * (ph * 0.13)
-            box_y2 = box_y1 + ph * 0.11
+                m.bbox_x1 = margin_x + current_col_in_sys * m_w
+                m.bbox_x2 = m.bbox_x1 + m_w - 6.0
+                m.bbox_y1 = sys_top
+                m.bbox_y2 = sys_top + sys_h
 
-            # 이미 MusicXML(nf-bbox-x1 등)에서 절대 좌표를 성공적으로 불러왔다면, 임시 그리드로 덮어쓰지 않음!
-            if m.bbox_x1 is None:
-                m.bbox_x1, m.bbox_y1 = box_x1, box_y1
-                m.bbox_x2, m.bbox_y2 = box_x2, box_y2
-            else:
-                # 기존 좌표 유지 및 아래 음표 오프셋 연산용으로 업데이트
-                box_x1, box_y1 = m.bbox_x1, m.bbox_y1
-                box_x2 = m.bbox_x2 if m.bbox_x2 is not None else box_x1 + pw * 0.20
+                current_col_in_sys += 1
+        else:
+            # 커스텀 맵핑이 이미 존재하는 경우:
+            # 1단계: 기존 유효한 마디들의 page 범위를 clamp만 수행 (좌표는 절대 변경 금지!)
+            for m in score.measures:
+                if m.bbox_x1 is not None and m.bbox_x2 is not None:
+                    m.mapped_page = min(page_count - 1, max(0, m.mapped_page))
+
+            # 2단계: 만약 일부 마디만 bbox가 누락된 경우, 인접 마디의 위치를 이어받아 매끄럽게 연속 배치 (겹침 원천 방지)
+            for idx, m in enumerate(score.measures):
+                if m.bbox_x1 is None or m.bbox_x2 is None:
+                    # 이전 마디 참조
+                    prev_m = score.measures[idx - 1] if idx > 0 else None
+                    next_m = score.measures[idx + 1] if idx + 1 < len(score.measures) else None
+                    
+                    ref_m = prev_m if (prev_m and prev_m.bbox_x1 is not None) else next_m
+                    if ref_m and ref_m.bbox_x1 is not None:
+                        m.mapped_page = ref_m.mapped_page
+                        ref_w = max(50.0, (ref_m.bbox_x2 or 200.0) - (ref_m.bbox_x1 or 0.0))
+                        ref_h = max(50.0, (ref_m.bbox_y2 or 200.0) - (ref_m.bbox_y1 or 0.0))
+                        
+                        if prev_m and prev_m.bbox_x2 is not None:
+                            cand_x1 = prev_m.bbox_x2 + 2.0
+                            if cand_x1 + ref_w > pw * 0.95:
+                                # 줄바꿈
+                                m.bbox_x1 = pw * 0.07
+                                m.bbox_x2 = m.bbox_x1 + ref_w
+                                m.bbox_y1 = (prev_m.bbox_y1 or 0.0) + ref_h + 30.0
+                                m.bbox_y2 = m.bbox_y1 + ref_h
+                            else:
+                                m.bbox_x1 = cand_x1
+                                m.bbox_x2 = cand_x1 + ref_w
+                                m.bbox_y1 = prev_m.bbox_y1
+                                m.bbox_y2 = prev_m.bbox_y2
+                        elif next_m and next_m.bbox_x1 is not None:
+                            m.bbox_x1 = max(pw * 0.07, (next_m.bbox_x1 or 0.0) - ref_w - 2.0)
+                            m.bbox_x2 = next_m.bbox_x1 - 2.0
+                            m.bbox_y1 = next_m.bbox_y1
+                            m.bbox_y2 = next_m.bbox_y2
+                    else:
+                        m.mapped_page = 0
+                        m.bbox_x1 = pw * 0.08
+                        m.bbox_x2 = pw * 0.28
+                        m.bbox_y1 = ph * 0.12
+                        m.bbox_y2 = ph * 0.23
+
+        # 3. 음표 좌표 동기화 (이미 저장된 mapped_x/y는 100% 보존!)
+        for m in score.measures:
+            bx1 = m.bbox_x1 or 0.0
+            bx2 = m.bbox_x2 or (bx1 + 150.0)
+            by1 = m.bbox_y1 or 0.0
+            by2 = m.bbox_y2 or (by1 + 100.0)
+            mw = max(10.0, bx2 - bx1)
+            total_b = max(1.0, float(getattr(m, 'beats', 4) or 4))
 
             for n_idx, note in enumerate(m.notes):
                 note.mapped_page = m.mapped_page
-                
-                # 이미 유효한 음표 절대 좌표(nf-mapped-x)가 존재한다면 덮어쓰지 않음!
+
+                # 이미 유효한 음표 절대 좌표(nf-mapped-x, nf-mapped-y)가 존재한다면 덮어쓰지 않고 100% 보존!
                 if note.mapped_x is not None and note.mapped_y is not None:
                     continue
-                    
+
                 scale = dpi / 72.0
-                if note.default_x is not None:
-                    note.mapped_x = box_x1 + (note.default_x * scale)
+                if note.default_x is not None and note.default_x > 0:
+                    note.mapped_x = bx1 + (note.default_x * scale)
+                elif hasattr(note, 'beat_position') and note.beat_position is not None:
+                    ratio = min(1.0, max(0.0, note.beat_position / total_b))
+                    note.mapped_x = bx1 + mw * (0.12 + 0.80 * ratio)
                 else:
-                    note.mapped_x = box_x1 + ((n_idx + 0.5) / max(1, len(m.notes))) * (box_x2 - box_x1)
+                    note.mapped_x = bx1 + ((n_idx + 0.5) / max(1, len(m.notes))) * mw
 
-                if note.default_y is not None:
-                    note.mapped_y = box_y1 + (note.default_y * scale)
+                if note.default_y is not None and note.default_y != 0:
+                    note.mapped_y = by1 + (note.default_y * scale)
                 else:
-                    note.mapped_y = (box_y1 + box_y2) / 2.0
+                    # 기본 오선지 중앙 배치 (높은음자리 vs 낮은음자리)
+                    if note.staff == 2:
+                        note.mapped_y = by1 + (by2 - by1) * 0.72
+                    elif note.is_rest:
+                        note.mapped_y = (by1 + by2) / 2.0
+                    else:
+                        note.mapped_y = by1 + (by2 - by1) * 0.35
 
-            import math
+        # 4. NaN / Inf 좌표 안전 클린업
+        import math
+        for m in score.measures:
             for attr in ['bbox_x1', 'bbox_y1', 'bbox_x2', 'bbox_y2']:
                 val = getattr(m, attr)
                 if val is not None and (math.isinf(val) or math.isnan(val)):

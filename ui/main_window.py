@@ -390,6 +390,53 @@ class MainWindow(QMainWindow):
         if file_path:
             self.load_pdf_file(file_path)
 
+    def _sanitize_measure_overlaps(self, score: ParsedScore):
+        """
+        동일 페이지 및 동일 시스템(줄) 상에 존재하는 마디 영역들의 X좌표 경계선이 겹치거나 뒤섞이지 않도록 정밀 정합(Sanitize)합니다.
+        """
+        if not score or not score.measures:
+            return
+
+        # 페이지별로 그룹화
+        page_dict: Dict[int, List[MeasureData]] = {}
+        for m in score.measures:
+            p = m.mapped_page
+            if p not in page_dict:
+                page_dict[p] = []
+            page_dict[p].append(m)
+
+        for p, measures in page_dict.items():
+            # 시스템(줄)별로 그룹화 (Y좌표 기준, 40px 이내 동일 시스템)
+            systems: List[List[MeasureData]] = []
+            for m in sorted(measures, key=lambda x: (x.bbox_y1 if x.bbox_y1 is not None else 0.0, x.number)):
+                if m.bbox_x1 is None or m.bbox_y1 is None:
+                    continue
+                placed = False
+                for sys_list in systems:
+                    avg_y = sum(sm.bbox_y1 for sm in sys_list) / len(sys_list)
+                    if abs(m.bbox_y1 - avg_y) <= 45.0:
+                        sys_list.append(m)
+                        placed = True
+                        break
+                if not placed:
+                    systems.append([m])
+
+            # 각 시스템 내에서 마디 번호 및 X좌표 순서대로 정렬 후 겹침(Overlap) 정리
+            for sys_list in systems:
+                sys_list.sort(key=lambda x: (x.bbox_x1 if x.bbox_x1 is not None else 0.0, x.number))
+                for i in range(len(sys_list) - 1):
+                    cur_m = sys_list[i]
+                    next_m = sys_list[i + 1]
+
+                    if cur_m.bbox_x1 is not None and cur_m.bbox_x2 is not None and next_m.bbox_x1 is not None and next_m.bbox_x2 is not None:
+                        # 현재 마디의 오른쪽(x2)이 다음 마디의 왼쪽(x1)을 침범하여 겹치는 경우
+                        if cur_m.bbox_x2 > next_m.bbox_x1 + 1.0:
+                            # 번호 순서에 맞게 경계선 분할
+                            if cur_m.number < next_m.number:
+                                cur_m.bbox_x2 = next_m.bbox_x1
+                            else:
+                                next_m.bbox_x1 = cur_m.bbox_x2
+
     def load_pdf_file(self, path: str):
         try:
             page_count = self.pdf_renderer.load_pdf(path)
@@ -406,6 +453,7 @@ class MainWindow(QMainWindow):
                     self.xml_parser.distribute_measures_across_pages(
                         self.score, page_count, dpi=200, pdf_renderer=self.pdf_renderer
                     )
+                self._sanitize_measure_overlaps(self.score)
 
             self.control_panel.update_page_info(0, page_count, self.score)
             self.render_current_page()
@@ -435,6 +483,7 @@ class MainWindow(QMainWindow):
                     self.xml_parser.distribute_measures_across_pages(
                         self.score, self.pdf_renderer.page_count, dpi=200, pdf_renderer=self.pdf_renderer
                     )
+                self._sanitize_measure_overlaps(self.score)
                 self.control_panel.update_page_info(self.current_page_idx, self.pdf_renderer.page_count, self.score)
 
             self.status_bar.showMessage(f"MusicXML 로드 완료 ({self.score.total_measures} 마디): {self.score.title}")
@@ -705,6 +754,7 @@ class MainWindow(QMainWindow):
                     if old_num and old_num.isdigit():
                         m_elems[k].set("number", str(int(old_num) + 1))
                         
+        self.control_panel.update_page_info(self.current_page_idx, self.pdf_renderer.page_count, self.score)
         self.render_current_page()
         self.status_bar.showMessage(f"새 마디(M{new_number}) 영역이 성공적으로 생성되었습니다. (전체: {self.score.total_measures})")
 
@@ -816,28 +866,7 @@ class MainWindow(QMainWindow):
         elif 'b' in pitch_str: alter = -1
         return (octave + 1) * 12 + base + alter
 
-    def create_measure_at(self, x: float, y: float):
-        """클릭한 위치에 새로운 마디 영역 박스를 생성합니다."""
-        if not self.score:
-            return
 
-        new_m_num = self.score.total_measures + 1
-        self.undo_manager.push_snapshot(self.score, f"마디 생성 (M{new_m_num})")
-
-        new_m = MeasureData(
-            number=new_m_num,
-            mapped_page=self.current_page_idx,
-            bbox_x1=x,
-            bbox_y1=y,
-            bbox_x2=x + 200.0,
-            bbox_y2=y + 120.0,
-            notes=[]
-        )
-        self.score.measures.append(new_m)
-        self.score.total_measures = len(self.score.measures)
-        self.control_panel.update_page_info(self.current_page_idx, self.pdf_renderer.page_count, self.score)
-        self.render_current_page()
-        self.status_bar.showMessage(f"➕ 새 마디 영역 M{new_m_num} 추가 완료 (X: {int(x)}, Y: {int(y)})")
 
     def delete_selected(self):
         """선택된 음표 점(또는 마디 영역)만 정확히 삭제합니다."""

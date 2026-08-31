@@ -10,13 +10,41 @@ class MusicXMLExporter:
 
     def export_musicxml(self, score: ParsedScore, output_path: str):
         """
-        보정된 마디 width 및 음표 default-x, default-y 좌표를 주입하여 새로운 MusicXML 파일로 저장합니다.
+        보정된 마디 width, 시스템/페이지 줄바꿈(print new-system / new-page) 및
+        음표 default-x, default-y 좌표를 주입하여 표준 규격에 완벽 호환되는 완성된 MusicXML 파일로 저장합니다.
         """
         if score.xml_tree is None or score.root_element is None:
             raise ValueError("수정할 XML 트리가 파싱되어 있지 않습니다.")
 
         tree = score.xml_tree
         root = score.root_element
+
+        # 0. 모든 마디에 대해 누락된 bbox 및 page 좌표 사전 보간 (단 1개의 마디도 None 상태로 저장되지 않도록 철저 보장)
+        for idx, m in enumerate(score.measures):
+            if m.bbox_x1 is None or m.bbox_x2 is None or m.bbox_y1 is None or m.bbox_y2 is None:
+                prev_m = score.measures[idx - 1] if idx > 0 else None
+                next_m = score.measures[idx + 1] if idx + 1 < len(score.measures) else None
+                ref_m = prev_m if (prev_m and prev_m.bbox_x1 is not None) else next_m
+                if ref_m and ref_m.bbox_x1 is not None:
+                    m.mapped_page = ref_m.mapped_page
+                    ref_w = max(50.0, (ref_m.bbox_x2 or 200.0) - (ref_m.bbox_x1 or 0.0))
+                    ref_h = max(50.0, (ref_m.bbox_y2 or 200.0) - (ref_m.bbox_y1 or 0.0))
+                    if prev_m and prev_m.bbox_x2 is not None:
+                        m.bbox_x1 = prev_m.bbox_x2 + 2.0
+                        m.bbox_x2 = m.bbox_x1 + ref_w
+                        m.bbox_y1 = prev_m.bbox_y1
+                        m.bbox_y2 = prev_m.bbox_y2
+                    elif next_m and next_m.bbox_x1 is not None:
+                        m.bbox_x1 = max(50.0, (next_m.bbox_x1 or 0.0) - ref_w - 2.0)
+                        m.bbox_x2 = next_m.bbox_x1 - 2.0
+                        m.bbox_y1 = next_m.bbox_y1
+                        m.bbox_y2 = next_m.bbox_y2
+                else:
+                    m.mapped_page = 0
+                    m.bbox_x1 = 100.0 + (idx % 3) * 350.0
+                    m.bbox_x2 = m.bbox_x1 + 340.0
+                    m.bbox_y1 = 200.0 + (idx // 3) * 250.0
+                    m.bbox_y2 = m.bbox_y1 + 220.0
 
         # 마디 맵핑 룩업 파서
         measure_map = {m.number: m for m in score.measures}
@@ -28,6 +56,11 @@ class MusicXMLExporter:
                 all_part_staves = {1, 2}
 
             existing_m_nums = set()
+            measures_to_remove = []
+            
+            # 이전 마디 추적 (시스템 줄바꿈 및 페이지 바꿈 계산용)
+            prev_m_data = None
+
             for m_elem in part.findall("measure"):
                 m_num_str = m_elem.get("number", "0")
                 try:
@@ -35,15 +68,13 @@ class MusicXMLExporter:
                 except ValueError:
                     continue
                 
-                existing_m_nums.add(m_num)
-
                 if m_num in measure_map:
+                    existing_m_nums.add(m_num)
                     m_data = measure_map[m_num]
                     
-                    # 마디 width 보정 및 커스텀 메타데이터 주입
-                    if m_data.bbox_x1 is not None and m_data.bbox_x2 is not None:
-                        calc_w = abs(m_data.bbox_x2 - m_data.bbox_x1) * (72.0 / 200.0)
-                        m_elem.set("width", f"{calc_w:.2f}")
+                    # 1. 마디 width 보정 및 커스텀 메타데이터 주입
+                    calc_w = abs((m_data.bbox_x2 or 200.0) - (m_data.bbox_x1 or 0.0)) * (72.0 / 200.0)
+                    m_elem.set("width", f"{calc_w:.2f}")
                         
                     m_elem.set("nf-page", str(m_data.mapped_page))
                     if m_data.bbox_x1 is not None:
@@ -55,10 +86,54 @@ class MusicXMLExporter:
                     if m_data.bbox_y2 is not None:
                         m_elem.set("nf-bbox-y2", f"{m_data.bbox_y2:.2f}")
 
-                    # 음표 default-x, default-y 보정 및 커스텀 메타데이터 주입
+                    # 2. 표준 MusicXML print (new-system / new-page) 주입
+                    is_new_page = False
+                    is_new_system = False
+
+                    if prev_m_data is None:
+                        # 악보의 맨 첫 번째 마디
+                        is_new_system = True
+                        is_new_page = True
+                    elif m_data.mapped_page > prev_m_data.mapped_page:
+                        # 새 페이지 시작
+                        is_new_page = True
+                    elif m_data.mapped_page == prev_m_data.mapped_page:
+                        # 같은 페이지에서 Y좌표 차이가 35픽셀 이상 나거나 X좌표가 이전 마디보다 앞서는 경우 -> 새 시스템(새 줄)
+                        dy = (m_data.bbox_y1 or 0.0) - (prev_m_data.bbox_y1 or 0.0)
+                        dx = (m_data.bbox_x1 or 0.0) - (prev_m_data.bbox_x1 or 0.0)
+                        if abs(dy) > 35.0 or dx < -50.0 or m_data.new_system:
+                            is_new_system = True
+
+                    print_elem = m_elem.find("print")
+                    if is_new_page or is_new_system:
+                        if print_elem is None:
+                            print_elem = ET.Element("print")
+                            m_elem.insert(0, print_elem)
+                        if is_new_page:
+                            print_elem.set("new-page", "yes")
+                        elif "new-page" in print_elem.attrib:
+                            del print_elem.attrib["new-page"]
+
+                        if is_new_system:
+                            print_elem.set("new-system", "yes")
+                        elif "new-system" in print_elem.attrib:
+                            del print_elem.attrib["new-system"]
+                    else:
+                        # 새 줄/페이지가 아닌 마디: 기존 불필요한 new-system/new-page 제거
+                        if print_elem is not None:
+                            if "new-page" in print_elem.attrib:
+                                del print_elem.attrib["new-page"]
+                            if "new-system" in print_elem.attrib:
+                                del print_elem.attrib["new-system"]
+                            if not print_elem.attrib and len(print_elem) == 0:
+                                m_elem.remove(print_elem)
+
+                    prev_m_data = m_data
+
+                    # 3. 음표 default-x, default-y 보정 및 커스텀 메타데이터 주입
                     note_nodes = m_elem.findall("note")
                     
-                    # 1. 기존 XML 노드 업데이트 및 화면에서 삭제된 노드 제거
+                    # 3-1. 기존 XML 노드 업데이트 및 화면에서 삭제된 노드 제거
                     for idx, n_elem in enumerate(note_nodes):
                         n_id = n_elem.get("nf-id")
                         matching_note = None
@@ -146,7 +221,7 @@ class MusicXMLExporter:
                             # 사용자가 화면에서 삭제한 음표는 XML에서도 삭제하여 완벽 덮어쓰기 적용
                             m_elem.remove(n_elem)
                     
-                    # 2. 화면에서 새로 추가되거나 복제된 음표를 XML에 신규 삽입
+                    # 3-2. 화면에서 새로 추가되거나 복제된 음표를 XML에 신규 삽입
                     existing_ids = {n_elem.get("nf-id") for n_elem in m_elem.findall("note") if n_elem.get("nf-id")}
                     for n_data in m_data.notes:
                         if n_data.id not in existing_ids and n_data.staff in all_part_staves:
@@ -189,7 +264,13 @@ class MusicXMLExporter:
                                 new_elem.set("nf-mapped-y", f"{n_data.mapped_y:.2f}")
                                 new_elem.set("nf-page", str(n_data.mapped_page))
 
-            # 3. 비어 있는 세로 마디 영역이 새로 추가된 경우 (XML에 없는 마디) 삽입 처리
+                else:
+                    measures_to_remove.append(m_elem)
+                    
+            for m_elem in measures_to_remove:
+                part.remove(m_elem)
+
+            # 4. 비어 있는 세로 마디 영역이 새로 추가된 경우 (XML에 없는 마디) 삽입 처리
             for m_data in score.measures:
                 if m_data.number not in existing_m_nums:
                     # 번호 순서에 맞게 삽입할 위치 탐색
