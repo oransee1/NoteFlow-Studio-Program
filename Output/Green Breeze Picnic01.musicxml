@@ -258,7 +258,7 @@
           <step>C</step>
           <octave>6</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>6</duration>
         <voice>1</voice>
         <type>eighth</type>
         <staff>1</staff>
@@ -345,7 +345,7 @@
           <step>F</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>6</duration>
         <tie type="stop" />
         <voice>6</voice>
         <type>16th</type>
@@ -355,15 +355,15 @@
           <technical />
         </notations>
       </note>
-      <note default-x="22.91" nf-id="m3_n7_b6d7f3" nf-page="0" nf-mapped-x="747.64" nf-mapped-y="408.12" default-y="44.32">
+      <note default-x="22.91" nf-id="m3_n7_b6d7f3" nf-page="0" nf-mapped-x="747.64" nf-mapped-y="405.88" default-y="43.52">
         <pitch>
           <step>D</step>
-          <octave>4</octave>
+          <octave>3</octave>
         </pitch>
-        <duration>3</duration>
+        <duration>13</duration>
         <voice>6</voice>
         <type>quarter</type>
-        <staff>1</staff>
+        <staff>2</staff>
         <notations>
           <technical />
         </notations>
@@ -1709,7 +1709,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="79.56" nf-id="m11_n4_0004d9" nf-page="0" nf-mapped-x="300.00" nf-mapped-y="1064.00" default-y="17.28">
+      <note default-x="82.80" nf-id="m11_n4_0004d9" nf-page="0" nf-mapped-x="309.00" nf-mapped-y="1064.00" default-y="17.28">
         <rest />
         <duration>4</duration>
         <voice>1</voice>
@@ -2312,7 +2312,7 @@
       <attributes>
         <divisions>12</divisions>
       </attributes>
-      <note default-x="12.60" nf-id="m14_n0_850cad" nf-page="0" nf-mapped-x="1057.00" nf-mapped-y="1064.00" default-y="17.28">
+      <note default-x="9.00" nf-id="m14_n0_850cad" nf-page="0" nf-mapped-x="1047.00" nf-mapped-y="1064.00" default-y="17.28">
         <rest />
         <duration>6</duration>
         <voice>1</voice>
@@ -3567,7 +3567,7 @@
       <attributes>
         <divisions>12</divisions>
       </attributes>
-      <note default-x="28.80" nf-id="m21_n0_bccbb6" nf-page="0" nf-mapped-x="159.00" nf-mapped-y="1792.00" default-y="16.92">
+      <note default-x="30.60" nf-id="m21_n0_bccbb6" nf-page="0" nf-mapped-x="164.00" nf-mapped-y="1792.00" default-y="16.92">
         <rest />
         <duration>4</duration>
         <voice>1</voice>
@@ -4014,7 +4014,7 @@
         <voice>6</voice>
         <staff>2</staff>
       </note>
-      <note nf-id="ef6b9bc6" default-x="27.70" default-y="55.80" nf-mapped-x="478.93" nf-mapped-y="1900.00" nf-page="0">
+      <note nf-id="ef6b9bc6" default-x="27.69" default-y="55.80" nf-mapped-x="478.93" nf-mapped-y="1900.00" nf-page="0">
         <pitch>
           <step>A</step>
           <octave>3</octave>
@@ -4423,7 +4423,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="34.53" nf-id="m24_n13_295766" nf-page="0" nf-mapped-x="1007.90" nf-mapped-y="1886.25" default-y="50.85">
+      <note default-x="34.52" nf-id="m24_n13_295766" nf-page="0" nf-mapped-x="1007.90" nf-mapped-y="1886.25" default-y="50.85">
         <chord />
         <pitch>
           <step>C</step>
@@ -4672,7 +4672,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="73.40" nf-id="m26_n6_95bfe5" nf-page="0" nf-mapped-x="1535.90" nf-mapped-y="1716.88" default-y="-10.12">
+      <note default-x="73.41" nf-id="m26_n6_95bfe5" nf-page="0" nf-mapped-x="1535.90" nf-mapped-y="1716.88" default-y="-10.12">
         <pitch>
           <step>D</step>
           <octave>4</octave>
@@ -4689,7 +4689,7 @@
       <backup>
         <duration>24</duration>
       </backup>
-      <note default-x="11.16" nf-id="m26_n7_c74edc" nf-page="0" nf-mapped-x="1363.00" nf-mapped-y="1928.00" default-y="65.88">
+      <note default-x="9.00" nf-id="m26_n7_c74edc" nf-page="0" nf-mapped-x="1357.00" nf-mapped-y="1928.00" default-y="65.88">
         <rest />
         <duration>8</duration>
         <voice>6</voice>
@@ -4714,6 +4714,24 @@
       <backup>
         <duration>24</duration>
       </backup>
+      <note nf-id="755fdc92" default-x="44.61" default-y="-7.65" nf-mapped-x="1455.90" nf-mapped-y="1723.75" nf-page="0">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
+      <note nf-id="a58f16da" default-x="55.51" default-y="2.25" nf-mapped-x="1486.20" nf-mapped-y="1751.25" nf-page="0">
+        <pitch>
+          <step>A</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>5</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
     </measure>
     <measure number="27" width="121.68" nf-page="1" nf-bbox-x1="79.00" nf-bbox-y1="202.00" nf-bbox-x2="417.00" nf-bbox-y2="464.00">
       <print new-page="yes" />
@@ -4915,7 +4933,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="24.09" nf-id="m28_n5_758b4a" nf-page="1" nf-mapped-x="483.90" nf-mapped-y="375.25" default-y="62.37">
+      <note default-x="24.08" nf-id="m28_n5_758b4a" nf-page="1" nf-mapped-x="483.90" nf-mapped-y="375.25" default-y="62.37">
         <pitch>
           <step>C</step>
           <octave>4</octave>
@@ -5100,7 +5118,7 @@
         <staff>2</staff>
         <notations />
       </note>
-      <note default-x="82.77" nf-id="m29_n8_a39cfb" nf-page="1" nf-mapped-x="941.90" nf-mapped-y="375.25" default-y="62.37">
+      <note default-x="82.76" nf-id="m29_n8_a39cfb" nf-page="1" nf-mapped-x="941.90" nf-mapped-y="375.25" default-y="62.37">
         <pitch>
           <step>C</step>
           <octave>4</octave>
@@ -5140,7 +5158,7 @@
         <duration>3</duration>
         <voice>6</voice>
       </note>
-      <note nf-id="340372f8" default-x="113.37" default-y="62.37" nf-mapped-x="1026.90" nf-mapped-y="375.25" nf-page="1">
+      <note nf-id="340372f8" default-x="113.36" default-y="62.37" nf-mapped-x="1026.90" nf-mapped-y="375.25" nf-page="1">
         <pitch>
           <step>C</step>
           <octave>4</octave>
@@ -5281,7 +5299,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="92.13" nf-id="m30_n9_c23dbc" nf-page="1" nf-mapped-x="1254.90" nf-mapped-y="375.25" default-y="62.37">
+      <note default-x="92.12" nf-id="m30_n9_c23dbc" nf-page="1" nf-mapped-x="1254.90" nf-mapped-y="375.25" default-y="62.37">
         <pitch>
           <step>C</step>
           <octave>4</octave>
@@ -5435,7 +5453,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="96.81" nf-id="m31_n9_34b2ce" nf-page="1" nf-mapped-x="1547.90" nf-mapped-y="375.25" default-y="62.37">
+      <note default-x="96.80" nf-id="m31_n9_34b2ce" nf-page="1" nf-mapped-x="1547.90" nf-mapped-y="375.25" default-y="62.37">
         <pitch>
           <step>C</step>
           <octave>4</octave>
@@ -5571,7 +5589,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="46.05" nf-id="m32_n8_ab26b8" nf-page="1" nf-mapped-x="205.90" nf-mapped-y="753.25" default-y="49.41">
+      <note default-x="46.04" nf-id="m32_n8_ab26b8" nf-page="1" nf-mapped-x="205.90" nf-mapped-y="753.25" default-y="49.41">
         <pitch>
           <step>C</step>
           <octave>4</octave>
@@ -5633,7 +5651,7 @@
         <duration>7</duration>
         <voice>6</voice>
       </note>
-      <note nf-id="3137e975" default-x="83.36" default-y="66.73" nf-mapped-x="309.54" nf-mapped-y="801.38" nf-page="1">
+      <note nf-id="3137e975" default-x="83.35" default-y="66.73" nf-mapped-x="309.54" nf-mapped-y="801.38" nf-page="1">
         <pitch>
           <step>C</step>
           <octave>3</octave>
@@ -5762,7 +5780,7 @@
           <step>E</step>
           <octave>3</octave>
         </pitch>
-        <duration>12</duration>
+        <duration>15</duration>
         <voice>6</voice>
         <type>quarter</type>
         <staff>2</staff>
@@ -5770,9 +5788,9 @@
           <technical />
         </notations>
       </note>
-      <note default-x="51.84" nf-id="m33_n8_f9c7be" nf-page="1" nf-mapped-x="582.00" nf-mapped-y="795.00" default-y="64.44">
+      <note default-x="59.76" nf-id="m33_n8_f9c7be" nf-page="1" nf-mapped-x="604.00" nf-mapped-y="792.00" default-y="63.36">
         <rest />
-        <duration>12</duration>
+        <duration>9</duration>
         <voice>6</voice>
         <type>eighth</type>
         <staff>2</staff>
@@ -5881,7 +5899,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="41.73" nf-id="m34_n5_770762" nf-page="1" nf-mapped-x="820.90" nf-mapped-y="608.50" default-y="-2.70">
+      <note default-x="41.72" nf-id="m34_n5_770762" nf-page="1" nf-mapped-x="820.90" nf-mapped-y="608.50" default-y="-2.70">
         <pitch>
           <step>C</step>
           <octave>6</octave>
@@ -5897,7 +5915,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="53.97" nf-id="m34_n6_1d8934" nf-page="1" nf-mapped-x="854.90" nf-mapped-y="608.50" default-y="-2.70">
+      <note default-x="53.96" nf-id="m34_n6_1d8934" nf-page="1" nf-mapped-x="854.90" nf-mapped-y="608.50" default-y="-2.70">
         <pitch>
           <step>C</step>
           <octave>6</octave>
@@ -5941,7 +5959,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="91.41" nf-id="m34_n9_c2de4a" nf-page="1" nf-mapped-x="958.90" nf-mapped-y="608.50" default-y="-2.70">
+      <note default-x="91.40" nf-id="m34_n9_c2de4a" nf-page="1" nf-mapped-x="958.90" nf-mapped-y="608.50" default-y="-2.70">
         <pitch>
           <step>C</step>
           <octave>6</octave>
@@ -6017,15 +6035,6 @@
       <backup>
         <duration>24</duration>
       </backup>
-      <note nf-id="9fef492f" default-x="-19.02" default-y="22.05" nf-mapped-x="652.15" nf-mapped-y="677.25" nf-page="1">
-        <pitch>
-          <step>G</step>
-          <octave>4</octave>
-        </pitch>
-        <staff>1</staff>
-        <duration>6</duration>
-        <voice>1</voice>
-      </note>
       <note nf-id="141580db" default-x="-15.04" default-y="56.84" nf-mapped-x="663.22" nf-mapped-y="773.88" nf-page="1">
         <pitch>
           <step>G</step>
@@ -6053,7 +6062,7 @@
         <duration>8</duration>
         <voice>1</voice>
       </note>
-      <note nf-id="cd4a0634" default-x="77.73" default-y="49.41" nf-mapped-x="920.90" nf-mapped-y="753.25" nf-page="1">
+      <note nf-id="cd4a0634" default-x="77.72" default-y="49.41" nf-mapped-x="920.90" nf-mapped-y="753.25" nf-page="1">
         <pitch>
           <step>C</step>
           <octave>4</octave>
@@ -6062,7 +6071,7 @@
         <duration>4</duration>
         <voice>1</voice>
       </note>
-      <note nf-id="42c99fa1" default-x="91.41" default-y="-2.70" nf-mapped-x="958.90" nf-mapped-y="608.50" nf-page="1">
+      <note nf-id="42c99fa1" default-x="91.40" default-y="-2.70" nf-mapped-x="958.90" nf-mapped-y="608.50" nf-page="1">
         <pitch>
           <step>C</step>
           <octave>6</octave>
@@ -6071,7 +6080,7 @@
         <duration>3</duration>
         <voice>1</voice>
       </note>
-      <note nf-id="cf84323a" default-x="109.42" default-y="59.31" nf-mapped-x="1008.93" nf-mapped-y="780.75" nf-page="1">
+      <note nf-id="cf84323a" default-x="109.41" default-y="59.31" nf-mapped-x="1008.93" nf-mapped-y="780.75" nf-page="1">
         <pitch>
           <step>F</step>
           <octave>3</octave>
@@ -6080,7 +6089,7 @@
         <duration>3</duration>
         <voice>1</voice>
       </note>
-      <note nf-id="6298d2ce" default-x="190.05" default-y="-2.70" nf-mapped-x="1232.90" nf-mapped-y="608.50" nf-page="1">
+      <note nf-id="6298d2ce" default-x="190.04" default-y="-2.70" nf-mapped-x="1232.90" nf-mapped-y="608.50" nf-page="1">
         <pitch>
           <step>C</step>
           <octave>6</octave>
@@ -6150,7 +6159,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="59.52" nf-id="m35_n4_777833" nf-page="1" nf-mapped-x="1146.35" nf-mapped-y="684.12" default-y="24.52">
+      <note default-x="59.53" nf-id="m35_n4_777833" nf-page="1" nf-mapped-x="1146.35" nf-mapped-y="684.12" default-y="24.52">
         <pitch>
           <step>F</step>
           <octave>4</octave>
@@ -6164,7 +6173,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="73.09" nf-id="m35_n5_aa4212" nf-page="1" nf-mapped-x="1184.01" nf-mapped-y="656.62" default-y="14.62">
+      <note default-x="73.08" nf-id="m35_n5_aa4212" nf-page="1" nf-mapped-x="1184.01" nf-mapped-y="656.62" default-y="14.62">
         <pitch>
           <step>C</step>
           <octave>5</octave>
@@ -6178,7 +6187,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="90.69" nf-id="m35_n6_b056f5" nf-page="1" nf-mapped-x="1232.90" nf-mapped-y="608.50" default-y="-2.70">
+      <note default-x="90.68" nf-id="m35_n6_b056f5" nf-page="1" nf-mapped-x="1232.90" nf-mapped-y="608.50" default-y="-2.70">
         <pitch>
           <step>C</step>
           <octave>6</octave>
@@ -6356,7 +6365,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="98.61" nf-id="m36_n7_3031fd" nf-page="1" nf-mapped-x="1528.90" nf-mapped-y="608.50" default-y="-2.70">
+      <note default-x="98.60" nf-id="m36_n7_3031fd" nf-page="1" nf-mapped-x="1528.90" nf-mapped-y="608.50" default-y="-2.70">
         <pitch>
           <step>C</step>
           <octave>6</octave>
@@ -6460,9 +6469,9 @@
           <technical />
         </notations>
       </note>
-      <note default-x="85.01" nf-id="m36_n14_5dee09" nf-page="1" nf-mapped-x="1491.13" nf-mapped-y="753.25" default-y="49.41">
+      <note default-x="85.18" nf-id="m36_n14_5dee09" nf-page="1" nf-mapped-x="1491.60" nf-mapped-y="746.38" default-y="46.93">
         <pitch>
-          <step>C</step>
+          <step>D</step>
           <octave>4</octave>
         </pitch>
         <duration>6</duration>
@@ -6474,7 +6483,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="85.19" nf-id="m36_n15_a5e24f" nf-page="1" nf-mapped-x="1491.64" nf-mapped-y="773.88" default-y="56.84">
+      <note default-x="85.31" nf-id="m36_n15_a5e24f" nf-page="1" nf-mapped-x="1491.97" nf-mapped-y="773.88" default-y="56.84">
         <chord />
         <pitch>
           <step>G</step>
@@ -6499,6 +6508,33 @@
         <staff>2</staff>
         <duration>6</duration>
         <voice>6</voice>
+      </note>
+      <note nf-id="b8387682" default-x="59.04" default-y="46.93" nf-mapped-x="1419.00" nf-mapped-y="746.38" nf-page="1">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>6</duration>
+        <voice>6</voice>
+        <staff>2</staff>
+      </note>
+      <note nf-id="b42fa3ee" default-x="59.04" default-y="51.88" nf-mapped-x="1419.00" nf-mapped-y="760.12" nf-page="1">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>6</duration>
+        <voice>6</voice>
+        <staff>2</staff>
+      </note>
+      <note nf-id="97fc6f25" default-x="59.04" default-y="56.84" nf-mapped-x="1419.00" nf-mapped-y="773.88" nf-page="1">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>6</duration>
+        <voice>6</voice>
+        <staff>2</staff>
       </note>
     </measure>
     <measure number="37" width="122.04" nf-page="1" nf-bbox-x1="78.00" nf-bbox-y1="994.00" nf-bbox-x2="417.00" nf-bbox-y2="1232.00">
@@ -6644,7 +6680,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="56.85" nf-id="m37_n10_200fe9" nf-page="1" nf-mapped-x="235.90" nf-mapped-y="1128.50" default-y="48.42">
+      <note default-x="56.84" nf-id="m37_n10_200fe9" nf-page="1" nf-mapped-x="235.90" nf-mapped-y="1128.50" default-y="48.42">
         <chord />
         <pitch>
           <step>E</step>
@@ -6688,7 +6724,7 @@
           <step>F</step>
           <octave>3</octave>
         </pitch>
-        <staff>2</staff>
+        <staff>1</staff>
         <duration>3</duration>
         <voice>1</voice>
       </note>
@@ -6859,16 +6895,16 @@
           <technical />
         </notations>
       </note>
-      <note default-x="71.14" nf-id="m38_n10_cb5450" nf-page="1" nf-mapped-x="614.60" nf-mapped-y="1096.96" default-y="37.07">
+      <note default-x="71.14" nf-id="m38_n10_cb5450" nf-page="1" nf-mapped-x="614.60" nf-mapped-y="1096.50" default-y="36.90">
         <chord />
         <pitch>
-          <step>D</step>
+          <step>A</step>
           <octave>3</octave>
         </pitch>
-        <duration>12</duration>
+        <duration>3</duration>
         <voice>6</voice>
         <type>eighth</type>
-        <staff>2</staff>
+        <staff>1</staff>
         <beam number="1">continue</beam>
         <notations>
           <technical />
@@ -6882,7 +6918,7 @@
         <duration>3</duration>
         <voice>6</voice>
         <type>eighth</type>
-        <staff>2</staff>
+        <staff>1</staff>
         <beam number="1">end</beam>
         <notations>
           <technical />
@@ -6900,7 +6936,7 @@
         <duration>3</duration>
         <voice>1</voice>
       </note>
-      <note nf-id="217f5a48" default-x="49.18" default-y="47.15" nf-mapped-x="553.60" nf-mapped-y="1124.96" nf-page="1">
+      <note nf-id="217f5a48" default-x="49.18" default-y="48.42" nf-mapped-x="553.60" nf-mapped-y="1128.50" nf-page="1">
         <pitch>
           <step>E</step>
           <octave>4</octave>
@@ -6909,7 +6945,7 @@
         <duration>12</duration>
         <voice>6</voice>
       </note>
-      <note nf-id="a17032a7" default-x="49.29" default-y="-2.70" nf-mapped-x="553.90" nf-mapped-y="986.50" nf-page="1">
+      <note nf-id="a17032a7" default-x="49.28" default-y="-2.70" nf-mapped-x="553.90" nf-mapped-y="986.50" nf-page="1">
         <pitch>
           <step>C</step>
           <octave>6</octave>
@@ -6918,7 +6954,7 @@
         <duration>4</duration>
         <voice>1</voice>
       </note>
-      <note nf-id="02b64e0a" default-x="100.39" default-y="-10.12" nf-mapped-x="695.85" nf-mapped-y="965.88" nf-page="1">
+      <note nf-id="02b64e0a" default-x="113.62" default-y="-10.12" nf-mapped-x="732.60" nf-mapped-y="965.88" nf-page="1">
         <pitch>
           <step>D</step>
           <octave>4</octave>
@@ -6927,7 +6963,7 @@
         <duration>3</duration>
         <voice>1</voice>
       </note>
-      <note nf-id="08c3e3a5" default-x="49.23" default-y="63.76" nf-mapped-x="553.74" nf-mapped-y="1171.11" nf-page="1">
+      <note nf-id="08c3e3a5" default-x="49.23" default-y="63.27" nf-mapped-x="553.74" nf-mapped-y="1169.75" nf-page="1">
         <pitch>
           <step>F</step>
           <octave>3</octave>
@@ -6936,12 +6972,30 @@
         <voice>6</voice>
         <staff>2</staff>
       </note>
+      <note nf-id="247347b9" default-x="49.02" default-y="-2.70" nf-mapped-x="553.18" nf-mapped-y="986.50" nf-page="1">
+        <pitch>
+          <step>C</step>
+          <octave>6</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
+      <note nf-id="55e4c830" default-x="61.12" default-y="4.72" nf-mapped-x="586.78" nf-mapped-y="1007.12" nf-page="1">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
     </measure>
     <measure number="39" width="99.36" nf-page="1" nf-bbox-x1="667.00" nf-bbox-y1="994.00" nf-bbox-x2="943.00" nf-bbox-y2="1232.00">
       <attributes>
         <divisions>12</divisions>
       </attributes>
-      <note default-x="10.05" nf-id="9c4c64a0" nf-page="1" nf-mapped-x="694.92" nf-mapped-y="965.88" default-y="-10.12">
+      <note default-x="10.39" nf-id="9c4c64a0" nf-page="1" nf-mapped-x="695.85" nf-mapped-y="965.88" default-y="-10.12">
         <pitch>
           <step>D</step>
           <octave>4</octave>
@@ -6987,7 +7041,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="56.85" nf-id="m39_n3_4e6740" nf-page="1" nf-mapped-x="824.90" nf-mapped-y="972.75" default-y="-7.65">
+      <note default-x="56.84" nf-id="m39_n3_4e6740" nf-page="1" nf-mapped-x="824.90" nf-mapped-y="972.75" default-y="-7.65">
         <pitch>
           <step>C</step>
           <octave>4</octave>
@@ -7071,7 +7125,7 @@
         <duration>3</duration>
         <voice>6</voice>
         <type>eighth</type>
-        <staff>2</staff>
+        <staff>1</staff>
         <beam number="1">end</beam>
         <notations>
           <technical />
@@ -7230,7 +7284,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="78.09" nf-id="m40_n5_bea310" nf-page="1" nf-mapped-x="1159.90" nf-mapped-y="986.50" default-y="-2.70">
+      <note default-x="78.08" nf-id="m40_n5_bea310" nf-page="1" nf-mapped-x="1159.90" nf-mapped-y="986.50" default-y="-2.70">
         <pitch>
           <step>C</step>
           <octave>6</octave>
@@ -7318,7 +7372,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="64.77" nf-id="m40_n11_c564f9" nf-page="1" nf-mapped-x="1122.90" nf-mapped-y="1114.75" default-y="43.47">
+      <note default-x="64.76" nf-id="m40_n11_c564f9" nf-page="1" nf-mapped-x="1122.90" nf-mapped-y="1114.75" default-y="43.47">
         <pitch>
           <step>C</step>
           <octave>3</octave>
@@ -7332,7 +7386,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="37.77" nf-id="m40_n12_c59a69" nf-page="1" nf-mapped-x="1047.90" nf-mapped-y="1103.38" default-y="39.38">
+      <note default-x="37.76" nf-id="m40_n12_c59a69" nf-page="1" nf-mapped-x="1047.90" nf-mapped-y="1103.38" default-y="39.38">
         <chord />
         <pitch>
           <step>G</step>
@@ -7341,7 +7395,7 @@
         <duration>3</duration>
         <voice>6</voice>
         <type>eighth</type>
-        <staff>2</staff>
+        <staff>1</staff>
         <beam number="1">continue</beam>
         <notations>
           <technical />
@@ -7392,7 +7446,7 @@
       <backup>
         <duration>24</duration>
       </backup>
-      <note nf-id="1719a272" default-x="10.09" default-y="60.79" nf-mapped-x="971.01" nf-mapped-y="1162.88" nf-page="1">
+      <note nf-id="1719a272" default-x="10.08" default-y="60.79" nf-mapped-x="971.01" nf-mapped-y="1162.88" nf-page="1">
         <pitch>
           <step>G</step>
           <octave>3</octave>
@@ -7419,7 +7473,7 @@
         <duration>3</duration>
         <voice>6</voice>
       </note>
-      <note nf-id="5d74c2bd" default-x="37.77" default-y="39.38" nf-mapped-x="1047.90" nf-mapped-y="1103.38" nf-page="1">
+      <note nf-id="5d74c2bd" default-x="37.76" default-y="39.38" nf-mapped-x="1047.90" nf-mapped-y="1103.38" nf-page="1">
         <pitch>
           <step>G</step>
           <octave>3</octave>
@@ -7482,7 +7536,7 @@
         <duration>3</duration>
         <voice>1</voice>
       </note>
-      <note nf-id="71126015" default-x="123.05" default-y="9.67" nf-mapped-x="1284.79" nf-mapped-y="1020.88" nf-page="1">
+      <note nf-id="71126015" default-x="123.04" default-y="9.67" nf-mapped-x="1284.79" nf-mapped-y="1020.88" nf-page="1">
         <pitch>
           <step>E</step>
           <octave>5</octave>
@@ -7610,7 +7664,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="89.03" nf-id="m41_n8_682766" nf-page="1" nf-mapped-x="1503.32" nf-mapped-y="1082.75" default-y="31.95">
+      <note default-x="89.04" nf-id="m41_n8_682766" nf-page="1" nf-mapped-x="1503.32" nf-mapped-y="1082.75" default-y="31.95">
         <pitch>
           <step>C</step>
           <octave>4</octave>
@@ -7748,10 +7802,10 @@
       <attributes>
         <divisions>12</divisions>
       </attributes>
-      <note default-x="32.16" nf-id="m42_n0_b9583d" nf-page="1" nf-mapped-x="168.33" nf-mapped-y="1452.00" default-y="24.84">
+      <note default-x="62.13" nf-id="m42_n0_b9583d" nf-page="1" nf-mapped-x="251.59" nf-mapped-y="1424.00" default-y="14.76">
         <pitch>
-          <step>F</step>
-          <octave>4</octave>
+          <step>C</step>
+          <octave>5</octave>
         </pitch>
         <duration>3</duration>
         <voice>1</voice>
@@ -7763,31 +7817,31 @@
           <technical />
         </notations>
       </note>
-      <note default-x="32.55" nf-id="m42_n1_dfad5f" nf-page="1" nf-mapped-x="169.41" nf-mapped-y="1445.00" default-y="22.32">
+      <note default-x="74.79" nf-id="m42_n1_dfad5f" nf-page="1" nf-mapped-x="286.74" nf-mapped-y="1558.00" default-y="63.00">
         <chord />
         <pitch>
-          <step>G</step>
-          <octave>4</octave>
+          <step>F</step>
+          <octave>3</octave>
         </pitch>
-        <duration>6</duration>
+        <duration>4</duration>
         <voice>1</voice>
         <type>eighth</type>
         <dot />
-        <staff>1</staff>
+        <staff>2</staff>
         <beam number="1">continue</beam>
         <notations>
           <technical />
         </notations>
       </note>
-      <note default-x="61.81" nf-id="m42_n2_2dfb1d" nf-page="1" nf-mapped-x="250.69" nf-mapped-y="1424.00" default-y="14.76">
+      <note default-x="99.33" nf-id="m42_n2_2dfb1d" nf-page="1" nf-mapped-x="354.90" nf-mapped-y="1530.00" default-y="52.92">
         <pitch>
           <step>C</step>
-          <octave>5</octave>
+          <octave>4</octave>
         </pitch>
-        <duration>3</duration>
+        <duration>4</duration>
         <voice>1</voice>
         <type>16th</type>
-        <staff>1</staff>
+        <staff>2</staff>
         <beam number="1">end</beam>
         <notations>
           <technical />
@@ -7809,7 +7863,7 @@
         <staff>1</staff>
         <notations />
       </note>
-      <note default-x="109.61" nf-id="m42_n5_3c3b6b" nf-page="1" nf-mapped-x="383.46" nf-mapped-y="1396.00" default-y="4.68">
+      <note default-x="111.58" nf-id="m42_n5_3c3b6b" nf-page="1" nf-mapped-x="388.94" nf-mapped-y="1396.00" default-y="4.68">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -7846,7 +7900,7 @@
           <step>C</step>
           <octave>4</octave>
         </pitch>
-        <duration>6</duration>
+        <duration>3</duration>
         <voice>6</voice>
         <type>eighth</type>
         <staff>2</staff>
@@ -7855,10 +7909,10 @@
           <technical />
         </notations>
       </note>
-      <note default-x="73.93" nf-id="m42_n8_c30d00" nf-page="1" nf-mapped-x="284.35" nf-mapped-y="1558.00" default-y="63.00">
+      <note default-x="52.53" nf-id="m42_n8_c30d00" nf-page="1" nf-mapped-x="224.90" nf-mapped-y="1530.00" default-y="52.92">
         <pitch>
-          <step>F</step>
-          <octave>3</octave>
+          <step>C</step>
+          <octave>4</octave>
         </pitch>
         <duration>4</duration>
         <voice>6</voice>
@@ -7869,7 +7923,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="74.75" nf-id="m42_n9_2d265c" nf-page="1" nf-mapped-x="286.64" nf-mapped-y="1509.00" default-y="45.36">
+      <note default-x="74.74" nf-id="m42_n9_2d265c" nf-page="1" nf-mapped-x="286.60" nf-mapped-y="1509.00" default-y="45.36">
         <chord />
         <pitch>
           <step>D</step>
@@ -7884,12 +7938,12 @@
           <technical />
         </notations>
       </note>
-      <note default-x="86.65" nf-id="m42_n10_8462db" nf-page="1" nf-mapped-x="319.69" nf-mapped-y="1502.00" default-y="42.84">
+      <note default-x="87.81" nf-id="m42_n10_8462db" nf-page="1" nf-mapped-x="322.90" nf-mapped-y="1502.00" default-y="42.84">
         <pitch>
           <step>C</step>
           <octave>3</octave>
         </pitch>
-        <duration>3</duration>
+        <duration>4</duration>
         <voice>6</voice>
         <type>16th</type>
         <staff>2</staff>
@@ -7898,23 +7952,36 @@
           <technical />
         </notations>
       </note>
-      <note default-x="96.03" nf-id="m42_n11_8f28e2" nf-page="1" nf-mapped-x="345.75" nf-mapped-y="1530.00" default-y="52.92">
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>6</duration>
-        <voice>6</voice>
-        <type>eighth</type>
-        <staff>2</staff>
-        <beam number="1">end</beam>
-        <notations>
-          <technical />
-        </notations>
-      </note>
       <backup>
         <duration>24</duration>
       </backup>
+      <note nf-id="a35bbe56" default-x="30.28" default-y="24.84" nf-mapped-x="163.10" nf-mapped-y="1452.00" nf-page="1">
+        <pitch>
+          <step>F</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
+      <note nf-id="ce3be2fb" default-x="38.71" default-y="22.32" nf-mapped-x="186.54" nf-mapped-y="1445.00" nf-page="1">
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>6</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
+      <note nf-id="ee01387e" default-x="131.38" default-y="4.68" nf-mapped-x="443.94" nf-mapped-y="1396.00" nf-page="1">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
     </measure>
     <measure number="43" width="101.52" nf-page="1" nf-bbox-x1="416.00" nf-bbox-y1="1383.00" nf-bbox-x2="698.00" nf-bbox-y2="1619.00">
       <attributes>
@@ -7970,7 +8037,7 @@
           <step>E</step>
           <octave>5</octave>
         </pitch>
-        <duration>3</duration>
+        <duration>4</duration>
         <voice>1</voice>
         <type>16th</type>
         <staff>1</staff>
@@ -7979,20 +8046,20 @@
           <technical />
         </notations>
       </note>
-      <note default-x="54.72" nf-id="m43_n4_d31cbd" nf-page="1" nf-mapped-x="568.00" nf-mapped-y="1431.00" default-y="17.28">
+      <note default-x="58.68" nf-id="m43_n4_d31cbd" nf-page="1" nf-mapped-x="579.00" nf-mapped-y="1431.00" default-y="17.28">
         <rest />
-        <duration>4</duration>
+        <duration>3</duration>
         <voice>1</voice>
         <type>16th</type>
         <staff>1</staff>
         <notations />
       </note>
-      <note default-x="67.09" nf-id="m43_n5_93ee6b" nf-page="1" nf-mapped-x="602.37" nf-mapped-y="1417.00" default-y="12.24">
+      <note default-x="71.95" nf-id="m43_n5_93ee6b" nf-page="1" nf-mapped-x="615.85" nf-mapped-y="1417.00" default-y="12.24">
         <pitch>
           <step>D</step>
           <octave>5</octave>
         </pitch>
-        <duration>5</duration>
+        <duration>4</duration>
         <voice>1</voice>
         <type>eighth</type>
         <staff>1</staff>
@@ -8001,10 +8068,10 @@
           <technical />
         </notations>
       </note>
-      <note default-x="88.09" nf-id="m43_n6_8a2e8f" nf-page="1" nf-mapped-x="660.69" nf-mapped-y="1417.00" default-y="12.24">
+      <note default-x="92.74" nf-id="m43_n6_8a2e8f" nf-page="1" nf-mapped-x="673.62" nf-mapped-y="1445.00" default-y="22.32">
         <pitch>
-          <step>D</step>
-          <octave>5</octave>
+          <step>G</step>
+          <octave>4</octave>
         </pitch>
         <duration>3</duration>
         <voice>1</voice>
@@ -8015,11 +8082,11 @@
           <technical />
         </notations>
       </note>
-      <note default-x="89.14" nf-id="m43_n7_49d7af" nf-page="1" nf-mapped-x="663.60" nf-mapped-y="1445.00" default-y="22.32">
+      <note default-x="92.83" nf-id="m43_n7_49d7af" nf-page="1" nf-mapped-x="673.85" nf-mapped-y="1417.00" default-y="12.24">
         <chord />
         <pitch>
-          <step>G</step>
-          <octave>4</octave>
+          <step>D</step>
+          <octave>5</octave>
         </pitch>
         <duration>3</duration>
         <voice>1</voice>
@@ -8074,12 +8141,12 @@
           <technical />
         </notations>
       </note>
-      <note default-x="58.46" nf-id="m43_n11_1d3c58" nf-page="1" nf-mapped-x="578.39" nf-mapped-y="1509.00" default-y="45.36">
+      <note default-x="32.37" nf-id="m43_n11_1d3c58" nf-page="1" nf-mapped-x="505.90" nf-mapped-y="1530.00" default-y="52.92">
         <pitch>
-          <step>D</step>
-          <octave>3</octave>
+          <step>C</step>
+          <octave>4</octave>
         </pitch>
-        <duration>3</duration>
+        <duration>4</duration>
         <voice>6</voice>
         <type>16th</type>
         <staff>2</staff>
@@ -8088,9 +8155,9 @@
           <technical />
         </notations>
       </note>
-      <note default-x="66.33" nf-id="m43_n12_6bb0fe" nf-page="1" nf-mapped-x="600.25" nf-mapped-y="1502.00" default-y="42.84">
+      <note default-x="59.26" nf-id="m43_n12_6bb0fe" nf-page="1" nf-mapped-x="580.60" nf-mapped-y="1509.00" default-y="45.36">
         <pitch>
-          <step>C</step>
+          <step>D</step>
           <octave>3</octave>
         </pitch>
         <duration>3</duration>
@@ -8102,12 +8169,12 @@
           <technical />
         </notations>
       </note>
-      <note default-x="77.33" nf-id="m43_n13_3c0277" nf-page="1" nf-mapped-x="630.81" nf-mapped-y="1558.00" default-y="63.00">
+      <note default-x="83.49" nf-id="m43_n13_3c0277" nf-page="1" nf-mapped-x="647.90" nf-mapped-y="1530.00" default-y="52.92">
         <pitch>
-          <step>F</step>
-          <octave>3</octave>
+          <step>C</step>
+          <octave>4</octave>
         </pitch>
-        <duration>6</duration>
+        <duration>4</duration>
         <voice>6</voice>
         <type>eighth</type>
         <staff>2</staff>
@@ -8116,13 +8183,13 @@
           <technical />
         </notations>
       </note>
-      <note default-x="76.25" nf-id="m43_n14_922676" nf-page="1" nf-mapped-x="627.80" nf-mapped-y="1530.00" default-y="52.92">
+      <note default-x="83.43" nf-id="m43_n14_922676" nf-page="1" nf-mapped-x="647.74" nf-mapped-y="1558.00" default-y="63.00">
         <chord />
         <pitch>
-          <step>C</step>
-          <octave>4</octave>
+          <step>F</step>
+          <octave>3</octave>
         </pitch>
-        <duration>6</duration>
+        <duration>4</duration>
         <voice>6</voice>
         <type>eighth</type>
         <staff>2</staff>
@@ -8133,6 +8200,60 @@
       <backup>
         <duration>24</duration>
       </backup>
+      <note nf-id="b64aa4ff" default-x="46.46" default-y="42.84" nf-mapped-x="545.05" nf-mapped-y="1502.00" nf-page="1">
+        <pitch>
+          <step>C</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <staff>2</staff>
+      </note>
+      <note nf-id="7872bd56" default-x="46.50" default-y="9.72" nf-mapped-x="545.17" nf-mapped-y="1410.00" nf-page="1">
+        <pitch>
+          <step>E</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
+      <note nf-id="fb533362" default-x="46.41" default-y="42.84" nf-mapped-x="544.90" nf-mapped-y="1502.00" nf-page="1">
+        <pitch>
+          <step>C</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <staff>2</staff>
+      </note>
+      <note nf-id="126a2fd5" default-x="71.97" default-y="42.84" nf-mapped-x="615.90" nf-mapped-y="1502.00" nf-page="1">
+        <pitch>
+          <step>C</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>1</voice>
+        <staff>2</staff>
+      </note>
+      <note nf-id="a5fa066c" default-x="92.74" default-y="22.32" nf-mapped-x="673.62" nf-mapped-y="1445.00" nf-page="1">
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>6</voice>
+        <staff>1</staff>
+      </note>
+      <note nf-id="61e373ed" default-x="110.73" default-y="39.96" nf-mapped-x="723.57" nf-mapped-y="1494.00" nf-page="1">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
     </measure>
     <measure number="44" width="109.80" nf-page="1" nf-bbox-x1="698.00" nf-bbox-y1="1383.00" nf-bbox-x2="1003.00" nf-bbox-y2="1619.00">
       <attributes>
@@ -8215,7 +8336,7 @@
           <step>G</step>
           <octave>4</octave>
         </pitch>
-        <duration>3</duration>
+        <duration>4</duration>
         <voice>1</voice>
         <type>16th</type>
         <staff>1</staff>
@@ -8230,7 +8351,7 @@
           <step>E</step>
           <octave>5</octave>
         </pitch>
-        <duration>3</duration>
+        <duration>4</duration>
         <voice>1</voice>
         <type>16th</type>
         <staff>1</staff>
@@ -8238,12 +8359,12 @@
           <technical />
         </notations>
       </note>
-      <note default-x="61.28" nf-id="m44_n7_72ebfe" nf-page="1" nf-mapped-x="868.21" nf-mapped-y="1417.00" default-y="12.24">
+      <note default-x="62.95" nf-id="m44_n7_72ebfe" nf-page="1" nf-mapped-x="872.85" nf-mapped-y="1417.00" default-y="12.24">
         <pitch>
           <step>D</step>
           <octave>5</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>3</duration>
         <voice>1</voice>
         <type>16th</type>
         <staff>1</staff>
@@ -8252,24 +8373,10 @@
           <technical />
         </notations>
       </note>
-      <note default-x="73.58" nf-id="m44_n8_2a454a" nf-page="1" nf-mapped-x="902.39" nf-mapped-y="1424.00" default-y="14.76">
+      <note default-x="76.04" nf-id="m44_n8_2a454a" nf-page="1" nf-mapped-x="909.21" nf-mapped-y="1424.00" default-y="14.76">
         <pitch>
           <step>C</step>
           <octave>5</octave>
-        </pitch>
-        <duration>3</duration>
-        <voice>1</voice>
-        <type>16th</type>
-        <staff>1</staff>
-        <beam number="1">continue</beam>
-        <notations>
-          <technical />
-        </notations>
-      </note>
-      <note default-x="82.76" nf-id="m44_n9_a9e4c0" nf-page="1" nf-mapped-x="927.88" nf-mapped-y="1431.00" default-y="17.28">
-        <pitch>
-          <step>B</step>
-          <octave>4</octave>
         </pitch>
         <duration>4</duration>
         <voice>1</voice>
@@ -8280,7 +8387,21 @@
           <technical />
         </notations>
       </note>
-      <note default-x="95.53" nf-id="m44_n10_c20b15" nf-page="1" nf-mapped-x="963.35" nf-mapped-y="1445.00" default-y="22.32">
+      <note default-x="88.51" nf-id="m44_n9_a9e4c0" nf-page="1" nf-mapped-x="943.85" nf-mapped-y="1431.00" default-y="17.28">
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <staff>1</staff>
+        <beam number="1">continue</beam>
+        <notations>
+          <technical />
+        </notations>
+      </note>
+      <note default-x="100.35" nf-id="m44_n10_c20b15" nf-page="1" nf-mapped-x="976.76" nf-mapped-y="1445.00" default-y="22.32">
         <pitch>
           <step>G</step>
           <octave>4</octave>
@@ -8297,7 +8418,7 @@
       <backup>
         <duration>24</duration>
       </backup>
-      <note default-x="9.81" nf-id="m44_n11_71f12e" nf-page="1" nf-mapped-x="725.24" nf-mapped-y="1649.00" default-y="95.76">
+      <note default-x="9.25" nf-id="m44_n11_71f12e" nf-page="1" nf-mapped-x="723.69" nf-mapped-y="1649.00" default-y="95.76">
         <pitch>
           <step>D</step>
           <octave>3</octave>
@@ -8311,7 +8432,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="11.00" nf-id="m44_n12_bff41b" nf-page="1" nf-mapped-x="728.55" nf-mapped-y="1600.00" default-y="78.12">
+      <note default-x="9.34" nf-id="m44_n12_bff41b" nf-page="1" nf-mapped-x="723.93" nf-mapped-y="1600.00" default-y="78.12">
         <chord />
         <pitch>
           <step>G</step>
@@ -8356,6 +8477,78 @@
       <backup>
         <duration>24</duration>
       </backup>
+      <note nf-id="d2336585" default-x="-18.09" default-y="63.00" nf-mapped-x="647.74" nf-mapped-y="1558.00" nf-page="1">
+        <pitch>
+          <step>F</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>6</duration>
+        <voice>6</voice>
+        <staff>2</staff>
+      </note>
+      <note nf-id="5c5eefb8" default-x="36.24" default-y="78.12" nf-mapped-x="798.68" nf-mapped-y="1600.00" nf-page="1">
+        <pitch>
+          <step>G</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>6</duration>
+        <voice>6</voice>
+        <staff>2</staff>
+      </note>
+      <note nf-id="eafbfa5b" default-x="36.36" default-y="12.24" nf-mapped-x="799.00" nf-mapped-y="1417.00" nf-page="1">
+        <pitch>
+          <step>D</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
+      <note nf-id="5869b7b3" default-x="36.36" default-y="17.28" nf-mapped-x="799.00" nf-mapped-y="1431.00" nf-page="1">
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
+      <note nf-id="42672f3f" default-x="49.11" default-y="22.32" nf-mapped-x="834.42" nf-mapped-y="1445.00" nf-page="1">
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
+      <note nf-id="4d338875" default-x="49.20" default-y="9.72" nf-mapped-x="834.66" nf-mapped-y="1410.00" nf-page="1">
+        <pitch>
+          <step>E</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
+      <note nf-id="0fd75bc3" default-x="118.58" default-y="32.40" nf-mapped-x="1027.40" nf-mapped-y="1473.00" nf-page="1">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
+      <note nf-id="57cf20f4" default-x="118.78" default-y="19.80" nf-mapped-x="1027.95" nf-mapped-y="1438.00" nf-page="1">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
     </measure>
     <measure number="45" width="99.00" nf-page="1" nf-bbox-x1="1003.00" nf-bbox-y1="1383.00" nf-bbox-x2="1278.00" nf-bbox-y2="1619.00">
       <attributes>
@@ -8409,7 +8602,7 @@
           <step>C</step>
           <octave>5</octave>
         </pitch>
-        <duration>3</duration>
+        <duration>4</duration>
         <voice>1</voice>
         <type>16th</type>
         <staff>1</staff>
@@ -8418,12 +8611,12 @@
           <technical />
         </notations>
       </note>
-      <note default-x="57.79" nf-id="m45_n4_36daa3" nf-page="1" nf-mapped-x="1163.53" nf-mapped-y="1438.00" default-y="19.80">
+      <note default-x="58.58" nf-id="m45_n4_36daa3" nf-page="1" nf-mapped-x="1165.71" nf-mapped-y="1438.00" default-y="19.80">
         <pitch>
           <step>A</step>
           <octave>4</octave>
         </pitch>
-        <duration>5</duration>
+        <duration>3</duration>
         <voice>1</voice>
         <type>eighth</type>
         <staff>1</staff>
@@ -8432,13 +8625,13 @@
           <technical />
         </notations>
       </note>
-      <note default-x="53.83" nf-id="m45_n5_8e5784" nf-page="1" nf-mapped-x="1152.54" nf-mapped-y="1431.00" default-y="17.28">
+      <note default-x="46.65" nf-id="m45_n5_8e5784" nf-page="1" nf-mapped-x="1132.59" nf-mapped-y="1424.00" default-y="14.76">
         <chord />
         <pitch>
-          <step>B</step>
-          <octave>4</octave>
+          <step>C</step>
+          <octave>5</octave>
         </pitch>
-        <duration>3</duration>
+        <duration>4</duration>
         <voice>1</voice>
         <type>eighth</type>
         <staff>1</staff>
@@ -8447,7 +8640,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="76.68" nf-id="m45_n6_df2ab4" nf-page="1" nf-mapped-x="1216.01" nf-mapped-y="1445.00" default-y="22.32">
+      <note default-x="81.15" nf-id="m45_n6_df2ab4" nf-page="1" nf-mapped-x="1228.42" nf-mapped-y="1445.00" default-y="22.32">
         <pitch>
           <step>G</step>
           <octave>4</octave>
@@ -8483,7 +8676,7 @@
           <step>C</step>
           <octave>4</octave>
         </pitch>
-        <duration>8</duration>
+        <duration>11</duration>
         <voice>6</voice>
         <type>eighth</type>
         <dot />
@@ -8493,20 +8686,20 @@
           <technical />
         </notations>
       </note>
-      <note default-x="53.46" nf-id="m45_n9_c1cba0" nf-page="1" nf-mapped-x="1151.50" nf-mapped-y="1571.00" default-y="67.68">
+      <note default-x="58.14" nf-id="m45_n9_c1cba0" nf-page="1" nf-mapped-x="1164.50" nf-mapped-y="1572.00" default-y="68.04">
         <rest />
-        <duration>4</duration>
+        <duration>3</duration>
         <voice>6</voice>
         <type>16th</type>
         <staff>2</staff>
         <notations />
       </note>
-      <note default-x="68.32" nf-id="m45_n10_2f98d3" nf-page="1" nf-mapped-x="1192.79" nf-mapped-y="1530.00" default-y="52.92">
+      <note default-x="71.61" nf-id="m45_n10_2f98d3" nf-page="1" nf-mapped-x="1201.90" nf-mapped-y="1530.00" default-y="52.92">
         <pitch>
           <step>C</step>
           <octave>4</octave>
         </pitch>
-        <duration>6</duration>
+        <duration>4</duration>
         <voice>6</voice>
         <type>eighth</type>
         <staff>2</staff>
@@ -8515,7 +8708,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="88.20" nf-id="m45_n11_ce1c23" nf-page="1" nf-mapped-x="1248.00" nf-mapped-y="1530.00" default-y="52.92">
+      <note default-x="90.33" nf-id="m45_n11_ce1c23" nf-page="1" nf-mapped-x="1253.90" nf-mapped-y="1530.00" default-y="52.92">
         <pitch>
           <step>C</step>
           <octave>4</octave>
@@ -8532,12 +8725,57 @@
       <backup>
         <duration>24</duration>
       </backup>
+      <note nf-id="ccb49f0b" default-x="32.55" default-y="22.32" nf-mapped-x="1093.42" nf-mapped-y="1445.00" nf-page="1">
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
+      <note nf-id="d79c87be" default-x="66.13" default-y="17.28" nf-mapped-x="1186.69" nf-mapped-y="1431.00" nf-page="1">
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
+      <note nf-id="c3fcf842" default-x="90.38" default-y="52.92" nf-mapped-x="1254.05" nf-mapped-y="1530.00" nf-page="1">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>6</voice>
+        <staff>2</staff>
+      </note>
+      <note nf-id="da160608" default-x="81.15" default-y="22.32" nf-mapped-x="1228.42" nf-mapped-y="1445.00" nf-page="1">
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>6</voice>
+        <staff>1</staff>
+      </note>
+      <note nf-id="6bd068c6" default-x="90.33" default-y="52.92" nf-mapped-x="1253.90" nf-mapped-y="1530.00" nf-page="1">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>6</voice>
+        <staff>2</staff>
+      </note>
     </measure>
     <measure number="46" width="105.84" nf-page="1" nf-bbox-x1="1278.00" nf-bbox-y1="1383.00" nf-bbox-x2="1572.00" nf-bbox-y2="1619.00">
       <attributes>
         <divisions>12</divisions>
       </attributes>
-      <note default-x="10.20" nf-id="m46_n0_c93818" nf-page="1" nf-mapped-x="1306.34" nf-mapped-y="1452.00" default-y="24.84">
+      <note default-x="10.08" nf-id="m46_n0_c93818" nf-page="1" nf-mapped-x="1306.00" nf-mapped-y="1452.00" default-y="24.84">
         <pitch>
           <step>F</step>
           <octave>4</octave>
@@ -8551,22 +8789,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="10.25" nf-id="m46_n1_12016d" nf-page="1" nf-mapped-x="1306.46" nf-mapped-y="1424.00" default-y="14.76">
-        <chord />
-        <pitch>
-          <step>C</step>
-          <octave>5</octave>
-        </pitch>
-        <duration>6</duration>
-        <voice>1</voice>
-        <type>eighth</type>
-        <staff>1</staff>
-        <beam number="1">continue</beam>
-        <notations>
-          <technical />
-        </notations>
-      </note>
-      <note default-x="10.04" nf-id="m46_n2_21ed3b" nf-page="1" nf-mapped-x="1305.89" nf-mapped-y="1466.00" default-y="29.88">
+      <note default-x="10.08" nf-id="m46_n1_12016d" nf-page="1" nf-mapped-x="1306.00" nf-mapped-y="1466.00" default-y="29.88">
         <chord />
         <pitch>
           <step>D</step>
@@ -8581,7 +8804,22 @@
           <technical />
         </notations>
       </note>
-      <note default-x="30.81" nf-id="m46_n3_4382a9" nf-page="1" nf-mapped-x="1363.59" nf-mapped-y="1473.00" default-y="32.40">
+      <note default-x="10.03" nf-id="m46_n2_21ed3b" nf-page="1" nf-mapped-x="1305.87" nf-mapped-y="1424.00" default-y="14.76">
+        <chord />
+        <pitch>
+          <step>C</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>6</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <staff>1</staff>
+        <beam number="1">continue</beam>
+        <notations>
+          <technical />
+        </notations>
+      </note>
+      <note default-x="29.03" nf-id="m46_n3_4382a9" nf-page="1" nf-mapped-x="1358.65" nf-mapped-y="1473.00" default-y="32.40">
         <pitch>
           <step>C</step>
           <octave>4</octave>
@@ -8595,12 +8833,12 @@
           <technical />
         </notations>
       </note>
-      <note default-x="43.54" nf-id="m46_n4_8a8b30" nf-page="1" nf-mapped-x="1398.95" nf-mapped-y="1445.00" default-y="22.32">
+      <note default-x="68.63" nf-id="m46_n4_8a8b30" nf-page="1" nf-mapped-x="1468.65" nf-mapped-y="1473.00" default-y="32.40">
         <pitch>
-          <step>G</step>
+          <step>C</step>
           <octave>4</octave>
         </pitch>
-        <duration>3</duration>
+        <duration>4</duration>
         <voice>1</voice>
         <type>16th</type>
         <staff>1</staff>
@@ -8617,7 +8855,7 @@
         <staff>1</staff>
         <notations />
       </note>
-      <note default-x="68.12" nf-id="m46_n6_e0392f" nf-page="1" nf-mapped-x="1467.22" nf-mapped-y="1473.00" default-y="32.40">
+      <note default-x="68.63" nf-id="m46_n6_e0392f" nf-page="1" nf-mapped-x="1468.65" nf-mapped-y="1473.00" default-y="32.40">
         <pitch>
           <step>C</step>
           <octave>4</octave>
@@ -8631,7 +8869,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="81.99" nf-id="m46_n7_7f21cb" nf-page="1" nf-mapped-x="1505.75" nf-mapped-y="1452.00" default-y="24.84">
+      <note default-x="82.63" nf-id="m46_n7_7f21cb" nf-page="1" nf-mapped-x="1507.53" nf-mapped-y="1452.00" default-y="24.84">
         <pitch>
           <step>F</step>
           <octave>4</octave>
@@ -8645,7 +8883,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="82.08" nf-id="m46_n8_5d3ea4" nf-page="1" nf-mapped-x="1506.00" nf-mapped-y="1424.00" default-y="14.76">
+      <note default-x="82.75" nf-id="m46_n8_5d3ea4" nf-page="1" nf-mapped-x="1507.87" nf-mapped-y="1424.00" default-y="14.76">
         <chord />
         <pitch>
           <step>C</step>
@@ -8660,7 +8898,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="90.89" nf-id="m46_n9_16d643" nf-page="1" nf-mapped-x="1530.47" nf-mapped-y="1445.00" default-y="22.32">
+      <note default-x="95.55" nf-id="m46_n9_16d643" nf-page="1" nf-mapped-x="1543.42" nf-mapped-y="1445.00" default-y="22.32">
         <pitch>
           <step>G</step>
           <octave>4</octave>
@@ -8677,7 +8915,7 @@
       <backup>
         <duration>24</duration>
       </backup>
-      <note default-x="11.38" nf-id="m46_n10_cc6d94" nf-page="1" nf-mapped-x="1309.60" nf-mapped-y="1572.00" default-y="68.04">
+      <note default-x="9.78" nf-id="m46_n10_cc6d94" nf-page="1" nf-mapped-x="1305.16" nf-mapped-y="1572.00" default-y="68.04">
         <pitch>
           <step>D</step>
           <octave>3</octave>
@@ -8690,7 +8928,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="56.09" nf-id="m46_n11_fce2c1" nf-page="1" nf-mapped-x="1433.80" nf-mapped-y="1572.00" default-y="68.04">
+      <note default-x="55.75" nf-id="m46_n11_fce2c1" nf-page="1" nf-mapped-x="1432.85" nf-mapped-y="1572.00" default-y="68.04">
         <pitch>
           <step>D</step>
           <octave>3</octave>
@@ -8706,6 +8944,15 @@
       <backup>
         <duration>24</duration>
       </backup>
+      <note nf-id="fb169229" default-x="42.89" default-y="22.32" nf-mapped-x="1397.14" nf-mapped-y="1445.00" nf-page="1">
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
     </measure>
     <measure number="47" width="119.16" nf-page="1" nf-bbox-x1="79.00" nf-bbox-y1="1770.00" nf-bbox-x2="410.00" nf-bbox-y2="2001.00">
       <print new-system="yes" />
@@ -8734,7 +8981,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="73.57" nf-id="m47_n2_0a62b1" nf-page="1" nf-mapped-x="283.36" nf-mapped-y="1832.00" default-y="22.32">
+      <note default-x="74.40" nf-id="m47_n2_0a62b1" nf-page="1" nf-mapped-x="285.68" nf-mapped-y="1832.00" default-y="22.32">
         <pitch>
           <step>G</step>
           <octave>4</octave>
@@ -8748,12 +8995,12 @@
           <technical />
         </notations>
       </note>
-      <note default-x="84.37" nf-id="m47_n3_b51abb" nf-page="1" nf-mapped-x="313.36" nf-mapped-y="1853.00" default-y="29.88">
+      <note default-x="84.82" nf-id="m47_n3_b51abb" nf-page="1" nf-mapped-x="314.60" nf-mapped-y="1853.00" default-y="29.88">
         <pitch>
           <step>D</step>
           <octave>4</octave>
         </pitch>
-        <duration>3</duration>
+        <duration>4</duration>
         <voice>1</voice>
         <type>16th</type>
         <staff>1</staff>
@@ -8762,22 +9009,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="94.76" nf-id="m47_n4_7fbe08" nf-page="1" nf-mapped-x="342.21" nf-mapped-y="1839.00" default-y="24.84">
-        <pitch>
-          <step>F</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>3</duration>
-        <voice>1</voice>
-        <type>16th</type>
-        <staff>1</staff>
-        <beam number="1">continue</beam>
-        <notations>
-          <technical />
-        </notations>
-      </note>
-      <note default-x="94.76" nf-id="m47_n5_023952" nf-page="1" nf-mapped-x="342.21" nf-mapped-y="1811.00" default-y="14.76">
-        <chord />
+      <note default-x="98.16" nf-id="m47_n4_7fbe08" nf-page="1" nf-mapped-x="351.66" nf-mapped-y="1811.00" default-y="14.76">
         <pitch>
           <step>C</step>
           <octave>5</octave>
@@ -8791,7 +9023,22 @@
           <technical />
         </notations>
       </note>
-      <note default-x="101.61" nf-id="m47_n6_258850" nf-page="1" nf-mapped-x="361.25" nf-mapped-y="1839.00" default-y="24.84">
+      <note default-x="98.15" nf-id="m47_n5_023952" nf-page="1" nf-mapped-x="351.64" nf-mapped-y="1839.00" default-y="24.84">
+        <chord />
+        <pitch>
+          <step>F</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <staff>1</staff>
+        <beam number="1">continue</beam>
+        <notations>
+          <technical />
+        </notations>
+      </note>
+      <note default-x="109.68" nf-id="m47_n6_258850" nf-page="1" nf-mapped-x="383.66" nf-mapped-y="1839.00" default-y="24.84">
         <pitch>
           <step>F</step>
           <octave>4</octave>
@@ -8842,7 +9089,7 @@
           <step>C</step>
           <octave>4</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>3</duration>
         <voice>6</voice>
         <type>16th</type>
         <staff>2</staff>
@@ -8865,7 +9112,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="73.04" nf-id="m47_n11_cb590c" nf-page="1" nf-mapped-x="281.90" nf-mapped-y="1954.00" default-y="66.24">
+      <note default-x="74.11" nf-id="m47_n11_cb590c" nf-page="1" nf-mapped-x="284.85" nf-mapped-y="1954.00" default-y="66.24">
         <pitch>
           <step>D</step>
           <octave>3</octave>
@@ -8881,17 +9128,107 @@
       <backup>
         <duration>24</duration>
       </backup>
+      <note nf-id="f693b1cb" default-x="43.38" default-y="24.84" nf-mapped-x="199.50" nf-mapped-y="1839.00" nf-page="1">
+        <pitch>
+          <step>F</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>8</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
+      <note nf-id="09b90d6b" default-x="51.99" default-y="51.12" nf-mapped-x="223.41" nf-mapped-y="1912.00" nf-page="1">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>1</voice>
+        <staff>2</staff>
+      </note>
+      <note nf-id="70ef7589" default-x="63.22" default-y="48.60" nf-mapped-x="254.60" nf-mapped-y="1905.00" nf-page="1">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>1</voice>
+        <staff>2</staff>
+      </note>
+      <note nf-id="09b7f551" default-x="97.98" default-y="24.84" nf-mapped-x="351.16" nf-mapped-y="1839.00" nf-page="1">
+        <pitch>
+          <step>F</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
+      <note nf-id="7c7717dd" default-x="98.11" default-y="14.76" nf-mapped-x="351.54" nf-mapped-y="1811.00" nf-page="1">
+        <pitch>
+          <step>C</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
+      <note nf-id="c7569ea9" default-x="109.68" default-y="24.84" nf-mapped-x="383.66" nf-mapped-y="1839.00" nf-page="1">
+        <pitch>
+          <step>F</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
+      <note nf-id="97fdcc70" default-x="167.63" default-y="24.84" nf-mapped-x="544.64" nf-mapped-y="1839.00" nf-page="1">
+        <pitch>
+          <step>F</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
+      <note nf-id="4241426f" default-x="189.95" default-y="32.40" nf-mapped-x="606.65" nf-mapped-y="1860.00" nf-page="1">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
+      <note nf-id="c9b2e04a" default-x="51.93" default-y="51.12" nf-mapped-x="223.24" nf-mapped-y="1912.00" nf-page="1">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>6</voice>
+        <staff>2</staff>
+      </note>
+      <note nf-id="4c2b2bfa" default-x="63.22" default-y="48.60" nf-mapped-x="254.60" nf-mapped-y="1905.00" nf-page="1">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>6</voice>
+        <staff>2</staff>
+      </note>
     </measure>
     <measure number="48" width="104.04" nf-page="1" nf-bbox-x1="410.00" nf-bbox-y1="1770.00" nf-bbox-x2="699.00" nf-bbox-y2="2001.00">
       <attributes>
         <divisions>12</divisions>
       </attributes>
-      <note default-x="9.65" nf-id="m48_n0_4ef885" nf-page="1" nf-mapped-x="436.80" nf-mapped-y="1860.00" default-y="32.40">
+      <note default-x="8.84" nf-id="m48_n0_4ef885" nf-page="1" nf-mapped-x="434.56" nf-mapped-y="1860.00" default-y="32.40">
         <pitch>
           <step>C</step>
           <octave>4</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>3</duration>
         <voice>1</voice>
         <type>16th</type>
         <staff>1</staff>
@@ -8900,7 +9237,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="23.28" nf-id="m48_n1_10b582" nf-page="1" nf-mapped-x="474.66" nf-mapped-y="1839.00" default-y="24.84">
+      <note default-x="21.03" nf-id="m48_n1_10b582" nf-page="1" nf-mapped-x="468.42" nf-mapped-y="1839.00" default-y="24.84">
         <pitch>
           <step>F</step>
           <octave>4</octave>
@@ -8914,13 +9251,13 @@
           <technical />
         </notations>
       </note>
-      <note default-x="25.25" nf-id="m48_n2_9e895c" nf-page="1" nf-mapped-x="480.14" nf-mapped-y="1832.00" default-y="22.32">
+      <note default-x="28.70" nf-id="m48_n2_9e895c" nf-page="1" nf-mapped-x="489.71" nf-mapped-y="1832.00" default-y="22.32">
         <chord />
         <pitch>
           <step>G</step>
           <octave>4</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>3</duration>
         <voice>1</voice>
         <type>16th</type>
         <staff>1</staff>
@@ -8929,7 +9266,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="35.85" nf-id="m48_n3_fc5c48" nf-page="1" nf-mapped-x="509.58" nf-mapped-y="1846.00" default-y="27.36">
+      <note default-x="36.57" nf-id="m48_n3_fc5c48" nf-page="1" nf-mapped-x="511.59" nf-mapped-y="1846.00" default-y="27.36">
         <pitch>
           <step>E</step>
           <octave>4</octave>
@@ -8943,12 +9280,12 @@
           <technical />
         </notations>
       </note>
-      <note default-x="48.13" nf-id="m48_n4_8223f4" nf-page="1" nf-mapped-x="543.69" nf-mapped-y="1839.00" default-y="24.84">
+      <note default-x="48.47" nf-id="m48_n4_8223f4" nf-page="1" nf-mapped-x="544.64" nf-mapped-y="1839.00" default-y="24.84">
         <pitch>
           <step>F</step>
           <octave>4</octave>
         </pitch>
-        <duration>3</duration>
+        <duration>4</duration>
         <voice>1</voice>
         <type>16th</type>
         <staff>1</staff>
@@ -8957,12 +9294,12 @@
           <technical />
         </notations>
       </note>
-      <note default-x="57.79" nf-id="m48_n5_8bbcfa" nf-page="1" nf-mapped-x="570.54" nf-mapped-y="1832.00" default-y="22.32">
+      <note default-x="36.60" nf-id="m48_n5_8bbcfa" nf-page="1" nf-mapped-x="511.68" nf-mapped-y="1846.00" default-y="27.36">
         <pitch>
-          <step>G</step>
+          <step>E</step>
           <octave>4</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>3</duration>
         <voice>1</voice>
         <type>16th</type>
         <staff>1</staff>
@@ -8971,12 +9308,12 @@
           <technical />
         </notations>
       </note>
-      <note default-x="69.67" nf-id="m48_n6_11e014" nf-page="1" nf-mapped-x="603.52" nf-mapped-y="1860.00" default-y="32.40">
+      <note default-x="59.85" nf-id="m48_n6_11e014" nf-page="1" nf-mapped-x="576.25" nf-mapped-y="1832.00" default-y="22.32">
         <pitch>
-          <step>C</step>
+          <step>G</step>
           <octave>4</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>3</duration>
         <voice>1</voice>
         <type>16th</type>
         <staff>1</staff>
@@ -8985,7 +9322,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="80.10" nf-id="m48_n7_96f738" nf-page="1" nf-mapped-x="632.50" nf-mapped-y="1811.00" default-y="14.76">
+      <note default-x="83.69" nf-id="m48_n7_96f738" nf-page="1" nf-mapped-x="642.46" nf-mapped-y="1811.00" default-y="14.76">
         <pitch>
           <step>C</step>
           <octave>5</octave>
@@ -9002,21 +9339,7 @@
       <backup>
         <duration>24</duration>
       </backup>
-      <note default-x="9.63" nf-id="m48_n8_92b994" nf-page="1" nf-mapped-x="436.76" nf-mapped-y="1996.00" default-y="81.36">
-        <pitch>
-          <step>E</step>
-          <octave>2</octave>
-        </pitch>
-        <duration>15</duration>
-        <voice>6</voice>
-        <type>quarter</type>
-        <staff>2</staff>
-        <notations>
-          <technical />
-        </notations>
-      </note>
-      <note default-x="9.49" nf-id="m48_n9_c9dd36" nf-page="1" nf-mapped-x="436.37" nf-mapped-y="1947.00" default-y="63.72">
-        <chord />
+      <note default-x="8.93" nf-id="m48_n8_92b994" nf-page="1" nf-mapped-x="434.79" nf-mapped-y="1947.00" default-y="63.72">
         <pitch>
           <step>E</step>
           <octave>3</octave>
@@ -9029,7 +9352,21 @@
           <technical />
         </notations>
       </note>
-      <note default-x="59.29" nf-id="m48_n10_443b27" nf-page="1" nf-mapped-x="574.70" nf-mapped-y="1947.00" default-y="63.72">
+      <note default-x="8.83" nf-id="m48_n9_c9dd36" nf-page="1" nf-mapped-x="434.52" nf-mapped-y="1996.00" default-y="81.36">
+        <chord />
+        <pitch>
+          <step>E</step>
+          <octave>2</octave>
+        </pitch>
+        <duration>15</duration>
+        <voice>6</voice>
+        <type>quarter</type>
+        <staff>2</staff>
+        <notations>
+          <technical />
+        </notations>
+      </note>
+      <note default-x="59.79" nf-id="m48_n10_443b27" nf-page="1" nf-mapped-x="576.07" nf-mapped-y="1947.00" default-y="63.72">
         <pitch>
           <step>E</step>
           <octave>3</octave>
@@ -9043,12 +9380,12 @@
           <technical />
         </notations>
       </note>
-      <note default-x="81.86" nf-id="m48_n11_c1f179" nf-page="1" nf-mapped-x="637.39" nf-mapped-y="1947.00" default-y="63.72">
+      <note default-x="83.55" nf-id="m48_n11_c1f179" nf-page="1" nf-mapped-x="642.07" nf-mapped-y="1947.00" default-y="63.72">
         <pitch>
           <step>E</step>
           <octave>3</octave>
         </pitch>
-        <duration>3</duration>
+        <duration>4</duration>
         <voice>6</voice>
         <type>16th</type>
         <staff>2</staff>
@@ -9057,7 +9394,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="93.21" nf-id="m48_n12_344115" nf-page="1" nf-mapped-x="668.91" nf-mapped-y="1912.00" default-y="51.12">
+      <note default-x="96.45" nf-id="m48_n12_344115" nf-page="1" nf-mapped-x="677.90" nf-mapped-y="1912.00" default-y="51.12">
         <pitch>
           <step>C</step>
           <octave>4</octave>
@@ -9074,17 +9411,53 @@
       <backup>
         <duration>24</duration>
       </backup>
+      <note nf-id="38871ea0" default-x="28.08" default-y="22.32" nf-mapped-x="488.01" nf-mapped-y="1832.00" nf-page="1">
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
+      <note nf-id="41db4901" default-x="36.32" default-y="27.36" nf-mapped-x="510.89" nf-mapped-y="1846.00" nf-page="1">
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>6</voice>
+        <staff>1</staff>
+      </note>
+      <note nf-id="3f3e46ff" default-x="70.79" default-y="32.40" nf-mapped-x="606.65" nf-mapped-y="1860.00" nf-page="1">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>6</voice>
+        <staff>1</staff>
+      </note>
+      <note nf-id="ddb08f5b" default-x="113.43" default-y="63.72" nf-mapped-x="725.07" nf-mapped-y="1947.00" nf-page="1">
+        <pitch>
+          <step>E</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>1</voice>
+        <staff>2</staff>
+      </note>
     </measure>
     <measure number="49" width="78.84" nf-page="1" nf-bbox-x1="699.00" nf-bbox-y1="1770.00" nf-bbox-x2="918.00" nf-bbox-y2="2001.00">
       <attributes>
         <divisions>12</divisions>
       </attributes>
-      <note default-x="9.93" nf-id="m49_n0_7855ce" nf-page="1" nf-mapped-x="726.59" nf-mapped-y="1783.00" default-y="4.68">
+      <note default-x="9.34" nf-id="m49_n0_7855ce" nf-page="1" nf-mapped-x="724.94" nf-mapped-y="1783.00" default-y="4.68">
         <pitch>
           <step>G</step>
           <octave>5</octave>
         </pitch>
-        <duration>9</duration>
+        <duration>8</duration>
         <voice>1</voice>
         <type>eighth</type>
         <dot />
@@ -9094,12 +9467,12 @@
           <technical />
         </notations>
       </note>
-      <note default-x="32.23" nf-id="m49_n1_3c5cc7" nf-page="1" nf-mapped-x="788.54" nf-mapped-y="1769.00" default-y="-0.36">
+      <note default-x="30.44" nf-id="m49_n1_3c5cc7" nf-page="1" nf-mapped-x="783.55" nf-mapped-y="1769.00" default-y="-0.36">
         <pitch>
           <step>B</step>
           <octave>5</octave>
         </pitch>
-        <duration>3</duration>
+        <duration>4</duration>
         <tie type="start" />
         <voice>1</voice>
         <type>16th</type>
@@ -9110,12 +9483,12 @@
           <technical />
         </notations>
       </note>
-      <note default-x="41.99" nf-id="m49_n2_ae797b" nf-page="1" nf-mapped-x="815.64" nf-mapped-y="1769.00" default-y="-0.36">
+      <note default-x="41.81" nf-id="m49_n2_ae797b" nf-page="1" nf-mapped-x="815.13" nf-mapped-y="1776.00" default-y="2.16">
         <pitch>
-          <step>B</step>
+          <step>A</step>
           <octave>5</octave>
         </pitch>
-        <duration>8</duration>
+        <duration>9</duration>
         <tie type="stop" />
         <voice>1</voice>
         <type>eighth</type>
@@ -9126,12 +9499,12 @@
           <technical />
         </notations>
       </note>
-      <note default-x="63.53" nf-id="m49_n3_2c1181" nf-page="1" nf-mapped-x="875.46" nf-mapped-y="1811.00" default-y="14.76">
+      <note default-x="65.58" nf-id="m49_n3_2c1181" nf-page="1" nf-mapped-x="881.17" nf-mapped-y="1811.00" default-y="14.76">
         <pitch>
           <step>C</step>
           <octave>5</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>3</duration>
         <voice>1</voice>
         <type>eighth</type>
         <staff>1</staff>
@@ -9148,7 +9521,7 @@
           <step>E</step>
           <octave>3</octave>
         </pitch>
-        <duration>9</duration>
+        <duration>8</duration>
         <voice>6</voice>
         <type>eighth</type>
         <dot />
@@ -9172,7 +9545,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="41.87" nf-id="m49_n6_2b065a" nf-page="1" nf-mapped-x="815.31" nf-mapped-y="1947.00" default-y="63.72">
+      <note default-x="42.15" nf-id="m49_n6_2b065a" nf-page="1" nf-mapped-x="816.07" nf-mapped-y="1947.00" default-y="63.72">
         <pitch>
           <step>E</step>
           <octave>3</octave>
@@ -9186,7 +9559,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="54.09" nf-id="m49_n7_5d0fd2" nf-page="1" nf-mapped-x="849.26" nf-mapped-y="1912.00" default-y="51.12">
+      <note default-x="55.05" nf-id="m49_n7_5d0fd2" nf-page="1" nf-mapped-x="851.90" nf-mapped-y="1912.00" default-y="51.12">
         <pitch>
           <step>C</step>
           <octave>4</octave>
@@ -9200,12 +9573,12 @@
           <technical />
         </notations>
       </note>
-      <note default-x="63.49" nf-id="m49_n8_80ada0" nf-page="1" nf-mapped-x="875.35" nf-mapped-y="1947.00" default-y="63.72">
+      <note default-x="65.55" nf-id="m49_n8_80ada0" nf-page="1" nf-mapped-x="881.07" nf-mapped-y="1947.00" default-y="63.72">
         <pitch>
           <step>E</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>3</duration>
         <voice>6</voice>
         <type>eighth</type>
         <staff>2</staff>
@@ -9217,15 +9590,60 @@
       <backup>
         <duration>24</duration>
       </backup>
+      <note nf-id="e1e42fd5" default-x="-20.42" default-y="14.76" nf-mapped-x="642.29" nf-mapped-y="1811.00" nf-page="1">
+        <pitch>
+          <step>C</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>8</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
+      <note nf-id="0f82780c" default-x="30.57" default-y="51.12" nf-mapped-x="783.90" nf-mapped-y="1912.00" nf-page="1">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>6</voice>
+        <staff>2</staff>
+      </note>
+      <note nf-id="bfd0e3bb" default-x="87.79" default-y="61.20" nf-mapped-x="942.85" nf-mapped-y="1940.00" nf-page="1">
+        <pitch>
+          <step>F</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>6</voice>
+        <staff>2</staff>
+      </note>
+      <note nf-id="f61a65eb" default-x="88.20" default-y="19.80" nf-mapped-x="944.00" nf-mapped-y="1825.00" nf-page="1">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
+      <note nf-id="09273434" default-x="107.64" default-y="14.76" nf-mapped-x="998.00" nf-mapped-y="1811.00" nf-page="1">
+        <pitch>
+          <step>C</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
     </measure>
     <measure number="50" width="79.20" nf-page="1" nf-bbox-x1="918.00" nf-bbox-y1="1770.00" nf-bbox-x2="1138.00" nf-bbox-y2="2001.00">
       <attributes>
         <divisions>12</divisions>
       </attributes>
-      <note default-x="8.70" nf-id="m50_n0_55a4c7" nf-page="1" nf-mapped-x="942.18" nf-mapped-y="1825.00" default-y="19.80">
+      <note default-x="-13.26" nf-id="m50_n0_55a4c7" nf-page="1" nf-mapped-x="881.17" nf-mapped-y="1811.00" default-y="14.76">
         <pitch>
-          <step>A</step>
-          <octave>4</octave>
+          <step>C</step>
+          <octave>5</octave>
         </pitch>
         <duration>8</duration>
         <tie type="start" />
@@ -9243,7 +9661,7 @@
           <tuplet bracket="yes" type="start" number="1" />
         </notations>
       </note>
-      <note default-x="8.87" nf-id="m50_n1_7dda21" nf-page="1" nf-mapped-x="942.64" nf-mapped-y="1811.00" default-y="14.76">
+      <note default-x="9.36" nf-id="m50_n1_7dda21" nf-page="1" nf-mapped-x="944.00" nf-mapped-y="1811.00" default-y="14.76">
         <chord />
         <pitch>
           <step>C</step>
@@ -9264,12 +9682,12 @@
           <technical />
         </notations>
       </note>
-      <note default-x="30.49" nf-id="m50_n2_da6f89" nf-page="1" nf-mapped-x="1002.70" nf-mapped-y="1825.00" default-y="19.80">
+      <note default-x="28.80" nf-id="m50_n2_da6f89" nf-page="1" nf-mapped-x="998.00" nf-mapped-y="1825.00" default-y="19.80">
         <pitch>
           <step>A</step>
           <octave>4</octave>
         </pitch>
-        <duration>3</duration>
+        <duration>4</duration>
         <tie type="stop" />
         <voice>1</voice>
         <type>16th</type>
@@ -9285,10 +9703,10 @@
           <technical />
         </notations>
       </note>
-      <note default-x="30.89" nf-id="m50_n3_78e88c" nf-page="1" nf-mapped-x="1003.81" nf-mapped-y="1811.00" default-y="14.76">
+      <note default-x="38.88" nf-id="m50_n3_78e88c" nf-page="1" nf-mapped-x="1026.00" nf-mapped-y="1804.00" default-y="12.24">
         <chord />
         <pitch>
-          <step>C</step>
+          <step>D</step>
           <octave>5</octave>
         </pitch>
         <duration>3</duration>
@@ -9307,7 +9725,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="37.77" nf-id="m50_n4_1ede8f" nf-page="1" nf-mapped-x="1022.92" nf-mapped-y="1818.00" default-y="17.28">
+      <note default-x="38.88" nf-id="m50_n4_1ede8f" nf-page="1" nf-mapped-x="1026.00" nf-mapped-y="1818.00" default-y="17.28">
         <pitch>
           <step>B</step>
           <octave>4</octave>
@@ -9328,13 +9746,13 @@
           <technical />
         </notations>
       </note>
-      <note default-x="37.87" nf-id="m50_n5_4167fb" nf-page="1" nf-mapped-x="1023.20" nf-mapped-y="1804.00" default-y="12.24">
+      <note default-x="48.96" nf-id="m50_n5_4167fb" nf-page="1" nf-mapped-x="1054.00" nf-mapped-y="1804.00" default-y="12.24">
         <chord />
         <pitch>
           <step>D</step>
           <octave>5</octave>
         </pitch>
-        <duration>3</duration>
+        <duration>6</duration>
         <tie type="start" />
         <voice>1</voice>
         <type>16th</type>
@@ -9351,12 +9769,12 @@
           <tuplet type="stop" number="1" />
         </notations>
       </note>
-      <note default-x="42.16" nf-id="m50_n6_0ed3e4" nf-page="1" nf-mapped-x="1035.10" nf-mapped-y="1818.00" default-y="17.28">
+      <note default-x="66.24" nf-id="m50_n6_0ed3e4" nf-page="1" nf-mapped-x="1102.00" nf-mapped-y="1811.00" default-y="14.76">
         <pitch>
-          <step>B</step>
-          <octave>4</octave>
+          <step>C</step>
+          <octave>5</octave>
         </pitch>
-        <duration>8</duration>
+        <duration>3</duration>
         <tie type="stop" />
         <voice>1</voice>
         <type>eighth</type>
@@ -9367,13 +9785,13 @@
           <technical />
         </notations>
       </note>
-      <note default-x="42.03" nf-id="m50_n7_0f8a61" nf-page="1" nf-mapped-x="1034.76" nf-mapped-y="1804.00" default-y="12.24">
+      <note default-x="48.96" nf-id="m50_n7_0f8a61" nf-page="1" nf-mapped-x="1054.00" nf-mapped-y="1818.00" default-y="17.28">
         <chord />
         <pitch>
-          <step>D</step>
-          <octave>5</octave>
+          <step>B</step>
+          <octave>4</octave>
         </pitch>
-        <duration>8</duration>
+        <duration>6</duration>
         <tie type="stop" />
         <voice>1</voice>
         <type>eighth</type>
@@ -9383,12 +9801,12 @@
           <technical />
         </notations>
       </note>
-      <note default-x="63.68" nf-id="m50_n8_c73af2" nf-page="1" nf-mapped-x="1094.90" nf-mapped-y="1811.00" default-y="14.76">
+      <note default-x="88.92" nf-id="m50_n8_c73af2" nf-page="1" nf-mapped-x="1165.00" nf-mapped-y="1811.00" default-y="14.76">
         <pitch>
           <step>C</step>
           <octave>5</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>3</duration>
         <tie type="start" />
         <voice>1</voice>
         <type>eighth</type>
@@ -9398,13 +9816,13 @@
           <technical />
         </notations>
       </note>
-      <note default-x="63.53" nf-id="m50_n9_8afccb" nf-page="1" nf-mapped-x="1094.48" nf-mapped-y="1825.00" default-y="19.80">
+      <note default-x="66.24" nf-id="m50_n9_8afccb" nf-page="1" nf-mapped-x="1102.00" nf-mapped-y="1825.00" default-y="19.80">
         <chord />
         <pitch>
           <step>A</step>
           <octave>4</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>3</duration>
         <tie type="start" />
         <voice>1</voice>
         <type>eighth</type>
@@ -9422,7 +9840,7 @@
           <step>F</step>
           <octave>3</octave>
         </pitch>
-        <duration>20</duration>
+        <duration>21</duration>
         <voice>6</voice>
         <type>quarter</type>
         <dot />
@@ -9431,12 +9849,12 @@
           <technical />
         </notations>
       </note>
-      <note default-x="63.68" nf-id="m50_n11_d8acb5" nf-page="1" nf-mapped-x="1094.90" nf-mapped-y="1891.00" default-y="43.56">
+      <note default-x="65.74" nf-id="m50_n11_d8acb5" nf-page="1" nf-mapped-x="1100.60" nf-mapped-y="1891.00" default-y="43.56">
         <pitch>
           <step>D</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>3</duration>
         <voice>6</voice>
         <type>eighth</type>
         <staff>2</staff>
@@ -9447,15 +9865,33 @@
       <backup>
         <duration>24</duration>
       </backup>
+      <note nf-id="a6559411" default-x="65.77" default-y="19.80" nf-mapped-x="1100.70" nf-mapped-y="1825.00" nf-page="1">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
+      <note nf-id="94cece2f" default-x="88.45" default-y="19.80" nf-mapped-x="1163.70" nf-mapped-y="1825.00" nf-page="1">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
     </measure>
     <measure number="51" width="73.44" nf-page="1" nf-bbox-x1="1138.00" nf-bbox-y1="1770.00" nf-bbox-x2="1342.00" nf-bbox-y2="2001.00">
       <attributes>
         <divisions>12</divisions>
       </attributes>
-      <note default-x="9.23" nf-id="m51_n0_60a536" nf-page="1" nf-mapped-x="1163.64" nf-mapped-y="1811.00" default-y="14.76">
+      <note default-x="-12.96" nf-id="m51_n0_60a536" nf-page="1" nf-mapped-x="1102.00" nf-mapped-y="1825.00" default-y="19.80">
         <pitch>
-          <step>C</step>
-          <octave>5</octave>
+          <step>A</step>
+          <octave>4</octave>
         </pitch>
         <duration>8</duration>
         <tie type="stop" />
@@ -9468,11 +9904,11 @@
           <technical />
         </notations>
       </note>
-      <note default-x="9.06" nf-id="m51_n1_a84762" nf-page="1" nf-mapped-x="1163.18" nf-mapped-y="1825.00" default-y="19.80">
+      <note default-x="-12.96" nf-id="m51_n1_a84762" nf-page="1" nf-mapped-x="1102.00" nf-mapped-y="1811.00" default-y="14.76">
         <chord />
         <pitch>
-          <step>A</step>
-          <octave>4</octave>
+          <step>C</step>
+          <octave>5</octave>
         </pitch>
         <duration>8</duration>
         <tie type="stop" />
@@ -9485,12 +9921,12 @@
           <technical />
         </notations>
       </note>
-      <note default-x="26.21" nf-id="m51_n2_9ff137" nf-page="1" nf-mapped-x="1210.80" nf-mapped-y="1825.00" default-y="19.80">
+      <note default-x="26.76" nf-id="m51_n2_9ff137" nf-page="1" nf-mapped-x="1212.32" nf-mapped-y="1776.00" default-y="2.16">
         <pitch>
           <step>A</step>
-          <octave>4</octave>
+          <octave>5</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>7</duration>
         <voice>1</voice>
         <type>eighth</type>
         <staff>1</staff>
@@ -9499,41 +9935,41 @@
           <technical />
         </notations>
       </note>
-      <note default-x="26.32" nf-id="m51_n3_9d4f4f" nf-page="1" nf-mapped-x="1211.11" nf-mapped-y="1776.00" default-y="2.16">
+      <note default-x="43.40" nf-id="m51_n3_9d4f4f" nf-page="1" nf-mapped-x="1258.55" nf-mapped-y="1769.00" default-y="-0.36">
         <chord />
-        <pitch>
-          <step>A</step>
-          <octave>5</octave>
-        </pitch>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>eighth</type>
-        <staff>1</staff>
-        <notations>
-          <technical />
-        </notations>
-      </note>
-      <note default-x="41.77" nf-id="m51_n4_6cda36" nf-page="1" nf-mapped-x="1254.04" nf-mapped-y="1818.00" default-y="17.28">
         <pitch>
           <step>B</step>
-          <octave>4</octave>
+          <octave>5</octave>
         </pitch>
-        <duration>3</duration>
+        <duration>6</duration>
         <voice>1</voice>
         <type>eighth</type>
         <staff>1</staff>
-        <beam number="1">begin</beam>
         <notations>
           <technical />
         </notations>
       </note>
-      <note default-x="41.77" nf-id="m51_n5_b45a98" nf-page="1" nf-mapped-x="1254.04" nf-mapped-y="1804.00" default-y="12.24">
-        <chord />
+      <note default-x="43.92" nf-id="m51_n4_6cda36" nf-page="1" nf-mapped-x="1260.00" nf-mapped-y="1804.00" default-y="12.24">
         <pitch>
           <step>D</step>
           <octave>5</octave>
         </pitch>
-        <duration>3</duration>
+        <duration>6</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <staff>1</staff>
+        <beam number="1">begin</beam>
+        <notations>
+          <technical />
+        </notations>
+      </note>
+      <note default-x="43.92" nf-id="m51_n5_b45a98" nf-page="1" nf-mapped-x="1260.00" nf-mapped-y="1818.00" default-y="17.28">
+        <chord />
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>6</duration>
         <voice>1</voice>
         <type>eighth</type>
         <staff>1</staff>
@@ -9542,13 +9978,13 @@
           <technical />
         </notations>
       </note>
-      <note default-x="43.05" nf-id="m51_n6_b58245" nf-page="1" nf-mapped-x="1257.57" nf-mapped-y="1769.00" default-y="-0.36">
+      <note default-x="43.40" nf-id="m51_n6_b58245" nf-page="1" nf-mapped-x="1258.55" nf-mapped-y="1769.00" default-y="-0.36">
         <chord />
         <pitch>
           <step>B</step>
           <octave>5</octave>
         </pitch>
-        <duration>5</duration>
+        <duration>6</duration>
         <voice>1</voice>
         <type>eighth</type>
         <staff>1</staff>
@@ -9557,12 +9993,12 @@
           <technical />
         </notations>
       </note>
-      <note default-x="59.07" nf-id="m51_n7_d9b183" nf-page="1" nf-mapped-x="1302.09" nf-mapped-y="1811.00" default-y="14.76">
+      <note default-x="61.20" nf-id="m51_n7_d9b183" nf-page="1" nf-mapped-x="1308.00" nf-mapped-y="1797.00" default-y="9.72">
         <pitch>
-          <step>C</step>
+          <step>E</step>
           <octave>5</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>3</duration>
         <voice>1</voice>
         <type>eighth</type>
         <staff>1</staff>
@@ -9571,13 +10007,13 @@
           <technical />
         </notations>
       </note>
-      <note default-x="59.23" nf-id="m51_n8_0e76fe" nf-page="1" nf-mapped-x="1302.53" nf-mapped-y="1797.00" default-y="9.72">
+      <note default-x="61.20" nf-id="m51_n8_0e76fe" nf-page="1" nf-mapped-x="1308.00" nf-mapped-y="1811.00" default-y="14.76">
         <chord />
         <pitch>
-          <step>E</step>
+          <step>C</step>
           <octave>5</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>3</duration>
         <voice>1</voice>
         <type>eighth</type>
         <staff>1</staff>
@@ -9604,12 +10040,66 @@
       <backup>
         <duration>24</duration>
       </backup>
+      <note nf-id="409b6a24" default-x="9.72" default-y="19.80" nf-mapped-x="1165.00" nf-mapped-y="1825.00" nf-page="1">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>8</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
+      <note nf-id="9749dae2" default-x="26.58" default-y="19.80" nf-mapped-x="1211.84" nf-mapped-y="1825.00" nf-page="1">
+        <pitch>
+          <step>A</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>7</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
+      <note nf-id="b6068309" default-x="43.92" default-y="12.24" nf-mapped-x="1260.00" nf-mapped-y="1804.00" nf-page="1">
+        <pitch>
+          <step>D</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>6</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
+      <note nf-id="21c1deca" default-x="43.92" default-y="17.28" nf-mapped-x="1260.00" nf-mapped-y="1818.00" nf-page="1">
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>6</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
+      <note nf-id="ddbee68f" default-x="61.20" default-y="9.72" nf-mapped-x="1308.00" nf-mapped-y="1797.00" nf-page="1">
+        <pitch>
+          <step>E</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
+      <note nf-id="d90c69f4" default-x="86.87" default-y="12.24" nf-mapped-x="1379.30" nf-mapped-y="1804.00" nf-page="1">
+        <pitch>
+          <step>D</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
     </measure>
     <measure number="52" width="82.80" nf-page="1" nf-bbox-x1="1342.00" nf-bbox-y1="1770.00" nf-bbox-x2="1572.00" nf-bbox-y2="2001.00">
       <attributes>
         <divisions>12</divisions>
       </attributes>
-      <note default-x="8.97" nf-id="m52_n0_1308c2" nf-page="1" nf-mapped-x="1366.93" nf-mapped-y="1811.00" default-y="14.76">
+      <note default-x="-12.24" nf-id="m52_n0_1308c2" nf-page="1" nf-mapped-x="1308.00" nf-mapped-y="1811.00" default-y="14.76">
         <pitch>
           <step>C</step>
           <octave>5</octave>
@@ -9624,10 +10114,10 @@
           <technical />
         </notations>
       </note>
-      <note default-x="11.04" nf-id="m52_n1_4cac0a" nf-page="1" nf-mapped-x="1372.66" nf-mapped-y="1804.00" default-y="12.24">
+      <note default-x="6.05" nf-id="m52_n1_4cac0a" nf-page="1" nf-mapped-x="1358.82" nf-mapped-y="1811.00" default-y="14.76">
         <chord />
         <pitch>
-          <step>D</step>
+          <step>C</step>
           <octave>5</octave>
         </pitch>
         <duration>9</duration>
@@ -9640,10 +10130,10 @@
           <technical />
         </notations>
       </note>
-      <note default-x="34.39" nf-id="m52_n2_acb062" nf-page="1" nf-mapped-x="1437.54" nf-mapped-y="1804.00" default-y="12.24">
+      <note default-x="33.48" nf-id="m52_n2_acb062" nf-page="1" nf-mapped-x="1435.00" nf-mapped-y="1818.00" default-y="17.28">
         <pitch>
-          <step>D</step>
-          <octave>5</octave>
+          <step>B</step>
+          <octave>4</octave>
         </pitch>
         <duration>3</duration>
         <tie type="start" />
@@ -9656,11 +10146,11 @@
           <technical />
         </notations>
       </note>
-      <note default-x="34.32" nf-id="m52_n3_5a0ba1" nf-page="1" nf-mapped-x="1437.32" nf-mapped-y="1818.00" default-y="17.28">
+      <note default-x="33.48" nf-id="m52_n3_5a0ba1" nf-page="1" nf-mapped-x="1435.00" nf-mapped-y="1804.00" default-y="12.24">
         <chord />
         <pitch>
-          <step>B</step>
-          <octave>4</octave>
+          <step>D</step>
+          <octave>5</octave>
         </pitch>
         <duration>3</duration>
         <tie type="start" />
@@ -9672,10 +10162,10 @@
           <technical />
         </notations>
       </note>
-      <note default-x="44.67" nf-id="m52_n4_b3f33b" nf-page="1" nf-mapped-x="1466.08" nf-mapped-y="1804.00" default-y="12.24">
+      <note default-x="45.00" nf-id="m52_n4_b3f33b" nf-page="1" nf-mapped-x="1467.00" nf-mapped-y="1818.00" default-y="17.28">
         <pitch>
-          <step>D</step>
-          <octave>5</octave>
+          <step>B</step>
+          <octave>4</octave>
         </pitch>
         <duration>4</duration>
         <tie type="stop" />
@@ -9688,11 +10178,11 @@
           <technical />
         </notations>
       </note>
-      <note default-x="44.58" nf-id="m52_n5_bf724d" nf-page="1" nf-mapped-x="1465.82" nf-mapped-y="1818.00" default-y="17.28">
+      <note default-x="45.00" nf-id="m52_n5_bf724d" nf-page="1" nf-mapped-x="1467.00" nf-mapped-y="1804.00" default-y="12.24">
         <chord />
         <pitch>
-          <step>B</step>
-          <octave>4</octave>
+          <step>D</step>
+          <octave>5</octave>
         </pitch>
         <duration>4</duration>
         <tie type="stop" />
@@ -9705,12 +10195,12 @@
           <technical />
         </notations>
       </note>
-      <note default-x="54.85" nf-id="m52_n6_48f39f" nf-page="1" nf-mapped-x="1494.36" nf-mapped-y="1853.00" default-y="29.88">
+      <note default-x="55.30" nf-id="m52_n6_48f39f" nf-page="1" nf-mapped-x="1495.60" nf-mapped-y="1853.00" default-y="29.88">
         <pitch>
           <step>D</step>
           <octave>4</octave>
         </pitch>
-        <duration>3</duration>
+        <duration>5</duration>
         <voice>1</voice>
         <type>16th</type>
         <staff>1</staff>
@@ -9719,12 +10209,12 @@
           <technical />
         </notations>
       </note>
-      <note default-x="63.19" nf-id="m52_n7_9f3495" nf-page="1" nf-mapped-x="1517.54" nf-mapped-y="1804.00" default-y="12.24">
+      <note default-x="68.76" nf-id="m52_n7_9f3495" nf-page="1" nf-mapped-x="1533.00" nf-mapped-y="1804.00" default-y="12.24">
         <pitch>
           <step>D</step>
           <octave>5</octave>
         </pitch>
-        <duration>6</duration>
+        <duration>3</duration>
         <tie type="start" />
         <voice>1</voice>
         <type>eighth</type>
@@ -9735,13 +10225,13 @@
           <technical />
         </notations>
       </note>
-      <note default-x="63.19" nf-id="m52_n8_b3796a" nf-page="1" nf-mapped-x="1517.54" nf-mapped-y="1818.00" default-y="17.28">
+      <note default-x="68.76" nf-id="m52_n8_b3796a" nf-page="1" nf-mapped-x="1533.00" nf-mapped-y="1818.00" default-y="17.28">
         <chord />
         <pitch>
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>6</duration>
+        <duration>3</duration>
         <tie type="start" />
         <voice>1</voice>
         <type>eighth</type>
@@ -9825,30 +10315,12 @@
       <attributes>
         <divisions>12</divisions>
       </attributes>
-      <note default-x="31.69" nf-id="m53_n0_aa4f8a" nf-page="2" nf-mapped-x="166.04" nf-mapped-y="243.75" default-y="12.15">
-        <pitch>
-          <step>D</step>
-          <octave>5</octave>
-        </pitch>
-        <duration>12</duration>
-        <tie type="start" />
-        <tie type="stop" />
-        <voice>1</voice>
-        <type>quarter</type>
-        <staff>1</staff>
-        <notations>
-          <tied type="start" />
-          <tied type="stop" />
-          <technical />
-        </notations>
-      </note>
-      <note default-x="31.37" nf-id="m53_n1_e38362" nf-page="2" nf-mapped-x="165.13" nf-mapped-y="257.50" default-y="17.10">
-        <chord />
+      <note default-x="32.76" nf-id="m53_n0_aa4f8a" nf-page="2" nf-mapped-x="169.00" nf-mapped-y="257.50" default-y="17.10">
         <pitch>
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>12</duration>
+        <duration>9</duration>
         <tie type="start" />
         <tie type="stop" />
         <voice>1</voice>
@@ -9860,10 +10332,28 @@
           <technical />
         </notations>
       </note>
-      <note default-x="70.63" nf-id="m53_n2_0dbb2e" nf-page="2" nf-mapped-x="274.19" nf-mapped-y="243.75" default-y="12.15">
+      <note default-x="32.76" nf-id="m53_n1_e38362" nf-page="2" nf-mapped-x="169.00" nf-mapped-y="243.75" default-y="12.15">
+        <chord />
         <pitch>
           <step>D</step>
           <octave>5</octave>
+        </pitch>
+        <duration>9</duration>
+        <tie type="start" />
+        <tie type="stop" />
+        <voice>1</voice>
+        <type>quarter</type>
+        <staff>1</staff>
+        <notations>
+          <tied type="start" />
+          <tied type="stop" />
+          <technical />
+        </notations>
+      </note>
+      <note default-x="70.74" nf-id="m53_n2_0dbb2e" nf-page="2" nf-mapped-x="274.50" nf-mapped-y="257.50" default-y="17.10">
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
         </pitch>
         <duration>4</duration>
         <tie type="stop" />
@@ -9876,11 +10366,11 @@
           <technical />
         </notations>
       </note>
-      <note default-x="70.59" nf-id="m53_n3_63c232" nf-page="2" nf-mapped-x="274.09" nf-mapped-y="257.50" default-y="17.10">
+      <note default-x="70.74" nf-id="m53_n3_63c232" nf-page="2" nf-mapped-x="274.50" nf-mapped-y="243.75" default-y="12.15">
         <chord />
         <pitch>
-          <step>B</step>
-          <octave>4</octave>
+          <step>D</step>
+          <octave>5</octave>
         </pitch>
         <duration>4</duration>
         <tie type="stop" />
@@ -9893,7 +10383,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="84.11" nf-id="m53_n4_fa5376" nf-page="2" nf-mapped-x="311.64" nf-mapped-y="223.12" default-y="4.72">
+      <note default-x="84.30" nf-id="m53_n4_fa5376" nf-page="2" nf-mapped-x="312.17" nf-mapped-y="223.12" default-y="4.72">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -9907,12 +10397,12 @@
           <technical />
         </notations>
       </note>
-      <note default-x="96.55" nf-id="m53_n5_582530" nf-page="2" nf-mapped-x="346.20" nf-mapped-y="202.50" default-y="-2.70">
+      <note default-x="98.25" nf-id="m53_n5_582530" nf-page="2" nf-mapped-x="350.90" nf-mapped-y="202.50" default-y="-2.70">
         <pitch>
           <step>C</step>
           <octave>6</octave>
         </pitch>
-        <duration>3</duration>
+        <duration>4</duration>
         <voice>1</voice>
         <type>16th</type>
         <staff>1</staff>
@@ -9921,7 +10411,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="101.50" nf-id="m53_n6_f1092b" nf-page="2" nf-mapped-x="359.95" nf-mapped-y="195.62" default-y="-5.17">
+      <note default-x="111.10" nf-id="m53_n6_f1092b" nf-page="2" nf-mapped-x="386.60" nf-mapped-y="195.62" default-y="-5.17">
         <pitch>
           <step>D</step>
           <octave>4</octave>
@@ -9995,7 +10485,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="96.57" nf-id="m53_n11_da0593" nf-page="2" nf-mapped-x="346.24" nf-mapped-y="355.75" default-y="52.47">
+      <note default-x="98.35" nf-id="m53_n11_da0593" nf-page="2" nf-mapped-x="351.20" nf-mapped-y="355.75" default-y="52.47">
         <pitch>
           <step>C</step>
           <octave>3</octave>
@@ -10012,6 +10502,24 @@
       <backup>
         <duration>24</duration>
       </backup>
+      <note nf-id="7e5b5ff3" default-x="70.64" default-y="69.80" nf-mapped-x="274.21" nf-mapped-y="403.88" nf-page="2">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>8</duration>
+        <voice>6</voice>
+        <staff>2</staff>
+      </note>
+      <note nf-id="652b57ee" default-x="128.83" default-y="-7.65" nf-mapped-x="435.85" nf-mapped-y="188.75" nf-page="2">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
     </measure>
     <measure number="54" width="107.64" nf-page="2" nf-bbox-x1="410.00" nf-bbox-y1="210.00" nf-bbox-x2="709.00" nf-bbox-y2="472.00">
       <attributes>
@@ -10067,7 +10575,7 @@
         <staff>1</staff>
         <notations />
       </note>
-      <note default-x="72.14" nf-id="m54_n4_5133f8" nf-page="2" nf-mapped-x="610.39" nf-mapped-y="223.12" default-y="4.72">
+      <note default-x="72.42" nf-id="m54_n4_5133f8" nf-page="2" nf-mapped-x="611.17" nf-mapped-y="223.12" default-y="4.72">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -10081,7 +10589,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="84.79" nf-id="m54_n5_af587f" nf-page="2" nf-mapped-x="645.53" nf-mapped-y="209.38" default-y="-0.22">
+      <note default-x="86.26" nf-id="m54_n5_af587f" nf-page="2" nf-mapped-x="649.60" nf-mapped-y="209.38" default-y="-0.22">
         <pitch>
           <step>B</step>
           <octave>5</octave>
@@ -10095,7 +10603,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="91.39" nf-id="m54_n6_dd453c" nf-page="2" nf-mapped-x="663.86" nf-mapped-y="202.50" default-y="-2.70">
+      <note default-x="99.33" nf-id="m54_n6_dd453c" nf-page="2" nf-mapped-x="685.90" nf-mapped-y="202.50" default-y="-2.70">
         <pitch>
           <step>C</step>
           <octave>6</octave>
@@ -10156,7 +10664,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="59.86" nf-id="m54_n10_574a10" nf-page="2" nf-mapped-x="576.27" nf-mapped-y="348.88" default-y="49.99">
+      <note default-x="60.09" nf-id="m54_n10_574a10" nf-page="2" nf-mapped-x="576.90" nf-mapped-y="348.88" default-y="49.99">
         <pitch>
           <step>D</step>
           <octave>3</octave>
@@ -10172,6 +10680,33 @@
       <backup>
         <duration>24</duration>
       </backup>
+      <note nf-id="9670f0e0" default-x="35.04" default-y="52.47" nf-mapped-x="507.32" nf-mapped-y="355.75" nf-page="2">
+        <pitch>
+          <step>C</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>6</duration>
+        <voice>6</voice>
+        <staff>2</staff>
+      </note>
+      <note nf-id="254b7495" default-x="47.38" default-y="-5.17" nf-mapped-x="541.60" nf-mapped-y="195.62" nf-page="2">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
+      <note nf-id="137bfa54" default-x="117.33" default-y="-2.70" nf-mapped-x="735.90" nf-mapped-y="202.50" nf-page="2">
+        <pitch>
+          <step>C</step>
+          <octave>6</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
     </measure>
     <measure number="55" width="103.32" nf-page="2" nf-bbox-x1="709.00" nf-bbox-y1="210.00" nf-bbox-x2="996.00" nf-bbox-y2="472.00">
       <attributes>
@@ -10243,7 +10778,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="81.03" nf-id="m55_n5_400d22" nf-page="2" nf-mapped-x="934.09" nf-mapped-y="209.38" default-y="-0.22">
+      <note default-x="81.94" nf-id="m55_n5_400d22" nf-page="2" nf-mapped-x="936.60" nf-mapped-y="209.38" default-y="-0.22">
         <pitch>
           <step>B</step>
           <octave>5</octave>
@@ -10257,7 +10792,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="87.94" nf-id="m55_n6_d44f5d" nf-page="2" nf-mapped-x="953.27" nf-mapped-y="202.50" default-y="-2.70">
+      <note default-x="95.01" nf-id="m55_n6_d44f5d" nf-page="2" nf-mapped-x="972.90" nf-mapped-y="202.50" default-y="-2.70">
         <pitch>
           <step>C</step>
           <octave>6</octave>
@@ -10291,7 +10826,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="44.18" nf-id="m55_n8_9d9089" nf-page="2" nf-mapped-x="831.71" nf-mapped-y="348.88" default-y="49.99">
+      <note default-x="44.25" nf-id="m55_n8_9d9089" nf-page="2" nf-mapped-x="831.90" nf-mapped-y="348.88" default-y="49.99">
         <pitch>
           <step>D</step>
           <octave>3</octave>
@@ -10305,7 +10840,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="55.73" nf-id="m55_n9_b285b0" nf-page="2" nf-mapped-x="863.80" nf-mapped-y="355.75" default-y="52.47">
+      <note default-x="55.87" nf-id="m55_n9_b285b0" nf-page="2" nf-mapped-x="864.20" nf-mapped-y="355.75" default-y="52.47">
         <pitch>
           <step>C</step>
           <octave>3</octave>
@@ -10321,6 +10856,24 @@
       <backup>
         <duration>24</duration>
       </backup>
+      <note nf-id="6e6dc2dc" default-x="68.10" default-y="4.72" nf-mapped-x="898.17" nf-mapped-y="223.12" nf-page="2">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
+      <note nf-id="2580d779" default-x="113.37" default-y="-2.70" nf-mapped-x="1023.90" nf-mapped-y="202.50" nf-page="2">
+        <pitch>
+          <step>C</step>
+          <octave>6</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
     </measure>
     <measure number="56" width="101.88" nf-page="2" nf-bbox-x1="996.00" nf-bbox-y1="210.00" nf-bbox-x2="1279.00" nf-bbox-y2="472.00">
       <attributes>
@@ -10370,12 +10923,12 @@
           <technical />
         </notations>
       </note>
-      <note default-x="47.98" nf-id="m56_n3_7eabb9" nf-page="2" nf-mapped-x="1129.27" nf-mapped-y="202.50" default-y="-2.70">
+      <note default-x="49.29" nf-id="m56_n3_7eabb9" nf-page="2" nf-mapped-x="1132.90" nf-mapped-y="202.50" default-y="-2.70">
         <pitch>
           <step>C</step>
           <octave>6</octave>
         </pitch>
-        <duration>3</duration>
+        <duration>4</duration>
         <tie type="start" />
         <voice>1</voice>
         <type>16th</type>
@@ -10386,7 +10939,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="53.55" nf-id="m56_n4_1edee5" nf-page="2" nf-mapped-x="1144.74" nf-mapped-y="202.50" default-y="-2.70">
+      <note default-x="62.25" nf-id="m56_n4_1edee5" nf-page="2" nf-mapped-x="1168.90" nf-mapped-y="202.50" default-y="-2.70">
         <pitch>
           <step>C</step>
           <octave>6</octave>
@@ -10402,12 +10955,12 @@
           <technical />
         </notations>
       </note>
-      <note default-x="61.53" nf-id="m56_n5_c3b81e" nf-page="2" nf-mapped-x="1166.91" nf-mapped-y="209.38" default-y="-0.22">
+      <note default-x="74.74" nf-id="m56_n5_c3b81e" nf-page="2" nf-mapped-x="1203.60" nf-mapped-y="209.38" default-y="-0.22">
         <pitch>
           <step>B</step>
           <octave>5</octave>
         </pitch>
-        <duration>8</duration>
+        <duration>4</duration>
         <voice>1</voice>
         <type>eighth</type>
         <staff>1</staff>
@@ -10416,7 +10969,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="91.13" nf-id="m56_n6_e37a06" nf-page="2" nf-mapped-x="1249.15" nf-mapped-y="223.12" default-y="4.72">
+      <note default-x="93.63" nf-id="m56_n6_e37a06" nf-page="2" nf-mapped-x="1256.07" nf-mapped-y="223.12" default-y="4.72">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -10464,18 +11017,18 @@
       </note>
       <note default-x="54.90" nf-id="m56_n9_1cf5a4" nf-page="2" nf-mapped-x="1148.50" nf-mapped-y="425.00" default-y="77.40">
         <rest />
-        <duration>8</duration>
+        <duration>9</duration>
         <voice>6</voice>
         <type>eighth</type>
         <staff>2</staff>
         <notations />
       </note>
-      <note default-x="80.61" nf-id="m56_n10_58f8aa" nf-page="2" nf-mapped-x="1219.92" nf-mapped-y="355.75" default-y="52.47">
+      <note default-x="84.31" nf-id="m56_n10_58f8aa" nf-page="2" nf-mapped-x="1230.20" nf-mapped-y="355.75" default-y="52.47">
         <pitch>
           <step>C</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>3</duration>
         <voice>6</voice>
         <type>eighth</type>
         <staff>2</staff>
@@ -10486,17 +11039,71 @@
       <backup>
         <duration>24</duration>
       </backup>
+      <note nf-id="a7a08743" default-x="21.63" default-y="14.62" nf-mapped-x="1056.07" nf-mapped-y="250.62" nf-page="2">
+        <pitch>
+          <step>C</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
+      <note nf-id="b800fda0" default-x="35.34" default-y="4.72" nf-mapped-x="1094.17" nf-mapped-y="223.12" nf-page="2">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
+      <note nf-id="846f5191" default-x="93.63" default-y="4.72" nf-mapped-x="1256.07" nf-mapped-y="223.12" nf-page="2">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
+      <note nf-id="e944409f" default-x="84.31" default-y="52.47" nf-mapped-x="1230.20" nf-mapped-y="355.75" nf-page="2">
+        <pitch>
+          <step>C</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>6</voice>
+        <staff>2</staff>
+      </note>
+      <note nf-id="dab5eb20" default-x="123.54" default-y="12.15" nf-mapped-x="1339.18" nf-mapped-y="243.75" nf-page="2">
+        <pitch>
+          <step>D</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
+      <note nf-id="b3aeef72" default-x="175.74" default-y="4.72" nf-mapped-x="1484.17" nf-mapped-y="223.12" nf-page="2">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
     </measure>
     <measure number="57" width="105.48" nf-page="2" nf-bbox-x1="1279.00" nf-bbox-y1="210.00" nf-bbox-x2="1572.00" nf-bbox-y2="472.00">
       <attributes>
         <divisions>12</divisions>
       </attributes>
-      <note default-x="10.31" nf-id="m57_n0_afe5ca" nf-page="2" nf-mapped-x="1307.64" nf-mapped-y="223.12" default-y="4.72">
+      <note default-x="10.11" nf-id="m57_n0_afe5ca" nf-page="2" nf-mapped-x="1307.07" nf-mapped-y="223.12" default-y="4.72">
         <pitch>
           <step>G</step>
           <octave>5</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>8</duration>
         <tie type="stop" />
         <voice>1</voice>
         <type>16th</type>
@@ -10507,9 +11114,9 @@
           <technical />
         </notations>
       </note>
-      <note default-x="22.11" nf-id="m57_n1_17d6f1" nf-page="2" nf-mapped-x="1340.41" nf-mapped-y="243.75" default-y="12.15">
+      <note default-x="35.34" nf-id="m57_n1_17d6f1" nf-page="2" nf-mapped-x="1377.17" nf-mapped-y="223.12" default-y="4.72">
         <pitch>
-          <step>D</step>
+          <step>G</step>
           <octave>5</octave>
         </pitch>
         <duration>3</duration>
@@ -10521,10 +11128,10 @@
           <technical />
         </notations>
       </note>
-      <note default-x="35.15" nf-id="m57_n2_86a6de" nf-page="2" nf-mapped-x="1376.64" nf-mapped-y="223.12" default-y="4.72">
+      <note default-x="49.29" nf-id="m57_n2_86a6de" nf-page="2" nf-mapped-x="1415.90" nf-mapped-y="202.50" default-y="-2.70">
         <pitch>
-          <step>G</step>
-          <octave>5</octave>
+          <step>C</step>
+          <octave>6</octave>
         </pitch>
         <duration>4</duration>
         <voice>1</voice>
@@ -10535,7 +11142,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="48.83" nf-id="m57_n3_4a76c9" nf-page="2" nf-mapped-x="1414.63" nf-mapped-y="202.50" default-y="-2.70">
+      <note default-x="49.29" nf-id="m57_n3_4a76c9" nf-page="2" nf-mapped-x="1415.90" nf-mapped-y="202.50" default-y="-2.70">
         <pitch>
           <step>C</step>
           <octave>6</octave>
@@ -10549,9 +11156,9 @@
           <technical />
         </notations>
       </note>
-      <note default-x="60.52" nf-id="m57_n4_1dfb3b" nf-page="2" nf-mapped-x="1447.12" nf-mapped-y="209.38" default-y="-0.22">
+      <note default-x="35.34" nf-id="m57_n4_1dfb3b" nf-page="2" nf-mapped-x="1377.17" nf-mapped-y="223.12" default-y="4.72">
         <pitch>
-          <step>B</step>
+          <step>G</step>
           <octave>5</octave>
         </pitch>
         <duration>3</duration>
@@ -10563,12 +11170,12 @@
           <technical />
         </notations>
       </note>
-      <note default-x="72.19" nf-id="m57_n5_1462ee" nf-page="2" nf-mapped-x="1479.53" nf-mapped-y="223.12" default-y="4.72">
+      <note default-x="62.14" nf-id="m57_n5_1462ee" nf-page="2" nf-mapped-x="1451.60" nf-mapped-y="209.38" default-y="-0.22">
         <pitch>
-          <step>G</step>
+          <step>B</step>
           <octave>5</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>5</duration>
         <voice>1</voice>
         <type>16th</type>
         <staff>1</staff>
@@ -10577,7 +11184,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="81.51" nf-id="m57_n6_dfa783" nf-page="2" nf-mapped-x="1505.41" nf-mapped-y="243.75" default-y="12.15">
+      <note default-x="85.27" nf-id="m57_n6_dfa783" nf-page="2" nf-mapped-x="1515.85" nf-mapped-y="243.75" default-y="12.15">
         <pitch>
           <step>D</step>
           <octave>5</octave>
@@ -10591,7 +11198,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="90.89" nf-id="m57_n7_0f7d3b" nf-page="2" nf-mapped-x="1531.48" nf-mapped-y="257.50" default-y="17.10">
+      <note default-x="96.90" nf-id="m57_n7_0f7d3b" nf-page="2" nf-mapped-x="1548.18" nf-mapped-y="257.50" default-y="17.10">
         <pitch>
           <step>B</step>
           <octave>4</octave>
@@ -10610,7 +11217,7 @@
       <backup>
         <duration>24</duration>
       </backup>
-      <note default-x="10.99" nf-id="m57_n8_2eecd0" nf-page="2" nf-mapped-x="1309.54" nf-mapped-y="403.88" default-y="69.80">
+      <note default-x="10.16" nf-id="m57_n8_2eecd0" nf-page="2" nf-mapped-x="1307.21" nf-mapped-y="403.88" default-y="69.80">
         <pitch>
           <step>G</step>
           <octave>3</octave>
@@ -10623,7 +11230,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="35.21" nf-id="m57_n9_fe9ae2" nf-page="2" nf-mapped-x="1376.80" nf-mapped-y="355.75" default-y="52.47">
+      <note default-x="35.35" nf-id="m57_n9_fe9ae2" nf-page="2" nf-mapped-x="1377.20" nf-mapped-y="355.75" default-y="52.47">
         <pitch>
           <step>C</step>
           <octave>3</octave>
@@ -10636,7 +11243,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="82.93" nf-id="m57_n10_5aeeb1" nf-page="2" nf-mapped-x="1509.35" nf-mapped-y="355.75" default-y="52.47">
+      <note default-x="85.39" nf-id="m57_n10_5aeeb1" nf-page="2" nf-mapped-x="1516.20" nf-mapped-y="355.75" default-y="52.47">
         <pitch>
           <step>C</step>
           <octave>3</octave>
@@ -10658,12 +11265,12 @@
       <attributes>
         <divisions>12</divisions>
       </attributes>
-      <note default-x="31.11" nf-id="m58_n0_0106a8" nf-page="2" nf-mapped-x="164.41" nf-mapped-y="657.50" default-y="17.10">
+      <note default-x="32.35" nf-id="m58_n0_0106a8" nf-page="2" nf-mapped-x="167.85" nf-mapped-y="657.50" default-y="17.10">
         <pitch>
           <step>B</step>
           <octave>4</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>3</duration>
         <tie type="stop" />
         <voice>1</voice>
         <type>16th</type>
@@ -10674,12 +11281,12 @@
           <technical />
         </notations>
       </note>
-      <note default-x="41.44" nf-id="m58_n1_b25c72" nf-page="2" nf-mapped-x="193.11" nf-mapped-y="650.62" default-y="14.62">
+      <note default-x="45.01" nf-id="m58_n1_b25c72" nf-page="2" nf-mapped-x="203.01" nf-mapped-y="650.62" default-y="14.62">
         <pitch>
           <step>C</step>
           <octave>5</octave>
         </pitch>
-        <duration>6</duration>
+        <duration>4</duration>
         <voice>1</voice>
         <type>eighth</type>
         <staff>1</staff>
@@ -10688,12 +11295,12 @@
           <technical />
         </notations>
       </note>
-      <note default-x="62.25" nf-id="m58_n2_d11e34" nf-page="2" nf-mapped-x="250.93" nf-mapped-y="602.50" default-y="-2.70">
+      <note default-x="62.61" nf-id="m58_n2_d11e34" nf-page="2" nf-mapped-x="251.90" nf-mapped-y="602.50" default-y="-2.70">
         <pitch>
           <step>C</step>
           <octave>6</octave>
         </pitch>
-        <duration>3</duration>
+        <duration>4</duration>
         <tie type="start" />
         <voice>1</voice>
         <type>16th</type>
@@ -10704,12 +11311,12 @@
           <technical />
         </notations>
       </note>
-      <note default-x="71.64" nf-id="m58_n3_483d78" nf-page="2" nf-mapped-x="276.99" nf-mapped-y="602.50" default-y="-2.70">
+      <note default-x="75.21" nf-id="m58_n3_483d78" nf-page="2" nf-mapped-x="286.90" nf-mapped-y="602.50" default-y="-2.70">
         <pitch>
           <step>C</step>
           <octave>6</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>3</duration>
         <tie type="stop" />
         <voice>1</voice>
         <type>16th</type>
@@ -10720,12 +11327,12 @@
           <technical />
         </notations>
       </note>
-      <note default-x="84.98" nf-id="m58_n4_2ec592" nf-page="2" nf-mapped-x="314.05" nf-mapped-y="623.12" default-y="4.72">
+      <note default-x="86.43" nf-id="m58_n4_2ec592" nf-page="2" nf-mapped-x="318.07" nf-mapped-y="623.12" default-y="4.72">
         <pitch>
           <step>G</step>
           <octave>5</octave>
         </pitch>
-        <duration>6</duration>
+        <duration>8</duration>
         <tie type="start" />
         <voice>1</voice>
         <type>eighth</type>
@@ -10759,7 +11366,7 @@
           <step>C</step>
           <octave>4</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>7</duration>
         <voice>6</voice>
         <type>eighth</type>
         <staff>2</staff>
@@ -10768,12 +11375,12 @@
           <technical />
         </notations>
       </note>
-      <note default-x="73.84" nf-id="m58_n7_e47584" nf-page="2" nf-mapped-x="283.11" nf-mapped-y="764.25" default-y="55.53">
+      <note default-x="53.61" nf-id="m58_n7_e47584" nf-page="2" nf-mapped-x="226.90" nf-mapped-y="764.25" default-y="55.53">
         <pitch>
           <step>C</step>
           <octave>4</octave>
         </pitch>
-        <duration>8</duration>
+        <duration>7</duration>
         <voice>6</voice>
         <type>eighth</type>
         <staff>2</staff>
@@ -10782,7 +11389,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="94.19" nf-id="m58_n8_2ca854" nf-page="2" nf-mapped-x="339.65" nf-mapped-y="764.25" default-y="55.53">
+      <note default-x="95.37" nf-id="m58_n8_2ca854" nf-page="2" nf-mapped-x="342.90" nf-mapped-y="764.25" default-y="55.53">
         <pitch>
           <step>C</step>
           <octave>4</octave>
@@ -10796,7 +11403,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="106.46" nf-id="m58_n9_495c23" nf-page="2" nf-mapped-x="373.72" nf-mapped-y="719.38" default-y="39.38">
+      <note default-x="108.94" nf-id="m58_n9_495c23" nf-page="2" nf-mapped-x="380.60" nf-mapped-y="719.38" default-y="39.38">
         <pitch>
           <step>G</step>
           <octave>3</octave>
@@ -10813,12 +11420,48 @@
       <backup>
         <duration>24</duration>
       </backup>
+      <note nf-id="40a0ef8e" default-x="75.21" default-y="55.53" nf-mapped-x="286.90" nf-mapped-y="764.25" nf-page="2">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <staff>2</staff>
+        <duration>5</duration>
+        <voice>6</voice>
+      </note>
+      <note nf-id="40c707c7" default-x="94.94" default-y="55.53" nf-mapped-x="341.73" nf-mapped-y="764.25" nf-page="2">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <staff>2</staff>
+        <duration>4</duration>
+        <voice>1</voice>
+      </note>
+      <note nf-id="583aba3a" default-x="108.94" default-y="39.38" nf-mapped-x="380.60" nf-mapped-y="719.38" nf-page="2">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <staff>2</staff>
+        <duration>3</duration>
+        <voice>6</voice>
+      </note>
+      <note nf-id="8405788c" default-x="177.81" default-y="55.84" nf-mapped-x="571.90" nf-mapped-y="765.10" nf-page="2">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <staff>2</staff>
+        <duration>3</duration>
+        <voice>1</voice>
+      </note>
     </measure>
     <measure number="59" width="102.60" nf-page="2" nf-bbox-x1="404.00" nf-bbox-y1="610.00" nf-bbox-x2="689.00" nf-bbox-y2="853.00">
       <attributes>
         <divisions>12</divisions>
       </attributes>
-      <note default-x="9.74" nf-id="m59_n0_b2a4c5" nf-page="2" nf-mapped-x="431.06" nf-mapped-y="623.12" default-y="4.72">
+      <note default-x="9.39" nf-id="m59_n0_b2a4c5" nf-page="2" nf-mapped-x="430.07" nf-mapped-y="623.12" default-y="4.72">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -10834,7 +11477,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="34.07" nf-id="m59_n1_cf4f31" nf-page="2" nf-mapped-x="498.64" nf-mapped-y="623.12" default-y="4.72">
+      <note default-x="34.23" nf-id="m59_n1_cf4f31" nf-page="2" nf-mapped-x="499.07" nf-mapped-y="623.12" default-y="4.72">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -10848,12 +11491,12 @@
           <technical />
         </notations>
       </note>
-      <note default-x="47.39" nf-id="m59_n2_b691ac" nf-page="2" nf-mapped-x="535.63" nf-mapped-y="602.50" default-y="-2.70">
+      <note default-x="47.85" nf-id="m59_n2_b691ac" nf-page="2" nf-mapped-x="536.90" nf-mapped-y="602.50" default-y="-2.70">
         <pitch>
           <step>C</step>
           <octave>6</octave>
         </pitch>
-        <duration>3</duration>
+        <duration>4</duration>
         <tie type="start" />
         <voice>1</voice>
         <type>16th</type>
@@ -10864,12 +11507,12 @@
           <technical />
         </notations>
       </note>
-      <note default-x="56.85" nf-id="m59_n3_dd1c0d" nf-page="2" nf-mapped-x="561.93" nf-mapped-y="602.50" default-y="-2.70">
+      <note default-x="60.45" nf-id="m59_n3_dd1c0d" nf-page="2" nf-mapped-x="571.90" nf-mapped-y="602.50" default-y="-2.70">
         <pitch>
           <step>C</step>
           <octave>6</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>3</duration>
         <tie type="stop" />
         <voice>1</voice>
         <type>16th</type>
@@ -10880,7 +11523,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="70.22" nf-id="m59_n4_d6551b" nf-page="2" nf-mapped-x="599.05" nf-mapped-y="623.12" default-y="4.72">
+      <note default-x="71.67" nf-id="m59_n4_d6551b" nf-page="2" nf-mapped-x="603.07" nf-mapped-y="623.12" default-y="4.72">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -10900,7 +11543,7 @@
       <backup>
         <duration>24</duration>
       </backup>
-      <note default-x="10.48" nf-id="m59_n5_1b76b9" nf-page="2" nf-mapped-x="433.11" nf-mapped-y="764.25" default-y="55.53">
+      <note default-x="9.33" nf-id="m59_n5_1b76b9" nf-page="2" nf-mapped-x="429.90" nf-mapped-y="764.25" default-y="55.53">
         <pitch>
           <step>C</step>
           <octave>4</octave>
@@ -10914,21 +11557,21 @@
           <technical />
         </notations>
       </note>
-      <note default-x="22.91" nf-id="m59_n6_8faf90" nf-page="2" nf-mapped-x="467.64" nf-mapped-y="712.50" default-y="36.90">
+      <note default-x="22.90" nf-id="m59_n6_8faf90" nf-page="2" nf-mapped-x="467.60" nf-mapped-y="719.38" default-y="39.38">
         <pitch>
-          <step>A</step>
+          <step>G</step>
           <octave>3</octave>
         </pitch>
         <duration>3</duration>
         <voice>6</voice>
         <type>16th</type>
-        <staff>1</staff>
+        <staff>2</staff>
         <beam number="1">continue</beam>
         <notations>
           <technical />
         </notations>
       </note>
-      <note default-x="34.10" nf-id="m59_n7_b353f0" nf-page="2" nf-mapped-x="498.72" nf-mapped-y="764.25" default-y="55.53">
+      <note default-x="34.17" nf-id="m59_n7_b353f0" nf-page="2" nf-mapped-x="498.90" nf-mapped-y="764.25" default-y="55.53">
         <pitch>
           <step>C</step>
           <octave>4</octave>
@@ -10942,7 +11585,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="59.14" nf-id="m59_n8_ae5bab" nf-page="2" nf-mapped-x="568.27" nf-mapped-y="764.25" default-y="55.53">
+      <note default-x="34.17" nf-id="m59_n8_ae5bab" nf-page="2" nf-mapped-x="498.90" nf-mapped-y="765.10" default-y="55.84">
         <pitch>
           <step>C</step>
           <octave>4</octave>
@@ -10956,7 +11599,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="79.62" nf-id="m59_n9_535fb3" nf-page="2" nf-mapped-x="625.18" nf-mapped-y="764.25" default-y="55.53">
+      <note default-x="80.61" nf-id="m59_n9_535fb3" nf-page="2" nf-mapped-x="627.90" nf-mapped-y="765.10" default-y="55.84">
         <pitch>
           <step>C</step>
           <octave>4</octave>
@@ -10970,7 +11613,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="91.91" nf-id="m59_n10_c4cb0e" nf-page="2" nf-mapped-x="659.31" nf-mapped-y="719.38" default-y="39.38">
+      <note default-x="94.18" nf-id="m59_n10_c4cb0e" nf-page="2" nf-mapped-x="665.60" nf-mapped-y="718.96" default-y="39.23">
         <pitch>
           <step>G</step>
           <octave>3</octave>
@@ -10978,7 +11621,7 @@
         <duration>3</duration>
         <voice>6</voice>
         <type>16th</type>
-        <staff>1</staff>
+        <staff>2</staff>
         <beam number="1">end</beam>
         <notations>
           <technical />
@@ -10987,12 +11630,39 @@
       <backup>
         <duration>24</duration>
       </backup>
+      <note nf-id="f90e6c65" default-x="80.18" default-y="55.96" nf-mapped-x="626.73" nf-mapped-y="765.43" nf-page="2">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5</duration>
+        <voice>6</voice>
+        <staff>2</staff>
+      </note>
+      <note nf-id="e96f1237" default-x="94.18" default-y="39.23" nf-mapped-x="665.60" nf-mapped-y="718.96" nf-page="2">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5</duration>
+        <voice>6</voice>
+        <staff>2</staff>
+      </note>
+      <note nf-id="23baa79a" default-x="163.05" default-y="55.84" nf-mapped-x="856.90" nf-mapped-y="765.10" nf-page="2">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5</duration>
+        <voice>6</voice>
+        <staff>2</staff>
+      </note>
     </measure>
     <measure number="60" width="102.60" nf-page="2" nf-bbox-x1="689.00" nf-bbox-y1="610.00" nf-bbox-x2="974.00" nf-bbox-y2="853.00">
       <attributes>
         <divisions>12</divisions>
       </attributes>
-      <note default-x="9.74" nf-id="m60_n0_1851db" nf-page="2" nf-mapped-x="716.06" nf-mapped-y="623.12" default-y="4.72">
+      <note default-x="9.39" nf-id="m60_n0_1851db" nf-page="2" nf-mapped-x="715.07" nf-mapped-y="623.12" default-y="4.72">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -11008,7 +11678,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="34.07" nf-id="m60_n1_1e90de" nf-page="2" nf-mapped-x="783.64" nf-mapped-y="623.12" default-y="4.72">
+      <note default-x="34.23" nf-id="m60_n1_1e90de" nf-page="2" nf-mapped-x="784.07" nf-mapped-y="623.12" default-y="4.72">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -11022,12 +11692,12 @@
           <technical />
         </notations>
       </note>
-      <note default-x="47.39" nf-id="m60_n2_1f3f50" nf-page="2" nf-mapped-x="820.63" nf-mapped-y="602.50" default-y="-2.70">
+      <note default-x="47.85" nf-id="m60_n2_1f3f50" nf-page="2" nf-mapped-x="821.90" nf-mapped-y="602.50" default-y="-2.70">
         <pitch>
           <step>C</step>
           <octave>6</octave>
         </pitch>
-        <duration>3</duration>
+        <duration>4</duration>
         <tie type="start" />
         <voice>1</voice>
         <type>16th</type>
@@ -11038,12 +11708,12 @@
           <technical />
         </notations>
       </note>
-      <note default-x="56.87" nf-id="m60_n3_e96bf6" nf-page="2" nf-mapped-x="846.97" nf-mapped-y="602.50" default-y="-2.70">
+      <note default-x="60.45" nf-id="m60_n3_e96bf6" nf-page="2" nf-mapped-x="856.90" nf-mapped-y="602.50" default-y="-2.70">
         <pitch>
           <step>C</step>
           <octave>6</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>3</duration>
         <tie type="stop" />
         <voice>1</voice>
         <type>16th</type>
@@ -11054,7 +11724,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="70.22" nf-id="m60_n4_1e122c" nf-page="2" nf-mapped-x="884.05" nf-mapped-y="623.12" default-y="4.72">
+      <note default-x="71.67" nf-id="m60_n4_1e122c" nf-page="2" nf-mapped-x="888.07" nf-mapped-y="623.12" default-y="4.72">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -11074,7 +11744,7 @@
       <backup>
         <duration>24</duration>
       </backup>
-      <note default-x="10.43" nf-id="m60_n5_9e2449" nf-page="2" nf-mapped-x="717.97" nf-mapped-y="764.25" default-y="55.53">
+      <note default-x="9.33" nf-id="m60_n5_9e2449" nf-page="2" nf-mapped-x="714.90" nf-mapped-y="765.10" default-y="55.84">
         <pitch>
           <step>C</step>
           <octave>4</octave>
@@ -11088,21 +11758,21 @@
           <technical />
         </notations>
       </note>
-      <note default-x="22.91" nf-id="m60_n6_efe531" nf-page="2" nf-mapped-x="752.64" nf-mapped-y="712.50" default-y="36.90">
+      <note default-x="22.90" nf-id="m60_n6_efe531" nf-page="2" nf-mapped-x="752.60" nf-mapped-y="718.96" default-y="39.23">
         <pitch>
-          <step>A</step>
+          <step>G</step>
           <octave>3</octave>
         </pitch>
         <duration>3</duration>
         <voice>6</voice>
         <type>16th</type>
-        <staff>1</staff>
+        <staff>2</staff>
         <beam number="1">continue</beam>
         <notations>
           <technical />
         </notations>
       </note>
-      <note default-x="34.12" nf-id="m60_n7_b7f89b" nf-page="2" nf-mapped-x="783.78" nf-mapped-y="764.25" default-y="55.53">
+      <note default-x="34.17" nf-id="m60_n7_b7f89b" nf-page="2" nf-mapped-x="783.90" nf-mapped-y="765.10" default-y="55.84">
         <pitch>
           <step>C</step>
           <octave>4</octave>
@@ -11116,7 +11786,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="59.14" nf-id="m60_n8_025581" nf-page="2" nf-mapped-x="853.27" nf-mapped-y="764.25" default-y="55.53">
+      <note default-x="34.17" nf-id="m60_n8_025581" nf-page="2" nf-mapped-x="783.90" nf-mapped-y="765.10" default-y="55.84">
         <pitch>
           <step>C</step>
           <octave>4</octave>
@@ -11130,7 +11800,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="79.68" nf-id="m60_n9_945ac2" nf-page="2" nf-mapped-x="910.32" nf-mapped-y="764.25" default-y="55.53">
+      <note default-x="80.61" nf-id="m60_n9_945ac2" nf-page="2" nf-mapped-x="912.90" nf-mapped-y="765.10" default-y="55.84">
         <pitch>
           <step>C</step>
           <octave>4</octave>
@@ -11144,7 +11814,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="91.91" nf-id="m60_n10_31dbe7" nf-page="2" nf-mapped-x="944.31" nf-mapped-y="719.38" default-y="39.38">
+      <note default-x="94.18" nf-id="m60_n10_31dbe7" nf-page="2" nf-mapped-x="950.60" nf-mapped-y="718.96" default-y="39.23">
         <pitch>
           <step>G</step>
           <octave>3</octave>
@@ -11152,7 +11822,7 @@
         <duration>3</duration>
         <voice>6</voice>
         <type>16th</type>
-        <staff>1</staff>
+        <staff>2</staff>
         <beam number="1">end</beam>
         <notations>
           <technical />
@@ -11161,12 +11831,30 @@
       <backup>
         <duration>24</duration>
       </backup>
+      <note nf-id="e95eb94c" default-x="80.18" default-y="55.96" nf-mapped-x="911.73" nf-mapped-y="765.43" nf-page="2">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>5</duration>
+        <voice>6</voice>
+        <staff>2</staff>
+      </note>
+      <note nf-id="bde99b08" default-x="94.18" default-y="39.23" nf-mapped-x="950.60" nf-mapped-y="718.96" nf-page="2">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5</duration>
+        <voice>6</voice>
+        <staff>2</staff>
+      </note>
     </measure>
     <measure number="61" width="105.84" nf-page="2" nf-bbox-x1="974.00" nf-bbox-y1="610.00" nf-bbox-x2="1268.00" nf-bbox-y2="853.00">
       <attributes>
         <divisions>12</divisions>
       </attributes>
-      <note default-x="9.91" nf-id="m61_n0_5d524b" nf-page="2" nf-mapped-x="1001.53" nf-mapped-y="623.12" default-y="4.72">
+      <note default-x="9.39" nf-id="m61_n0_5d524b" nf-page="2" nf-mapped-x="1000.07" nf-mapped-y="623.12" default-y="4.72">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -11182,7 +11870,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="34.43" nf-id="m61_n1_f8c148" nf-page="2" nf-mapped-x="1069.64" nf-mapped-y="623.12" default-y="4.72">
+      <note default-x="34.59" nf-id="m61_n1_f8c148" nf-page="2" nf-mapped-x="1070.07" nf-mapped-y="623.12" default-y="4.72">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -11196,12 +11884,12 @@
           <technical />
         </notations>
       </note>
-      <note default-x="47.91" nf-id="m61_n2_8d80a0" nf-page="2" nf-mapped-x="1107.07" nf-mapped-y="602.50" default-y="-2.70">
+      <note default-x="48.21" nf-id="m61_n2_8d80a0" nf-page="2" nf-mapped-x="1107.90" nf-mapped-y="602.50" default-y="-2.70">
         <pitch>
           <step>C</step>
           <octave>6</octave>
         </pitch>
-        <duration>3</duration>
+        <duration>4</duration>
         <tie type="start" />
         <voice>1</voice>
         <type>16th</type>
@@ -11212,12 +11900,12 @@
           <technical />
         </notations>
       </note>
-      <note default-x="59.52" nf-id="m61_n3_51970e" nf-page="2" nf-mapped-x="1139.33" nf-mapped-y="602.50" default-y="-2.70">
+      <note default-x="60.45" nf-id="m61_n3_51970e" nf-page="2" nf-mapped-x="1141.90" nf-mapped-y="602.50" default-y="-2.70">
         <pitch>
           <step>C</step>
           <octave>6</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>3</duration>
         <tie type="stop" />
         <voice>1</voice>
         <type>16th</type>
@@ -11228,7 +11916,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="71.28" nf-id="m61_n4_c54546" nf-page="2" nf-mapped-x="1172.00" nf-mapped-y="623.12" default-y="4.72">
+      <note default-x="71.67" nf-id="m61_n4_c54546" nf-page="2" nf-mapped-x="1173.07" nf-mapped-y="623.12" default-y="4.72">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -11242,12 +11930,12 @@
           <technical />
         </notations>
       </note>
-      <note default-x="83.19" nf-id="m61_n5_dc73e2" nf-page="2" nf-mapped-x="1205.08" nf-mapped-y="602.50" default-y="-2.70">
+      <note default-x="85.29" nf-id="m61_n5_dc73e2" nf-page="2" nf-mapped-x="1210.90" nf-mapped-y="602.50" default-y="-2.70">
         <pitch>
           <step>C</step>
           <octave>6</octave>
         </pitch>
-        <duration>3</duration>
+        <duration>4</duration>
         <voice>1</voice>
         <type>16th</type>
         <staff>1</staff>
@@ -11256,7 +11944,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="88.23" nf-id="m61_n6_73b06f" nf-page="2" nf-mapped-x="1219.07" nf-mapped-y="595.62" default-y="-5.17">
+      <note default-x="97.78" nf-id="m61_n6_73b06f" nf-page="2" nf-mapped-x="1245.60" nf-mapped-y="595.62" default-y="-5.17">
         <pitch>
           <step>D</step>
           <octave>4</octave>
@@ -11273,7 +11961,7 @@
       <backup>
         <duration>24</duration>
       </backup>
-      <note default-x="10.79" nf-id="m61_n7_e035db" nf-page="2" nf-mapped-x="1003.97" nf-mapped-y="764.25" default-y="55.53">
+      <note default-x="9.33" nf-id="m61_n7_e035db" nf-page="2" nf-mapped-x="999.90" nf-mapped-y="765.10" default-y="55.84">
         <pitch>
           <step>C</step>
           <octave>4</octave>
@@ -11287,21 +11975,21 @@
           <technical />
         </notations>
       </note>
-      <note default-x="23.23" nf-id="m61_n8_83b7f2" nf-page="2" nf-mapped-x="1038.53" nf-mapped-y="712.50" default-y="36.90">
+      <note default-x="23.09" nf-id="m61_n8_83b7f2" nf-page="2" nf-mapped-x="1038.13" nf-mapped-y="719.62" default-y="39.46">
         <pitch>
-          <step>A</step>
+          <step>G</step>
           <octave>3</octave>
         </pitch>
         <duration>3</duration>
         <voice>6</voice>
         <type>16th</type>
-        <staff>1</staff>
+        <staff>2</staff>
         <beam number="1">continue</beam>
         <notations>
           <technical />
         </notations>
       </note>
-      <note default-x="34.34" nf-id="m61_n9_cd5e50" nf-page="2" nf-mapped-x="1069.38" nf-mapped-y="764.25" default-y="55.53">
+      <note default-x="34.64" nf-id="m61_n9_cd5e50" nf-page="2" nf-mapped-x="1070.22" nf-mapped-y="764.93" default-y="55.77">
         <pitch>
           <step>C</step>
           <octave>4</octave>
@@ -11315,7 +12003,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="59.99" nf-id="m61_n10_f956a1" nf-page="2" nf-mapped-x="1140.63" nf-mapped-y="764.25" default-y="55.53">
+      <note default-x="60.45" nf-id="m61_n10_f956a1" nf-page="2" nf-mapped-x="1141.90" nf-mapped-y="765.10" default-y="55.84">
         <pitch>
           <step>C</step>
           <octave>4</octave>
@@ -11331,12 +12019,30 @@
       <backup>
         <duration>24</duration>
       </backup>
+      <note nf-id="1f7d1932" default-x="85.24" default-y="-2.70" nf-mapped-x="1210.79" nf-mapped-y="602.50" nf-page="2">
+        <pitch>
+          <step>C</step>
+          <octave>6</octave>
+        </pitch>
+        <staff>1</staff>
+        <duration>4</duration>
+        <voice>1</voice>
+      </note>
+      <note nf-id="25d13bbd" default-x="97.78" default-y="-5.17" nf-mapped-x="1245.60" nf-mapped-y="595.62" nf-page="2">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <staff>1</staff>
+        <duration>3</duration>
+        <voice>1</voice>
+      </note>
     </measure>
     <measure number="62" width="109.44" nf-page="2" nf-bbox-x1="1268.00" nf-bbox-y1="610.00" nf-bbox-x2="1572.00" nf-bbox-y2="853.00">
       <attributes>
         <divisions>12</divisions>
       </attributes>
-      <note default-x="10.53" nf-id="m62_n0_06c788" nf-page="2" nf-mapped-x="1297.25" nf-mapped-y="588.75" default-y="-7.65">
+      <note default-x="9.69" nf-id="m62_n0_06c788" nf-page="2" nf-mapped-x="1294.90" nf-mapped-y="588.75" default-y="-7.65">
         <pitch>
           <step>C</step>
           <octave>4</octave>
@@ -11350,7 +12056,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="21.43" nf-id="m62_n1_9bb42e" nf-page="2" nf-mapped-x="1327.53" nf-mapped-y="623.12" default-y="4.72">
+      <note default-x="20.91" nf-id="m62_n1_9bb42e" nf-page="2" nf-mapped-x="1326.07" nf-mapped-y="623.12" default-y="4.72">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -11364,7 +12070,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="35.58" nf-id="m62_n2_d158a3" nf-page="2" nf-mapped-x="1366.84" nf-mapped-y="602.50" default-y="-2.70">
+      <note default-x="34.53" nf-id="m62_n2_d158a3" nf-page="2" nf-mapped-x="1363.90" nf-mapped-y="602.50" default-y="-2.70">
         <pitch>
           <step>C</step>
           <octave>6</octave>
@@ -11384,7 +12090,7 @@
           <tuplet bracket="yes" type="start" number="1" />
         </notations>
       </note>
-      <note default-x="44.87" nf-id="m62_n3_830341" nf-page="2" nf-mapped-x="1392.64" nf-mapped-y="595.62" default-y="-5.17">
+      <note default-x="44.86" nf-id="m62_n3_830341" nf-page="2" nf-mapped-x="1392.60" nf-mapped-y="595.62" default-y="-5.17">
         <pitch>
           <step>D</step>
           <octave>4</octave>
@@ -11404,7 +12110,7 @@
           <tuplet type="stop" number="1" />
         </notations>
       </note>
-      <note default-x="63.89" nf-id="m62_n4_43ae9a" nf-page="2" nf-mapped-x="1445.46" nf-mapped-y="623.12" default-y="4.72">
+      <note default-x="65.91" nf-id="m62_n4_43ae9a" nf-page="2" nf-mapped-x="1451.07" nf-mapped-y="623.12" default-y="4.72">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -11418,7 +12124,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="70.29" nf-id="m62_n5_f030d7" nf-page="2" nf-mapped-x="1463.25" nf-mapped-y="609.38" default-y="-0.22">
+      <note default-x="79.42" nf-id="m62_n5_f030d7" nf-page="2" nf-mapped-x="1488.60" nf-mapped-y="609.38" default-y="-0.22">
         <pitch>
           <step>B</step>
           <octave>5</octave>
@@ -11432,12 +12138,12 @@
           <technical />
         </notations>
       </note>
-      <note default-x="80.11" nf-id="m62_n6_c0c688" nf-page="2" nf-mapped-x="1490.54" nf-mapped-y="602.50" default-y="-2.70">
+      <note default-x="92.13" nf-id="m62_n6_c0c688" nf-page="2" nf-mapped-x="1523.90" nf-mapped-y="602.50" default-y="-2.70">
         <pitch>
           <step>C</step>
           <octave>6</octave>
         </pitch>
-        <duration>6</duration>
+        <duration>3</duration>
         <voice>1</voice>
         <type>eighth</type>
         <staff>1</staff>
@@ -11449,9 +12155,9 @@
       <backup>
         <duration>24</duration>
       </backup>
-      <note default-x="10.27" nf-id="m62_n7_3e1ec3" nf-page="2" nf-mapped-x="1296.53" nf-mapped-y="712.50" default-y="36.90">
+      <note default-x="9.58" nf-id="m62_n7_3e1ec3" nf-page="2" nf-mapped-x="1294.60" nf-mapped-y="718.96" default-y="39.23">
         <pitch>
-          <step>A</step>
+          <step>G</step>
           <octave>3</octave>
         </pitch>
         <duration>3</duration>
@@ -11463,16 +12169,16 @@
           <normal-notes>2</normal-notes>
           <normal-type>eighth</normal-type>
         </time-modification>
-        <staff>1</staff>
+        <staff>2</staff>
         <notations>
           <tied type="start" />
           <technical />
           <tuplet bracket="yes" type="start" number="1" />
         </notations>
       </note>
-      <note default-x="44.87" nf-id="m62_n8_57864f" nf-page="2" nf-mapped-x="1392.64" nf-mapped-y="712.50" default-y="36.90">
+      <note default-x="44.86" nf-id="m62_n8_57864f" nf-page="2" nf-mapped-x="1392.60" nf-mapped-y="718.96" default-y="39.23">
         <pitch>
-          <step>A</step>
+          <step>G</step>
           <octave>3</octave>
         </pitch>
         <duration>3</duration>
@@ -11484,14 +12190,14 @@
           <normal-notes>2</normal-notes>
           <normal-type>eighth</normal-type>
         </time-modification>
-        <staff>1</staff>
+        <staff>2</staff>
         <beam number="1">begin</beam>
         <notations>
           <tied type="stop" />
           <technical />
         </notations>
       </note>
-      <note default-x="52.78" nf-id="m62_n9_9002d0" nf-page="2" nf-mapped-x="1414.61" nf-mapped-y="726.25" default-y="41.85">
+      <note default-x="55.51" nf-id="m62_n9_9002d0" nf-page="2" nf-mapped-x="1422.20" nf-mapped-y="723.02" default-y="40.69">
         <pitch>
           <step>F</step>
           <octave>3</octave>
@@ -11504,14 +12210,14 @@
           <normal-notes>2</normal-notes>
           <normal-type>eighth</normal-type>
         </time-modification>
-        <staff>1</staff>
+        <staff>2</staff>
         <beam number="1">continue</beam>
         <notations>
           <technical />
           <tuplet type="stop" number="1" />
         </notations>
       </note>
-      <note default-x="58.40" nf-id="m62_n10_ab58e0" nf-page="2" nf-mapped-x="1430.22" nf-mapped-y="726.25" default-y="41.85">
+      <note default-x="65.95" nf-id="m62_n10_ab58e0" nf-page="2" nf-mapped-x="1451.20" nf-mapped-y="723.02" default-y="40.69">
         <pitch>
           <step>F</step>
           <octave>3</octave>
@@ -11520,15 +12226,15 @@
         <voice>6</voice>
         <type>eighth</type>
         <dot />
-        <staff>1</staff>
+        <staff>2</staff>
         <beam number="1">end</beam>
         <notations>
           <technical />
         </notations>
       </note>
-      <note default-x="98.13" nf-id="m62_n11_1053e3" nf-page="2" nf-mapped-x="1540.58" nf-mapped-y="736.75" default-y="45.63">
+      <note default-x="100.85" nf-id="m62_n11_1053e3" nf-page="2" nf-mapped-x="1548.13" nf-mapped-y="732.48" default-y="44.09">
         <pitch>
-          <step>C</step>
+          <step>D</step>
           <octave>3</octave>
         </pitch>
         <duration>3</duration>
@@ -11550,7 +12256,7 @@
       <attributes>
         <divisions>12</divisions>
       </attributes>
-      <note default-x="31.91" nf-id="m63_n0_5f8521" nf-page="2" nf-mapped-x="167.64" nf-mapped-y="1017.88" default-y="9.67">
+      <note default-x="32.04" nf-id="m63_n0_5f8521" nf-page="2" nf-mapped-x="168.00" nf-mapped-y="1018.68" default-y="9.97">
         <pitch>
           <step>E</step>
           <octave>5</octave>
@@ -11564,7 +12270,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="45.95" nf-id="m63_n1_3d1438" nf-page="2" nf-mapped-x="206.64" nf-mapped-y="983.50" default-y="-2.70">
+      <note default-x="46.53" nf-id="m63_n1_3d1438" nf-page="2" nf-mapped-x="208.24" nf-mapped-y="983.96" default-y="-2.53">
         <pitch>
           <step>C</step>
           <octave>6</octave>
@@ -11578,7 +12284,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="58.98" nf-id="m63_n2_859b43" nf-page="2" nf-mapped-x="242.83" nf-mapped-y="962.88" default-y="-10.12">
+      <note default-x="60.43" nf-id="m63_n2_859b43" nf-page="2" nf-mapped-x="246.85" nf-mapped-y="956.10" default-y="-12.57">
         <pitch>
           <step>D</step>
           <octave>4</octave>
@@ -11592,10 +12298,10 @@
           <technical />
         </notations>
       </note>
-      <note default-x="82.39" nf-id="m63_n3_fafeb7" nf-page="2" nf-mapped-x="307.87" nf-mapped-y="1004.12" default-y="4.72">
+      <note default-x="60.43" nf-id="m63_n3_fafeb7" nf-page="2" nf-mapped-x="246.85" nf-mapped-y="956.10" default-y="-12.57">
         <pitch>
-          <step>G</step>
-          <octave>5</octave>
+          <step>D</step>
+          <octave>4</octave>
         </pitch>
         <duration>3</duration>
         <voice>1</voice>
@@ -11606,7 +12312,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="89.32" nf-id="m63_n4_e5bdcc" nf-page="2" nf-mapped-x="327.12" nf-mapped-y="990.38" default-y="-0.22">
+      <note default-x="98.50" nf-id="m63_n4_e5bdcc" nf-page="2" nf-mapped-x="352.60" nf-mapped-y="992.96" default-y="0.71">
         <pitch>
           <step>B</step>
           <octave>5</octave>
@@ -11620,7 +12326,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="99.09" nf-id="m63_n5_05c0fe" nf-page="2" nf-mapped-x="354.25" nf-mapped-y="983.50" default-y="-2.70">
+      <note default-x="111.57" nf-id="m63_n5_05c0fe" nf-page="2" nf-mapped-x="388.90" nf-mapped-y="984.10" default-y="-2.48">
         <pitch>
           <step>C</step>
           <octave>6</octave>
@@ -11637,24 +12343,24 @@
       <backup>
         <duration>24</duration>
       </backup>
-      <note default-x="32.42" nf-id="m63_n6_99fd9f" nf-page="2" nf-mapped-x="169.06" nf-mapped-y="1114.12" default-y="44.32">
+      <note default-x="31.90" nf-id="m63_n6_99fd9f" nf-page="2" nf-mapped-x="167.60" nf-mapped-y="1113.96" default-y="44.27">
         <pitch>
           <step>D</step>
-          <octave>4</octave>
+          <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>10</duration>
         <tie type="stop" />
         <voice>6</voice>
         <type>eighth</type>
         <dot />
-        <staff>1</staff>
+        <staff>2</staff>
         <beam number="1">begin</beam>
         <notations>
           <tied type="stop" />
           <technical />
         </notations>
       </note>
-      <note default-x="69.32" nf-id="m63_n7_af8a92" nf-page="2" nf-mapped-x="271.56" nf-mapped-y="1118.75" default-y="45.99">
+      <note default-x="70.29" nf-id="m63_n7_af8a92" nf-page="2" nf-mapped-x="274.24" nf-mapped-y="1118.96" default-y="46.07">
         <pitch>
           <step>C</step>
           <octave>3</octave>
@@ -11668,7 +12374,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="82.10" nf-id="m63_n8_879958" nf-page="2" nf-mapped-x="307.06" nf-mapped-y="1093.50" default-y="36.90">
+      <note default-x="84.31" nf-id="m63_n8_879958" nf-page="2" nf-mapped-x="313.20" nf-mapped-y="1091.02" default-y="36.01">
         <pitch>
           <step>A</step>
           <octave>3</octave>
@@ -11677,13 +12383,13 @@
         <voice>6</voice>
         <type>eighth</type>
         <dot />
-        <staff>1</staff>
+        <staff>2</staff>
         <beam number="1">begin</beam>
         <notations>
           <technical />
         </notations>
       </note>
-      <note default-x="117.72" nf-id="m63_n9_230b39" nf-page="2" nf-mapped-x="406.00" nf-mapped-y="1125.62" default-y="48.46">
+      <note default-x="120.82" nf-id="m63_n9_230b39" nf-page="2" nf-mapped-x="414.60" nf-mapped-y="1127.96" default-y="49.31">
         <pitch>
           <step>D</step>
           <octave>3</octave>
@@ -11702,6 +12408,33 @@
       <backup>
         <duration>24</duration>
       </backup>
+      <note nf-id="df5a8457" default-x="84.16" default-y="4.87" nf-mapped-x="312.78" nf-mapped-y="1004.52" nf-page="2">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
+      <note nf-id="edf086d8" default-x="120.82" default-y="49.31" nf-mapped-x="414.60" nf-mapped-y="1127.96" nf-page="2">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10</duration>
+        <voice>6</voice>
+        <staff>2</staff>
+      </note>
+      <note nf-id="c2aa902d" default-x="139.74" default-y="14.88" nf-mapped-x="467.16" nf-mapped-y="1032.34" nf-page="2">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>10</duration>
+        <voice>6</voice>
+        <staff>2</staff>
+      </note>
     </measure>
     <measure number="64" width="97.92" nf-page="2" nf-bbox-x1="440.00" nf-bbox-y1="991.00" nf-bbox-x2="712.00" nf-bbox-y2="1235.00">
       <attributes>
@@ -11735,7 +12468,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="36.57" nf-id="m64_n2_d80010" nf-page="2" nf-mapped-x="541.58" nf-mapped-y="983.50" default-y="-2.70">
+      <note default-x="38.13" nf-id="m64_n2_d80010" nf-page="2" nf-mapped-x="545.90" nf-mapped-y="984.10" default-y="-2.48">
         <pitch>
           <step>C</step>
           <octave>6</octave>
@@ -11749,10 +12482,10 @@
           <technical />
         </notations>
       </note>
-      <note default-x="56.74" nf-id="m64_n3_a485b6" nf-page="2" nf-mapped-x="597.60" nf-mapped-y="990.38" default-y="-0.22">
+      <note default-x="38.13" nf-id="m64_n3_a485b6" nf-page="2" nf-mapped-x="545.90" nf-mapped-y="984.10" default-y="-2.48">
         <pitch>
-          <step>B</step>
-          <octave>5</octave>
+          <step>C</step>
+          <octave>6</octave>
         </pitch>
         <duration>5</duration>
         <voice>1</voice>
@@ -11763,7 +12496,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="75.71" nf-id="m64_n4_5e6c2a" nf-page="2" nf-mapped-x="650.31" nf-mapped-y="1004.12" default-y="4.72">
+      <note default-x="75.88" nf-id="m64_n4_5e6c2a" nf-page="2" nf-mapped-x="650.78" nf-mapped-y="1004.52" default-y="4.87">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -11780,7 +12513,7 @@
       <backup>
         <duration>24</duration>
       </backup>
-      <note default-x="10.71" nf-id="m64_n5_4d048e" nf-page="2" nf-mapped-x="469.76" nf-mapped-y="1125.62" default-y="48.46">
+      <note default-x="9.58" nf-id="m64_n5_4d048e" nf-page="2" nf-mapped-x="466.60" nf-mapped-y="1127.96" default-y="49.31">
         <pitch>
           <step>D</step>
           <octave>3</octave>
@@ -11798,7 +12531,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="75.83" nf-id="m64_n6_7ba1dc" nf-page="2" nf-mapped-x="650.64" nf-mapped-y="1125.62" default-y="48.46">
+      <note default-x="75.82" nf-id="m64_n6_7ba1dc" nf-page="2" nf-mapped-x="650.60" nf-mapped-y="1127.96" default-y="49.31">
         <pitch>
           <step>D</step>
           <octave>3</octave>
@@ -11814,7 +12547,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="85.62" nf-id="m64_n7_c82bae" nf-page="2" nf-mapped-x="677.82" nf-mapped-y="1118.75" default-y="45.99">
+      <note default-x="88.89" nf-id="m64_n7_c82bae" nf-page="2" nf-mapped-x="686.90" nf-mapped-y="1119.10" default-y="46.12">
         <pitch>
           <step>C</step>
           <octave>3</octave>
@@ -11831,12 +12564,48 @@
       <backup>
         <duration>24</duration>
       </backup>
+      <note nf-id="5f283518" default-x="9.78" default-y="14.83" nf-mapped-x="467.17" nf-mapped-y="1032.19" nf-page="2">
+        <pitch>
+          <step>C</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>7</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
+      <note nf-id="91375b89" default-x="23.49" default-y="4.73" nf-mapped-x="505.25" nf-mapped-y="1004.15" nf-page="2">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>5</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
+      <note nf-id="c47377ff" default-x="23.68" default-y="4.87" nf-mapped-x="505.78" nf-mapped-y="1004.52" nf-page="2">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>7</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
+      <note nf-id="244577ea" default-x="57.46" default-y="0.71" nf-mapped-x="599.60" nf-mapped-y="992.96" nf-page="2">
+        <pitch>
+          <step>B</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>7</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
     </measure>
     <measure number="65" width="112.32" nf-page="2" nf-bbox-x1="712.00" nf-bbox-y1="991.00" nf-bbox-x2="1024.00" nf-bbox-y2="1235.00">
       <attributes>
         <divisions>12</divisions>
       </attributes>
-      <note default-x="12.04" nf-id="m65_n0_7e9eae" nf-page="2" nf-mapped-x="745.44" nf-mapped-y="1024.75" default-y="12.15">
+      <note default-x="9.67" nf-id="m65_n0_7e9eae" nf-page="2" nf-mapped-x="738.85" nf-mapped-y="1025.10" default-y="12.27">
         <pitch>
           <step>D</step>
           <octave>5</octave>
@@ -11850,7 +12619,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="23.51" nf-id="m65_n1_adbeba" nf-page="2" nf-mapped-x="777.31" nf-mapped-y="1004.12" default-y="4.72">
+      <note default-x="23.68" nf-id="m65_n1_adbeba" nf-page="2" nf-mapped-x="777.78" nf-mapped-y="1004.52" default-y="4.87">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -11864,7 +12633,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="36.64" nf-id="m65_n2_a20fad" nf-page="2" nf-mapped-x="813.78" nf-mapped-y="997.25" default-y="2.25">
+      <note default-x="36.69" nf-id="m65_n2_a20fad" nf-page="2" nf-mapped-x="813.90" nf-mapped-y="998.10" default-y="2.56">
         <pitch>
           <step>A</step>
           <octave>5</octave>
@@ -11878,9 +12647,9 @@
           <technical />
         </notations>
       </note>
-      <note default-x="49.87" nf-id="m65_n3_c4081c" nf-page="2" nf-mapped-x="850.53" nf-mapped-y="990.38" default-y="-0.22">
+      <note default-x="49.73" nf-id="m65_n3_c4081c" nf-page="2" nf-mapped-x="850.13" nf-mapped-y="993.62" default-y="0.94">
         <pitch>
-          <step>B</step>
+          <step>A</step>
           <octave>5</octave>
         </pitch>
         <duration>3</duration>
@@ -11892,7 +12661,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="62.63" nf-id="m65_n4_016a8c" nf-page="2" nf-mapped-x="885.96" nf-mapped-y="997.25" default-y="2.25">
+      <note default-x="62.97" nf-id="m65_n4_016a8c" nf-page="2" nf-mapped-x="886.90" nf-mapped-y="998.10" default-y="2.56">
         <pitch>
           <step>A</step>
           <octave>5</octave>
@@ -11906,7 +12675,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="75.45" nf-id="m65_n5_14b74b" nf-page="2" nf-mapped-x="921.57" nf-mapped-y="990.38" default-y="-0.22">
+      <note default-x="75.82" nf-id="m65_n5_14b74b" nf-page="2" nf-mapped-x="922.60" nf-mapped-y="992.96" default-y="0.71">
         <pitch>
           <step>B</step>
           <octave>5</octave>
@@ -11920,7 +12689,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="88.20" nf-id="m65_n6_71d39a" nf-page="2" nf-mapped-x="957.00" nf-mapped-y="976.62" default-y="-5.17">
+      <note default-x="89.86" nf-id="m65_n6_71d39a" nf-page="2" nf-mapped-x="961.60" nf-mapped-y="978.96" default-y="-4.33">
         <pitch>
           <step>D</step>
           <octave>4</octave>
@@ -11934,7 +12703,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="94.37" nf-id="m65_n7_e7c557" nf-page="2" nf-mapped-x="974.13" nf-mapped-y="983.50" default-y="-2.70">
+      <note default-x="102.93" nf-id="m65_n7_e7c557" nf-page="2" nf-mapped-x="997.90" nf-mapped-y="984.10" default-y="-2.48">
         <pitch>
           <step>C</step>
           <octave>6</octave>
@@ -11951,7 +12720,7 @@
       <backup>
         <duration>24</duration>
       </backup>
-      <note default-x="14.40" nf-id="m65_n8_461a47" nf-page="2" nf-mapped-x="752.00" nf-mapped-y="1187.00" default-y="70.56">
+      <note default-x="7.56" nf-id="m65_n8_461a47" nf-page="2" nf-mapped-x="733.00" nf-mapped-y="1189.00" default-y="71.28">
         <rest />
         <duration>12</duration>
         <voice>6</voice>
@@ -11959,7 +12728,7 @@
         <staff>2</staff>
         <notations />
       </note>
-      <note default-x="60.66" nf-id="m65_n9_8ed240" nf-page="2" nf-mapped-x="880.50" nf-mapped-y="1187.00" default-y="70.56">
+      <note default-x="62.82" nf-id="m65_n9_8ed240" nf-page="2" nf-mapped-x="886.50" nf-mapped-y="1187.00" default-y="70.56">
         <rest />
         <duration>6</duration>
         <voice>6</voice>
@@ -11967,7 +12736,7 @@
         <staff>2</staff>
         <notations />
       </note>
-      <note default-x="83.79" nf-id="m65_n10_8c8b46" nf-page="2" nf-mapped-x="944.75" nf-mapped-y="1187.00" default-y="70.56">
+      <note default-x="89.19" nf-id="m65_n10_8c8b46" nf-page="2" nf-mapped-x="959.75" nf-mapped-y="1188.00" default-y="70.92">
         <rest />
         <duration>4</duration>
         <voice>6</voice>
@@ -11975,7 +12744,7 @@
         <staff>2</staff>
         <notations />
       </note>
-      <note default-x="99.84" nf-id="m65_n11_64ee8e" nf-page="2" nf-mapped-x="989.34" nf-mapped-y="1146.25" default-y="55.89">
+      <note default-x="102.93" nf-id="m65_n11_64ee8e" nf-page="2" nf-mapped-x="997.90" nf-mapped-y="1147.10" default-y="56.20">
         <pitch>
           <step>C</step>
           <octave>4</octave>
@@ -11993,15 +12762,33 @@
       <backup>
         <duration>24</duration>
       </backup>
+      <note nf-id="b411a89e" default-x="121.65" default-y="56.20" nf-mapped-x="1049.90" nf-mapped-y="1147.10" nf-page="2">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>6</voice>
+        <staff>2</staff>
+      </note>
+      <note nf-id="b37dfbb1" default-x="121.74" default-y="14.83" nf-mapped-x="1050.17" nf-mapped-y="1032.19" nf-page="2">
+        <pitch>
+          <step>C</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
     </measure>
     <measure number="66" width="96.12" nf-page="2" nf-bbox-x1="1024.00" nf-bbox-y1="991.00" nf-bbox-x2="1291.00" nf-bbox-y2="1235.00">
       <attributes>
         <divisions>12</divisions>
       </attributes>
-      <note default-x="9.32" nf-id="m66_n0_b9d927" nf-page="2" nf-mapped-x="1049.90" nf-mapped-y="1031.62" default-y="14.62">
+      <note default-x="-9.39" nf-id="m66_n0_b9d927" nf-page="2" nf-mapped-x="997.90" nf-mapped-y="984.10" default-y="-2.48">
         <pitch>
           <step>C</step>
-          <octave>5</octave>
+          <octave>6</octave>
         </pitch>
         <duration>4</duration>
         <voice>1</voice>
@@ -12012,7 +12799,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="23.51" nf-id="m66_n1_a54021" nf-page="2" nf-mapped-x="1089.31" nf-mapped-y="1004.12" default-y="4.72">
+      <note default-x="23.68" nf-id="m66_n1_a54021" nf-page="2" nf-mapped-x="1089.78" nf-mapped-y="1004.52" default-y="4.87">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -12026,7 +12813,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="35.01" nf-id="m66_n2_56c49c" nf-page="2" nf-mapped-x="1121.26" nf-mapped-y="1004.12" default-y="4.72">
+      <note default-x="36.64" nf-id="m66_n2_56c49c" nf-page="2" nf-mapped-x="1125.78" nf-mapped-y="1004.52" default-y="4.87">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -12040,7 +12827,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="55.40" nf-id="m66_n3_8ef072" nf-page="2" nf-mapped-x="1177.89" nf-mapped-y="1004.12" default-y="4.72">
+      <note default-x="56.08" nf-id="m66_n3_8ef072" nf-page="2" nf-mapped-x="1179.78" nf-mapped-y="1004.52" default-y="4.87">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -12054,7 +12841,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="74.39" nf-id="m66_n4_6e3d7e" nf-page="2" nf-mapped-x="1230.64" nf-mapped-y="1031.62" default-y="14.62">
+      <note default-x="74.58" nf-id="m66_n4_6e3d7e" nf-page="2" nf-mapped-x="1231.17" nf-mapped-y="1032.19" default-y="14.83">
         <pitch>
           <step>C</step>
           <octave>5</octave>
@@ -12089,7 +12876,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="74.09" nf-id="m66_n6_504814" nf-page="2" nf-mapped-x="1229.80" nf-mapped-y="1146.25" default-y="55.89">
+      <note default-x="74.49" nf-id="m66_n6_504814" nf-page="2" nf-mapped-x="1230.90" nf-mapped-y="1147.10" default-y="56.20">
         <pitch>
           <step>C</step>
           <octave>4</octave>
@@ -12105,7 +12892,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="85.71" nf-id="m66_n7_c5d3ed" nf-page="2" nf-mapped-x="1262.09" nf-mapped-y="1194.38" default-y="73.22">
+      <note default-x="87.46" nf-id="m66_n7_c5d3ed" nf-page="2" nf-mapped-x="1266.94" nf-mapped-y="1195.23" default-y="73.52">
         <pitch>
           <step>C</step>
           <octave>3</octave>
@@ -12121,7 +12908,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="81.93" nf-id="m66_n8_fc315e" nf-page="2" nf-mapped-x="1251.59" nf-mapped-y="1146.25" default-y="55.89">
+      <note default-x="87.45" nf-id="m66_n8_fc315e" nf-page="2" nf-mapped-x="1266.90" nf-mapped-y="1147.10" default-y="56.20">
         <chord />
         <pitch>
           <step>C</step>
@@ -12140,6 +12927,42 @@
       <backup>
         <duration>24</duration>
       </backup>
+      <note nf-id="bd294e22" default-x="-21.88" default-y="-4.81" nf-mapped-x="963.22" nf-mapped-y="977.63" nf-page="2">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
+      <note nf-id="13add788" default-x="74.06" default-y="56.32" nf-mapped-x="1229.73" nf-mapped-y="1147.43" nf-page="2">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>6</voice>
+        <staff>2</staff>
+      </note>
+      <note nf-id="7a1cc2eb" default-x="87.45" default-y="56.20" nf-mapped-x="1266.90" nf-mapped-y="1147.10" nf-page="2">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>6</voice>
+        <staff>2</staff>
+      </note>
+      <note nf-id="af8536de" default-x="87.46" default-y="73.52" nf-mapped-x="1266.94" nf-mapped-y="1195.23" nf-page="2">
+        <pitch>
+          <step>C</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>6</voice>
+        <staff>2</staff>
+      </note>
     </measure>
     <measure number="67" width="101.16" nf-page="2" nf-bbox-x1="1291.00" nf-bbox-y1="991.00" nf-bbox-x2="1572.00" nf-bbox-y2="1235.00">
       <attributes>
@@ -12173,7 +12996,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="37.07" nf-id="m67_n2_8dea56" nf-page="2" nf-mapped-x="1393.96" nf-mapped-y="983.50" default-y="-2.70">
+      <note default-x="38.61" nf-id="m67_n2_8dea56" nf-page="2" nf-mapped-x="1398.24" nf-mapped-y="983.96" default-y="-2.53">
         <pitch>
           <step>C</step>
           <octave>6</octave>
@@ -12187,10 +13010,10 @@
           <technical />
         </notations>
       </note>
-      <note default-x="58.99" nf-id="m67_n3_bebe28" nf-page="2" nf-mapped-x="1454.87" nf-mapped-y="1004.12" default-y="4.72">
+      <note default-x="38.61" nf-id="m67_n3_bebe28" nf-page="2" nf-mapped-x="1398.24" nf-mapped-y="983.96" default-y="-2.53">
         <pitch>
-          <step>G</step>
-          <octave>5</octave>
+          <step>C</step>
+          <octave>6</octave>
         </pitch>
         <duration>5</duration>
         <voice>1</voice>
@@ -12201,7 +13024,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="78.48" nf-id="m67_n4_968e2c" nf-page="2" nf-mapped-x="1509.00" nf-mapped-y="1031.62" default-y="14.62">
+      <note default-x="78.90" nf-id="m67_n4_968e2c" nf-page="2" nf-mapped-x="1510.17" nf-mapped-y="1032.19" default-y="14.83">
         <pitch>
           <step>C</step>
           <octave>5</octave>
@@ -12218,7 +13041,7 @@
       <backup>
         <duration>24</duration>
       </backup>
-      <note default-x="10.92" nf-id="m67_n5_e7aec1" nf-page="2" nf-mapped-x="1321.33" nf-mapped-y="1194.38" default-y="73.22">
+      <note default-x="9.70" nf-id="m67_n5_e7aec1" nf-page="2" nf-mapped-x="1317.94" nf-mapped-y="1195.23" default-y="73.52">
         <pitch>
           <step>C</step>
           <octave>3</octave>
@@ -12235,7 +13058,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="10.48" nf-id="m67_n6_b096c0" nf-page="2" nf-mapped-x="1320.10" nf-mapped-y="1146.25" default-y="55.89">
+      <note default-x="9.69" nf-id="m67_n6_b096c0" nf-page="2" nf-mapped-x="1317.90" nf-mapped-y="1147.10" default-y="56.20">
         <chord />
         <pitch>
           <step>C</step>
@@ -12253,7 +13076,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="47.37" nf-id="m67_n7_0d1c1d" nf-page="2" nf-mapped-x="1422.57" nf-mapped-y="1194.38" default-y="73.22">
+      <note default-x="47.94" nf-id="m67_n7_0d1c1d" nf-page="2" nf-mapped-x="1424.17" nf-mapped-y="1195.19" default-y="73.51">
         <pitch>
           <step>C</step>
           <octave>3</octave>
@@ -12267,7 +13090,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="54.54" nf-id="m67_n8_65af24" nf-page="2" nf-mapped-x="1442.50" nf-mapped-y="1187.00" default-y="70.56">
+      <note default-x="60.66" nf-id="m67_n8_65af24" nf-page="2" nf-mapped-x="1459.50" nf-mapped-y="1187.00" default-y="70.56">
         <rest />
         <duration>6</duration>
         <voice>6</voice>
@@ -12275,7 +13098,7 @@
         <staff>2</staff>
         <notations />
       </note>
-      <note default-x="75.33" nf-id="m67_n9_dc8cfc" nf-page="2" nf-mapped-x="1500.25" nf-mapped-y="1187.00" default-y="70.56">
+      <note default-x="77.49" nf-id="m67_n9_dc8cfc" nf-page="2" nf-mapped-x="1506.25" nf-mapped-y="1187.00" default-y="70.56">
         <rest />
         <duration>4</duration>
         <voice>6</voice>
@@ -12283,7 +13106,7 @@
         <staff>2</staff>
         <notations />
       </note>
-      <note default-x="89.68" nf-id="m67_n10_09d55c" nf-page="2" nf-mapped-x="1540.12" nf-mapped-y="1146.25" default-y="55.89">
+      <note default-x="91.41" nf-id="m67_n10_09d55c" nf-page="2" nf-mapped-x="1544.90" nf-mapped-y="1147.10" default-y="56.20">
         <pitch>
           <step>C</step>
           <octave>4</octave>
@@ -12301,13 +13124,40 @@
       <backup>
         <duration>24</duration>
       </backup>
+      <note nf-id="c6d7ad08" default-x="9.78" default-y="14.83" nf-mapped-x="1318.17" nf-mapped-y="1032.19" nf-page="2">
+        <pitch>
+          <step>C</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>7</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
+      <note nf-id="ef67de64" default-x="24.04" default-y="4.87" nf-mapped-x="1357.78" nf-mapped-y="1004.52" nf-page="2">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>7</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
+      <note nf-id="337fb02d" default-x="60.76" default-y="4.87" nf-mapped-x="1459.78" nf-mapped-y="1004.52" nf-page="2">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>7</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
     </measure>
     <measure number="68" width="100.44" nf-page="2" nf-bbox-x1="78.00" nf-bbox-y1="1372.00" nf-bbox-x2="357.00" nf-bbox-y2="1607.00">
       <print new-system="yes" />
       <attributes>
         <divisions>12</divisions>
       </attributes>
-      <note default-x="29.99" nf-id="m68_n0_b725e9" nf-page="2" nf-mapped-x="161.31" nf-mapped-y="1413.00" default-y="14.76">
+      <note default-x="32.52" nf-id="m68_n0_b725e9" nf-page="2" nf-mapped-x="168.35" nf-mapped-y="1413.63" default-y="14.99">
         <pitch>
           <step>C</step>
           <octave>5</octave>
@@ -12321,7 +13171,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="33.70" nf-id="m68_n1_f951b9" nf-page="2" nf-mapped-x="171.62" nf-mapped-y="1385.00" default-y="4.68">
+      <note default-x="44.98" nf-id="m68_n1_f951b9" nf-page="2" nf-mapped-x="202.94" nf-mapped-y="1386.89" default-y="5.36">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -12335,7 +13185,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="42.57" nf-id="m68_n2_a8db51" nf-page="2" nf-mapped-x="196.25" nf-mapped-y="1364.00" default-y="-2.88">
+      <note default-x="57.67" nf-id="m68_n2_a8db51" nf-page="2" nf-mapped-x="238.20" nf-mapped-y="1365.02" default-y="-2.51">
         <pitch>
           <step>C</step>
           <octave>6</octave>
@@ -12349,7 +13199,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="56.43" nf-id="m68_n3_5a2c69" nf-page="2" nf-mapped-x="234.74" nf-mapped-y="1385.00" default-y="4.68">
+      <note default-x="72.70" nf-id="m68_n3_5a2c69" nf-page="2" nf-mapped-x="279.94" nf-mapped-y="1386.89" default-y="5.36">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -12365,7 +13215,7 @@
       <backup>
         <duration>24</duration>
       </backup>
-      <note default-x="29.60" nf-id="m68_n4_6eb3f6" nf-page="2" nf-mapped-x="160.23" nf-mapped-y="1518.00" default-y="52.56">
+      <note default-x="32.36" nf-id="m68_n4_6eb3f6" nf-page="2" nf-mapped-x="167.90" nf-mapped-y="1519.12" default-y="52.96">
         <pitch>
           <step>C</step>
           <octave>4</octave>
@@ -12381,7 +13231,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="81.93" nf-id="m68_n5_1fe51f" nf-page="2" nf-mapped-x="305.57" nf-mapped-y="1469.00" default-y="34.92">
+      <note default-x="83.00" nf-id="m68_n5_1fe51f" nf-page="2" nf-mapped-x="308.55" nf-mapped-y="1472.01" default-y="36.00">
         <pitch>
           <step>B</step>
           <octave>3</octave>
@@ -12389,13 +13239,13 @@
         <duration>4</duration>
         <voice>6</voice>
         <type>16th</type>
-        <staff>1</staff>
+        <staff>2</staff>
         <beam number="1">begin</beam>
         <notations>
           <technical />
         </notations>
       </note>
-      <note default-x="88.36" nf-id="m68_n6_20455f" nf-page="2" nf-mapped-x="323.44" nf-mapped-y="1518.00" default-y="52.56">
+      <note default-x="109.41" nf-id="m68_n6_20455f" nf-page="2" nf-mapped-x="381.90" nf-mapped-y="1519.10" default-y="52.96">
         <pitch>
           <step>C</step>
           <octave>4</octave>
@@ -12414,15 +13264,33 @@
       <backup>
         <duration>24</duration>
       </backup>
+      <note nf-id="e2be032b" default-x="93.21" default-y="52.96" nf-mapped-x="336.90" nf-mapped-y="1519.10" nf-page="2">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>1</voice>
+        <staff>2</staff>
+      </note>
+      <note nf-id="7fbd7033" default-x="109.50" default-y="15.05" nf-mapped-x="382.17" nf-mapped-y="1413.82" nf-page="2">
+        <pitch>
+          <step>C</step>
+          <octave>5</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>6</voice>
+        <staff>1</staff>
+      </note>
     </measure>
     <measure number="69" width="93.60" nf-page="2" nf-bbox-x1="357.00" nf-bbox-y1="1372.00" nf-bbox-x2="617.00" nf-bbox-y2="1607.00">
       <attributes>
         <divisions>12</divisions>
       </attributes>
-      <note default-x="8.96" nf-id="m69_n0_469889" nf-page="2" nf-mapped-x="381.90" nf-mapped-y="1413.00" default-y="14.76">
+      <note default-x="-17.44" nf-id="m69_n0_469889" nf-page="2" nf-mapped-x="308.55" nf-mapped-y="1472.01" default-y="36.00">
         <pitch>
-          <step>C</step>
-          <octave>5</octave>
+          <step>B</step>
+          <octave>3</octave>
         </pitch>
         <duration>4</duration>
         <voice>1</voice>
@@ -12433,7 +13301,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="21.81" nf-id="m69_n1_0cb1c5" nf-page="2" nf-mapped-x="417.58" nf-mapped-y="1385.00" default-y="4.68">
+      <note default-x="21.90" nf-id="m69_n1_0cb1c5" nf-page="2" nf-mapped-x="417.84" nf-mapped-y="1387.05" default-y="5.42">
         <pitch>
           <step>G</step>
           <octave>5</octave>
@@ -12447,7 +13315,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="33.89" nf-id="m69_n2_7d735f" nf-page="2" nf-mapped-x="451.14" nf-mapped-y="1364.00" default-y="-2.88">
+      <note default-x="34.63" nf-id="m69_n2_7d735f" nf-page="2" nf-mapped-x="453.20" nf-mapped-y="1365.02" default-y="-2.51">
         <pitch>
           <step>C</step>
           <octave>6</octave>
@@ -12461,7 +13329,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="52.87" nf-id="m69_n3_1321d9" nf-page="2" nf-mapped-x="503.86" nf-mapped-y="1420.00" default-y="17.28">
+      <note default-x="53.88" nf-id="m69_n3_1321d9" nf-page="2" nf-mapped-x="506.68" nf-mapped-y="1420.64" default-y="17.51">
         <pitch>
           <step>B</step>
           <octave>4</octave>
@@ -12481,7 +13349,7 @@
           <tuplet bracket="yes" type="start" number="1" />
         </notations>
       </note>
-      <note default-x="66.03" nf-id="m69_n4_637e86" nf-page="2" nf-mapped-x="540.41" nf-mapped-y="1434.00" default-y="22.32">
+      <note default-x="69.99" nf-id="m69_n4_637e86" nf-page="2" nf-mapped-x="551.42" nf-mapped-y="1434.69" default-y="22.57">
         <pitch>
           <step>G</step>
           <octave>4</octave>
@@ -12501,7 +13369,7 @@
           <tuplet type="stop" number="1" />
         </notations>
       </note>
-      <note default-x="72.54" nf-id="m69_n5_07d9a1" nf-page="2" nf-mapped-x="558.50" nf-mapped-y="1413.00" default-y="14.76">
+      <note default-x="81.21" nf-id="m69_n5_07d9a1" nf-page="2" nf-mapped-x="582.57" nf-mapped-y="1413.51" default-y="14.94">
         <pitch>
           <step>C</step>
           <octave>5</octave>
@@ -12551,7 +13419,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="52.42" nf-id="m69_n8_f24dd2" nf-page="2" nf-mapped-x="502.61" nf-mapped-y="1525.00" default-y="55.08">
+      <note default-x="53.69" nf-id="m69_n8_f24dd2" nf-page="2" nf-mapped-x="506.13" nf-mapped-y="1526.31" default-y="55.55">
         <pitch>
           <step>B</step>
           <octave>3</octave>
@@ -12573,7 +13441,7 @@
           <tuplet bracket="yes" type="start" number="1" />
         </notations>
       </note>
-      <note default-x="57.70" nf-id="m69_n9_785957" nf-page="2" nf-mapped-x="517.28" nf-mapped-y="1518.00" default-y="52.56">
+      <note default-x="63.33" nf-id="m69_n9_785957" nf-page="2" nf-mapped-x="532.90" nf-mapped-y="1519.10" default-y="52.96">
         <pitch>
           <step>C</step>
           <octave>4</octave>
@@ -12593,7 +13461,7 @@
           <tuplet type="stop" number="1" />
         </notations>
       </note>
-      <note default-x="69.66" nf-id="m69_n10_d8e59d" nf-page="2" nf-mapped-x="550.50" nf-mapped-y="1581.00" default-y="75.24">
+      <note default-x="80.98" nf-id="m69_n10_d8e59d" nf-page="2" nf-mapped-x="581.94" nf-mapped-y="1581.23" default-y="75.32">
         <pitch>
           <step>A</step>
           <octave>2</octave>
@@ -12607,7 +13475,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="69.48" nf-id="m69_n11_0e97cf" nf-page="2" nf-mapped-x="550.00" nf-mapped-y="1532.00" default-y="57.60">
+      <note default-x="80.95" nf-id="m69_n11_0e97cf" nf-page="2" nf-mapped-x="581.85" nf-mapped-y="1533.10" default-y="57.99">
         <chord />
         <pitch>
           <step>A</step>
@@ -12624,6 +13492,24 @@
       <backup>
         <duration>24</duration>
       </backup>
+      <note nf-id="d2837294" default-x="42.50" default-y="55.58" nf-mapped-x="475.05" nf-mapped-y="1526.39" nf-page="2">
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>6</voice>
+        <staff>2</staff>
+      </note>
+      <note nf-id="e73aa05c" default-x="101.94" default-y="22.63" nf-mapped-x="640.17" nf-mapped-y="1434.85" nf-page="2">
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
     </measure>
     <measure number="70" width="87.84" nf-page="2" nf-bbox-x1="617.00" nf-bbox-y1="1372.00" nf-bbox-x2="861.00" nf-bbox-y2="1607.00">
       <attributes>
@@ -12682,7 +13568,7 @@
       <backup>
         <duration>24</duration>
       </backup>
-      <note default-x="11.16" nf-id="m70_n4_df81e0" nf-page="2" nf-mapped-x="648.00" nf-mapped-y="1560.00" default-y="67.68">
+      <note default-x="7.56" nf-id="m70_n4_df81e0" nf-page="2" nf-mapped-x="638.00" nf-mapped-y="1560.00" default-y="67.68">
         <rest />
         <duration>6</duration>
         <voice>6</voice>
@@ -12767,7 +13653,7 @@
       <attributes>
         <divisions>12</divisions>
       </attributes>
-      <note default-x="11.16" nf-id="m71_n0_64efc5" nf-page="2" nf-mapped-x="892.00" nf-mapped-y="1420.00" default-y="17.28">
+      <note default-x="10.08" nf-id="m71_n0_64efc5" nf-page="2" nf-mapped-x="889.00" nf-mapped-y="1420.00" default-y="17.28">
         <rest />
         <duration>4</duration>
         <voice>1</voice>
@@ -12940,7 +13826,7 @@
       <attributes>
         <divisions>12</divisions>
       </attributes>
-      <note default-x="9.10" nf-id="m72_n0_a0800a" nf-page="2" nf-mapped-x="1127.29" nf-mapped-y="1434.00" default-y="22.32">
+      <note default-x="9.15" nf-id="m72_n0_a0800a" nf-page="2" nf-mapped-x="1127.42" nf-mapped-y="1434.69" default-y="22.57">
         <pitch>
           <step>G</step>
           <octave>4</octave>
@@ -12954,7 +13840,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="21.24" nf-id="m72_n1_5de064" nf-page="2" nf-mapped-x="1161.00" nf-mapped-y="1413.00" default-y="14.76">
+      <note default-x="21.86" nf-id="m72_n1_5de064" nf-page="2" nf-mapped-x="1162.73" nf-mapped-y="1413.32" default-y="14.88">
         <pitch>
           <step>C</step>
           <octave>5</octave>
@@ -12968,7 +13854,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="36.47" nf-id="m72_n2_f976d9" nf-page="2" nf-mapped-x="1203.30" nf-mapped-y="1420.00" default-y="17.28">
+      <note default-x="37.68" nf-id="m72_n2_f976d9" nf-page="2" nf-mapped-x="1206.68" nf-mapped-y="1420.64" default-y="17.51">
         <pitch>
           <step>B</step>
           <octave>4</octave>
@@ -12982,7 +13868,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="46.25" nf-id="m72_n3_2aa726" nf-page="2" nf-mapped-x="1230.46" nf-mapped-y="1441.00" default-y="24.84">
+      <note default-x="47.68" nf-id="m72_n3_2aa726" nf-page="2" nf-mapped-x="1234.46" nf-mapped-y="1440.97" default-y="24.83">
         <pitch>
           <step>F</step>
           <octave>4</octave>
@@ -12996,10 +13882,10 @@
           <technical />
         </notations>
       </note>
-      <note default-x="62.09" nf-id="m72_n4_b7bf4e" nf-page="2" nf-mapped-x="1274.46" nf-mapped-y="1483.00" default-y="39.96">
+      <note default-x="86.19" nf-id="m72_n4_b7bf4e" nf-page="2" nf-mapped-x="1341.42" nf-mapped-y="1434.69" default-y="22.57">
         <pitch>
           <step>G</step>
-          <octave>3</octave>
+          <octave>4</octave>
         </pitch>
         <duration>4</duration>
         <voice>1</voice>
@@ -13010,7 +13896,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="61.05" nf-id="m72_n5_dffb44" nf-page="2" nf-mapped-x="1271.59" nf-mapped-y="1434.00" default-y="22.32">
+      <note default-x="63.70" nf-id="m72_n5_dffb44" nf-page="2" nf-mapped-x="1278.93" nf-mapped-y="1434.59" default-y="22.53">
         <chord />
         <pitch>
           <step>G</step>
@@ -13055,10 +13941,10 @@
           <technical />
         </notations>
       </note>
-      <note default-x="45.21" nf-id="m72_n8_8d9886" nf-page="2" nf-mapped-x="1227.59" nf-mapped-y="1546.00" default-y="62.64">
+      <note default-x="29.49" nf-id="m72_n8_8d9886" nf-page="2" nf-mapped-x="1183.90" nf-mapped-y="1519.10" default-y="52.96">
         <pitch>
-          <step>F</step>
-          <octave>3</octave>
+          <step>C</step>
+          <octave>4</octave>
         </pitch>
         <duration>5</duration>
         <voice>6</voice>
@@ -13069,10 +13955,10 @@
           <technical />
         </notations>
       </note>
-      <note default-x="62.09" nf-id="m72_n9_56fac9" nf-page="2" nf-mapped-x="1274.46" nf-mapped-y="1637.00" default-y="95.40">
+      <note default-x="63.70" nf-id="m72_n9_56fac9" nf-page="2" nf-mapped-x="1278.93" nf-mapped-y="1587.59" default-y="77.61">
         <pitch>
-          <step>D</step>
-          <octave>3</octave>
+          <step>G</step>
+          <octave>2</octave>
         </pitch>
         <duration>4</duration>
         <voice>6</voice>
@@ -13083,11 +13969,11 @@
           <technical />
         </notations>
       </note>
-      <note default-x="60.33" nf-id="m72_n10_c315e0" nf-page="2" nf-mapped-x="1269.58" nf-mapped-y="1588.00" default-y="77.76">
+      <note default-x="63.67" nf-id="m72_n10_c315e0" nf-page="2" nf-mapped-x="1278.86" nf-mapped-y="1635.73" default-y="94.94">
         <chord />
         <pitch>
-          <step>G</step>
-          <octave>2</octave>
+          <step>D</step>
+          <octave>3</octave>
         </pitch>
         <duration>4</duration>
         <voice>6</voice>
@@ -13100,6 +13986,78 @@
       <backup>
         <duration>24</duration>
       </backup>
+      <note nf-id="9fba65f4" default-x="-19.25" default-y="24.76" nf-mapped-x="1048.53" nf-mapped-y="1440.78" nf-page="2">
+        <pitch>
+          <step>F</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>6</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
+      <note nf-id="105de60a" default-x="-19.08" default-y="62.46" nf-mapped-x="1049.01" nf-mapped-y="1545.49" nf-page="2">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>6</duration>
+        <voice>1</voice>
+        <staff>2</staff>
+      </note>
+      <note nf-id="fce1baa8" default-x="-9.13" default-y="32.27" nf-mapped-x="1076.65" nf-mapped-y="1461.65" nf-page="2">
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>6</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
+      <note nf-id="f5191bde" default-x="9.36" default-y="62.46" nf-mapped-x="1128.01" nf-mapped-y="1545.49" nf-page="2">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>6</duration>
+        <voice>1</voice>
+        <staff>2</staff>
+      </note>
+      <note nf-id="fa57599f" default-x="29.49" default-y="52.96" nf-mapped-x="1183.90" nf-mapped-y="1519.10" nf-page="2">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>6</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
+      <note nf-id="6792a057" default-x="47.61" default-y="62.96" nf-mapped-x="1234.25" nf-mapped-y="1546.90" nf-page="2">
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>6</duration>
+        <voice>1</voice>
+        <staff>2</staff>
+      </note>
+      <note nf-id="a523e0c0" default-x="63.50" default-y="39.83" nf-mapped-x="1278.40" nf-mapped-y="1482.64" nf-page="2">
+        <pitch>
+          <step>D</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>5</duration>
+        <voice>6</voice>
+        <staff>2</staff>
+      </note>
+      <note nf-id="f09c207d" default-x="63.57" default-y="39.69" nf-mapped-x="1278.57" nf-mapped-y="1482.24" nf-page="2">
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>6</duration>
+        <voice>1</voice>
+        <staff>1</staff>
+      </note>
     </measure>
     <measure number="73" width="91.44" nf-page="2" nf-bbox-x1="1318.00" nf-bbox-y1="1372.00" nf-bbox-x2="1572.00" nf-bbox-y2="1607.00">
       <attributes>
@@ -13220,7 +14178,7 @@
       <backup>
         <duration>24</duration>
       </backup>
-      <note default-x="11.88" nf-id="m73_n8_1bbfc1" nf-page="2" nf-mapped-x="1351.00" nf-mapped-y="1560.00" default-y="67.68">
+      <note default-x="7.20" nf-id="m73_n8_1bbfc1" nf-page="2" nf-mapped-x="1338.00" nf-mapped-y="1562.00" default-y="68.40">
         <rest />
         <duration>12</duration>
         <voice>6</voice>
@@ -13228,7 +14186,7 @@
         <staff>2</staff>
         <notations />
       </note>
-      <note default-x="49.50" nf-id="m73_n9_35268c" nf-page="2" nf-mapped-x="1455.50" nf-mapped-y="1560.00" default-y="67.68">
+      <note default-x="53.82" nf-id="m73_n9_35268c" nf-page="2" nf-mapped-x="1467.50" nf-mapped-y="1561.00" default-y="68.04">
         <rest />
         <duration>6</duration>
         <voice>6</voice>
@@ -13249,7 +14207,7 @@
           <technical />
         </notations>
       </note>
-      <note default-x="68.04" nf-id="m73_n11_f1d6b7" nf-page="2" nf-mapped-x="1507.00" nf-mapped-y="1532.00" default-y="57.60">
+      <note default-x="77.71" nf-id="m73_n11_f1d6b7" nf-page="2" nf-mapped-x="1533.85" nf-mapped-y="1533.10" default-y="57.99">
         <chord />
         <pitch>
           <step>A</step>
@@ -34183,7 +35141,7 @@
           <step>D</step>
           <octave>4</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>6</duration>
         <voice>1</voice>
         <type>eighth</type>
         <staff>1</staff>
@@ -34205,7 +35163,7 @@
       </note>
       <note default-x="31.59" nf-id="m189_n7_bc6d42" nf-page="7" nf-mapped-x="892.75" nf-mapped-y="394.00" default-y="66.60">
         <rest />
-        <duration>16</duration>
+        <duration>14</duration>
         <voice>6</voice>
         <type>16th</type>
         <staff>2</staff>
@@ -34224,16 +35182,16 @@
           <technical />
         </notations>
       </note>
-      <note default-x="84.10" nf-id="m189_n9_881e14" nf-page="7" nf-mapped-x="1038.60" nf-mapped-y="325.25" default-y="41.85">
+      <note default-x="84.10" nf-id="m189_n9_881e14" nf-page="7" nf-mapped-x="1038.60" nf-mapped-y="324.75" default-y="41.67">
         <pitch>
-          <step>F</step>
+          <step>C</step>
           <octave>3</octave>
         </pitch>
         <duration>3</duration>
         <tie type="start" />
         <voice>6</voice>
         <type>16th</type>
-        <staff>1</staff>
+        <staff>2</staff>
         <notations>
           <tied type="start" />
           <technical />
@@ -34334,17 +35292,17 @@
       <backup>
         <duration>24</duration>
       </backup>
-      <note default-x="10.01" nf-id="m190_n6_06a988" nf-page="7" nf-mapped-x="1094.81" nf-mapped-y="325.25" default-y="41.85">
+      <note default-x="10.01" nf-id="m190_n6_06a988" nf-page="7" nf-mapped-x="1094.81" nf-mapped-y="324.75" default-y="41.67">
         <pitch>
-          <step>F</step>
+          <step>C</step>
           <octave>3</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>10</duration>
         <tie type="stop" />
         <voice>6</voice>
         <type>eighth</type>
         <dot />
-        <staff>1</staff>
+        <staff>2</staff>
         <beam number="1">begin</beam>
         <notations>
           <tied type="stop" />
@@ -34411,7 +35369,7 @@
           <step>G</step>
           <octave>5</octave>
         </pitch>
-        <duration>3</duration>
+        <duration>6</duration>
         <voice>1</voice>
         <type>eighth</type>
         <staff>1</staff>
@@ -34484,7 +35442,7 @@
           <step>D</step>
           <octave>3</octave>
         </pitch>
-        <duration>12</duration>
+        <duration>8</duration>
         <tie type="stop" />
         <voice>6</voice>
         <type>eighth</type>
@@ -34496,15 +35454,15 @@
           <technical />
         </notations>
       </note>
-      <note default-x="34.76" nf-id="m191_n7_b5f044" nf-page="7" nf-mapped-x="1419.56" nf-mapped-y="325.25" default-y="41.85">
+      <note default-x="34.76" nf-id="m191_n7_b5f044" nf-page="7" nf-mapped-x="1419.56" nf-mapped-y="324.75" default-y="41.67">
         <pitch>
-          <step>F</step>
+          <step>C</step>
           <octave>3</octave>
         </pitch>
         <duration>4</duration>
         <voice>6</voice>
         <type>16th</type>
-        <staff>1</staff>
+        <staff>2</staff>
         <beam number="1">end</beam>
         <notations>
           <technical />
@@ -35191,7 +36149,7 @@
           <step>C</step>
           <octave>6</octave>
         </pitch>
-        <duration>3</duration>
+        <duration>4</duration>
         <voice>1</voice>
         <type>eighth</type>
         <staff>1</staff>
@@ -35261,15 +36219,15 @@
           <technical />
         </notations>
       </note>
-      <note default-x="40.55" nf-id="m197_n7_eb82fc" nf-page="7" nf-mapped-x="1435.64" nf-mapped-y="711.12" default-y="44.32">
+      <note default-x="40.55" nf-id="m197_n7_eb82fc" nf-page="7" nf-mapped-x="1435.64" nf-mapped-y="708.88" default-y="43.52">
         <pitch>
           <step>D</step>
-          <octave>4</octave>
+          <octave>3</octave>
         </pitch>
-        <duration>3</duration>
+        <duration>12</duration>
         <voice>6</voice>
         <type>quarter</type>
-        <staff>1</staff>
+        <staff>2</staff>
         <notations>
           <technical />
         </notations>

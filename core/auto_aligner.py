@@ -216,9 +216,23 @@ class AutoAligner:
         import cv2
         img_h, img_w, _ = bgr_img.shape
 
-        # 선택된 음표들의 바운딩 박스 계산 (덧줄 및 옥타브 고음/저음, 좌우 편차 포함 위해 여백 90px 확보)
-        min_x = max(0, int(min(n.mapped_x for n in valid_notes) - 90))
-        max_x = min(img_w, int(max(n.mapped_x for n in valid_notes) + 90))
+        # 선택된 음표들의 바운딩 박스 계산 (소속 마디 BBox 및 여백 포함하여 마디 내 모든 타원 온전히 포착)
+        base_m_num = valid_notes[0].measure_number if valid_notes else None
+        m_x1, m_x2 = None, None
+        if score and base_m_num:
+            matching_ms = [m for m in score.measures if m.number == base_m_num]
+            if matching_ms and matching_ms[0].bbox_x1 is not None and matching_ms[0].bbox_x2 is not None:
+                m_x1 = matching_ms[0].bbox_x1 - 40.0
+                m_x2 = matching_ms[0].bbox_x2 + 40.0
+
+        raw_min_x = min(n.mapped_x for n in valid_notes) - 90.0
+        raw_max_x = max(n.mapped_x for n in valid_notes) + 90.0
+        if m_x1 is not None and m_x2 is not None:
+            raw_min_x = min(raw_min_x, m_x1)
+            raw_max_x = max(raw_max_x, m_x2)
+
+        min_x = max(0, int(raw_min_x))
+        max_x = min(img_w, int(raw_max_x))
         min_y = max(0, int(min(n.mapped_y for n in valid_notes) - 65))
         max_y = min(img_h, int(max(n.mapped_y for n in valid_notes) + 65))
 
