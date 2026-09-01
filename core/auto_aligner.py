@@ -316,12 +316,16 @@ class AutoAligner:
             if not sys_region and systems:
                 sys_region = systems[0]
 
-            # 3. 대입된 타원 정중앙 Y좌표 기준으로 음계(Pitch) 및 건반(Staff) 계산
+            # 3. 대입된 타원 정중앙 Y좌표 기준으로 음계(Pitch) 계산 (원래 note.staff 파트/색상 100% 영구 보존!)
+            orig_staff = note.staff if (note.staff in (1, 2)) else None
             _, pitch_str, staff, _ = snap_notehead_to_local_staff_line(
-                cx, cy, thresh_full, sys_region
+                cx, cy, thresh_full, sys_region, note_staff=orig_staff
             )
             note.pitch = pitch_str
-            note.staff = staff
+            if orig_staff is not None:
+                note.staff = orig_staff  # 색상 변경 원천 방지 (낮은음자리=파란색, 높은음자리=녹색 완벽 유지)
+            else:
+                note.staff = staff
             aligned_count += 1
 
         return aligned_count
@@ -576,7 +580,8 @@ def snap_notehead_to_local_staff_line(
     sys_region: Optional[SystemRegion] = None,
     custom_treble_lines: Optional[List[int]] = None,
     custom_bass_lines: Optional[List[int]] = None,
-    custom_spacing: Optional[float] = None
+    custom_spacing: Optional[float] = None,
+    note_staff: Optional[int] = None
 ) -> Tuple[float, str, int, bool]:
     if custom_treble_lines and len(custom_treble_lines) >= 5:
         t_lines = custom_treble_lines
@@ -603,9 +608,17 @@ def snap_notehead_to_local_staff_line(
 
     half_sp = spacing / 2.0
     split_y = (t_lines[4] + b_lines[0]) / 2.0 if (t_lines and b_lines) else float(t_lines[4] + 20)
-    is_treble = (abs_y < split_y)
+    if note_staff == 2:
+        is_treble = False
+        staff = 2
+    elif note_staff == 1:
+        is_treble = True
+        staff = 1
+    else:
+        is_treble = (abs_y < split_y)
+        staff = 1 if is_treble else 2
+
     ref_lines = t_lines if is_treble else b_lines
-    staff = 1 if is_treble else 2
 
     candidate_lines = []
     for l_idx in range(-3, 8):
