@@ -166,24 +166,20 @@ class InteractiveMeasureItem(QGraphicsRectItem):
     def hoverMoveEvent(self, event):
         pos = event.pos()
         rect = self.rect()
-        margin = 10.0
+        margin = 8.0
 
         if abs(pos.x() - rect.right()) <= margin or abs(pos.x() - rect.left()) <= margin:
             self.setCursor(Qt.CursorShape.SizeHorCursor)
         elif abs(pos.y() - rect.bottom()) <= margin or abs(pos.y() - rect.top()) <= margin:
             self.setCursor(Qt.CursorShape.SizeVerCursor)
         else:
-            self.setCursor(Qt.CursorShape.SizeHorCursor)
+            self.setCursor(Qt.CursorShape.ArrowCursor)
         super().hoverMoveEvent(event)
 
     def mousePressEvent(self, event):
-        self.press_pos = event.scenePos()
-        self.press_item_pos = self.pos()
-        self.press_rect = self.rect()
-        self.press_note_coords = [(n.id, n.mapped_x, n.mapped_y) for n in self.measure_data.notes if n.mapped_x is not None and n.mapped_y is not None]
         pos = event.pos()
         rect = self.rect()
-        margin = 10.0
+        margin = 8.0
 
         if abs(pos.x() - rect.right()) <= margin:
             self.active_handle = 'right'
@@ -195,6 +191,16 @@ class InteractiveMeasureItem(QGraphicsRectItem):
             self.active_handle = 'top'
         else:
             self.active_handle = None
+
+        # 테두리 핸들을 잡지 않고 마디 내부를 클릭한 경우: 마퀴(RubberBand) 드래그 선택이 원활하게 작동하도록 이벤트 무시
+        if not self.active_handle:
+            event.ignore()
+            return
+
+        self.press_pos = event.scenePos()
+        self.press_item_pos = self.pos()
+        self.press_rect = self.rect()
+        self.press_note_coords = [(n.id, n.mapped_x, n.mapped_y) for n in self.measure_data.notes if n.mapped_x is not None and n.mapped_y is not None]
 
         super().mousePressEvent(event)
 

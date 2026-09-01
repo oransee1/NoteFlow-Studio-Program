@@ -497,13 +497,21 @@ class MainWindow(QMainWindow):
                     next_m = sys_list[i + 1]
 
                     if cur_m.bbox_x1 is not None and cur_m.bbox_x2 is not None and next_m.bbox_x1 is not None and next_m.bbox_x2 is not None:
-                        # 현재 마디의 오른쪽(x2)이 다음 마디의 왼쪽(x1)을 침범하여 겹치는 경우
                         if cur_m.bbox_x2 > next_m.bbox_x1 + 1.0:
-                            # 번호 순서에 맞게 경계선 분할
                             if cur_m.number < next_m.number:
                                 cur_m.bbox_x2 = next_m.bbox_x1
                             else:
                                 next_m.bbox_x1 = cur_m.bbox_x2
+
+    def _on_mode_toggled(self, checked: bool):
+        if checked:
+            self.canvas_view.setDragMode(QGraphicsView.DragMode.RubberBandDrag)
+            self.btn_mode_toggle.setText("🔲 마퀴 드래그 선택 모드 (ON)")
+            self.status_bar.showMessage("마퀴 드래그 선택 모드: 마우스 왼쪽 버튼으로 원하는 음표 영역을 드래그하여 선택하세요.")
+        else:
+            self.canvas_view.setDragMode(QGraphicsView.DragMode.ScrollHandDrag)
+            self.btn_mode_toggle.setText("✋ 화면 이동(스크롤) 모드")
+            self.status_bar.showMessage("화면 이동 모드: 마우스 드래그로 악보 화면을 자유롭게 이동하세요.")
 
     def load_pdf_file(self, path: str):
         try:
