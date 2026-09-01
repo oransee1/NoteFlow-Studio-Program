@@ -215,9 +215,9 @@ class AutoAligner:
         import cv2
         img_h, img_w, _ = bgr_img.shape
 
-        # 선택된 음표들의 바운딩 박스 계산 (덧줄 및 옥타브 고음/저음 음표 포함 위해 여백 65px 확보)
-        min_x = max(0, int(min(n.mapped_x for n in valid_notes) - 65))
-        max_x = min(img_w, int(max(n.mapped_x for n in valid_notes) + 65))
+        # 선택된 음표들의 바운딩 박스 계산 (덧줄 및 옥타브 고음/저음, 좌우 편차 포함 위해 여백 90px 확보)
+        min_x = max(0, int(min(n.mapped_x for n in valid_notes) - 90))
+        max_x = min(img_w, int(max(n.mapped_x for n in valid_notes) + 90))
         min_y = max(0, int(min(n.mapped_y for n in valid_notes) - 65))
         max_y = min(img_h, int(max(n.mapped_y for n in valid_notes) + 65))
 
@@ -232,14 +232,14 @@ class AutoAligner:
         k_el = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (4, 4))
         noteheads_img = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, k_el)
 
-        # 2. 타원(Notehead) 윤곽선 검출 및 서브픽셀 타원 피팅 (음표 옆 부점 Dot, 코드 텍스트, 세로 기둥 잡음 100% 원천 배제)
+        # 2. 타원(Notehead) 윤곽선 검출 및 서브픽셀 타원 피팅 (클레프 기호, 음표 옆 부점 Dot, 코드 텍스트 100% 원천 배제)
         contours, _ = cv2.findContours(noteheads_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         detected_centers: List[Tuple[float, float]] = []
 
         for c in contours:
             area = cv2.contourArea(c)
-            # 음표 옆 작은 부점(Dot: area < 45) 및 거대 빔(area > 380) 원천 배제
-            if 45 <= area <= 380:
+            # 음표 옆 작은 부점(Dot: area < 60) 및 거대 빔(area > 350) 원천 배제
+            if 60 <= area <= 350:
                 if len(c) >= 5:
                     box_center, box_size, angle = cv2.fitEllipse(c)
                     cx, cy = float(box_center[0]), float(box_center[1])
@@ -249,12 +249,21 @@ class AutoAligner:
                     abs_cy = float(min_y + cy)
 
                     # 오선지 시스템 범위(위/아래 덧줄 포함) 내부인지 확인
-                    in_sys = any((sys.y_min - 40 <= abs_cy <= sys.y_max + 40) for sys in systems) if systems else True
+                    in_sys = False
+                    is_clef_column = False
+                    for sys in systems:
+                        if sys.y_min - 40 <= abs_cy <= sys.y_max + 40:
+                            in_sys = True
+                            # 시스템 좌측 끝단의 높은음자리표/낮은음자리표 클레프 및 박자표 기호 영역 (좌측 65px)
+                            sys_x_start = float(sys.x_min if hasattr(sys, 'x_min') and sys.x_min is not None else 80.0)
+                            if abs_cx < sys_x_start + 65.0 or abs_cx < 165.0:
+                                is_clef_column = True
+                            break
+                    if not systems:
+                        in_sys = True
 
-                    # 표준 음표 머리 타원 기하학적 조건 (부점 Dot 배제: ma >= 6.5, MA >= 12, angle 35~85도)
-                    if in_sys and 6.5 <= ma <= 22.0 and 11.5 <= MA <= 28.0 and (35.0 <= angle <= 85.0) and (0.38 <= ratio <= 0.90):
-                        detected_centers.append((abs_cx, abs_cy))
-                    elif in_sys and 7.0 <= ma <= 20.0 and 12.0 <= MA <= 26.0:
+                    # 표준 음표 머리 정밀 기하학적 조건 (클레프 기호 및 부점 배제)
+                    if in_sys and not is_clef_column and 7.0 <= ma <= 19.0 and 13.0 <= MA <= 27.0 and (35.0 <= angle <= 85.0):
                         detected_centers.append((abs_cx, abs_cy))
                 else:
                     M = cv2.moments(c)
@@ -262,7 +271,7 @@ class AutoAligner:
                         mcx = float(min_x + float(M['m10'] / M['m00']))
                         mcy = float(min_y + float(M['m01'] / M['m00']))
                         in_sys = any((sys.y_min - 40 <= mcy <= sys.y_max + 40) for sys in systems) if systems else True
-                        if in_sys and area >= 60:
+                        if in_sys and mcx >= 165.0 and area >= 100:
                             detected_centers.append((mcx, mcy))
 
         # 타원 중심들을 X좌표(좌 -> 우) 순서로 정렬 및 근접 중복 제거 (반경 6px)
@@ -282,7 +291,7 @@ class AutoAligner:
         gray_full = cv2.cvtColor(bgr_img, cv2.COLOR_BGR2GRAY)
         _, thresh_full = cv2.threshold(gray_full, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
 
-        # 1:1 전역 최적 최소 비용 이분 매칭 (Global Min-Cost Bipartite Matching)
+        # 1:1 단조 증가 순서 보존 전역 최적 매칭 (Monotonic Order-Preserving Global Matching)
         matched_pairs: List[Tuple[NoteData, Tuple[float, float]]] = []
         import itertools
 
@@ -292,46 +301,27 @@ class AutoAligner:
         if N == M:
             for note, center in zip(sorted_notes, unique_centers):
                 matched_pairs.append((note, center))
-        elif M > N and N <= 12:
-            # 선택된 음표 수가 12개 이하인 경우 전역 최적 완전 탐색
-            cost_matrix = []
-            for note in sorted_notes:
-                nx, ny = float(note.mapped_x), float(note.mapped_y)
-                row = [math.hypot(cx - nx, (cy - ny) * 1.5) for cx, cy in unique_centers]
-                cost_matrix.append(row)
-
-            best_perm = None
+        elif M > N:
+            # 타원이 음표보다 많은 경우: 단조 증가하는 N개 타원 부분조합 중 총 거리 최소 선택
+            best_comb = None
             min_total_cost = float('inf')
 
             for comb in itertools.combinations(range(M), N):
-                for perm in itertools.permutations(comb):
-                    # 음표는 X좌표 순서대로 진행하므로 X 역행이 과도한 순열은 가중치 부여
-                    total_cost = sum(cost_matrix[i][perm[i]] for i in range(N))
-                    if total_cost < min_total_cost:
-                        min_total_cost = total_cost
-                        best_perm = perm
+                cost = sum(math.hypot(unique_centers[comb[i]][0] - sorted_notes[i].mapped_x, (unique_centers[comb[i]][1] - sorted_notes[i].mapped_y) * 1.5) for i in range(N))
+                if cost < min_total_cost:
+                    min_total_cost = cost
+                    best_comb = comb
 
-            if best_perm:
+            if best_comb:
                 for i in range(N):
-                    matched_pairs.append((sorted_notes[i], unique_centers[best_perm[i]]))
+                    matched_pairs.append((sorted_notes[i], unique_centers[best_comb[i]]))
+            else:
+                for i in range(N):
+                    matched_pairs.append((sorted_notes[i], unique_centers[i]))
         else:
-            # N > 12이거나 M < N인 경우 탐욕적 최근접 매칭 폴백
-            used_center_indices = set()
-            candidate_edges = []
-            for n_idx, note in enumerate(sorted_notes):
-                nx, ny = float(note.mapped_x), float(note.mapped_y)
-                for c_idx, (cx, cy) in enumerate(unique_centers):
-                    dist = math.hypot(cx - nx, (cy - ny) * 1.5)
-                    candidate_edges.append((dist, n_idx, c_idx))
-
-            candidate_edges.sort(key=lambda item: item[0])
-            used_notes = set()
-            for dist, n_idx, c_idx in candidate_edges:
-                if n_idx in used_notes or c_idx in used_center_indices:
-                    continue
-                used_notes.add(n_idx)
-                used_center_indices.add(c_idx)
-                matched_pairs.append((sorted_notes[n_idx], unique_centers[c_idx]))
+            # 음표가 타원보다 많은 경우 (일부 쉼표나 중복): 앞에서부터 1:1 대입
+            for i in range(M):
+                matched_pairs.append((sorted_notes[i], unique_centers[i]))
 
         aligned_count = 0
         for note, (cx, cy) in matched_pairs:
