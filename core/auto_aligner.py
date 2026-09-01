@@ -194,9 +194,9 @@ class AutoAligner:
     def align_selected_notes_to_noteheads(self, notes: List[NoteData], page_idx: int, dpi: int = 200) -> int:
         """
         사용자가 마우스로 드래그 선택한 음표(동일한 크기의 타원) 영역을 정밀 분석하여:
-        1. 해당 영역의 실제 악보 흑색 음표 머리 타원(Notehead blob / ellipse)의 정확한 중심 좌표(x, y)를 서브픽셀 단위로 검출
-        2. 검출된 타원 정중앙 좌표를 선택된 음표 데이터(mapped_x, mapped_y)에 1:1 대입
-        3. 오선지 선/칸 자석 스냅 및 음계(Pitch), 건반 위치(Staff)를 100% 정밀 재계산
+        1. 해당 영역의 실제 악보 흑색 음표 머리 타원(Notehead ellipse)의 정확한 중심 좌표(x, y)를 서브픽셀 단위로 검출
+        2. 검출된 타원 정중앙 좌표를 선택된 음표 데이터(mapped_x, mapped_y)에 1:1 직접 대입 (정중앙 100% 착 붙임)
+        3. 오선지 선/칸 기준 음계(Pitch), 건반 위치(Staff)를 100% 정밀 재계산
         """
         if not notes or not self.pdf_renderer.doc:
             return 0
@@ -215,11 +215,11 @@ class AutoAligner:
         import cv2
         img_h, img_w, _ = bgr_img.shape
 
-        # 선택된 음표들의 바운딩 박스 계산 (+여백 35px)
-        min_x = max(0, int(min(n.mapped_x for n in valid_notes) - 35))
-        max_x = min(img_w, int(max(n.mapped_x for n in valid_notes) + 35))
-        min_y = max(0, int(min(n.mapped_y for n in valid_notes) - 35))
-        max_y = min(img_h, int(max(n.mapped_y for n in valid_notes) + 35))
+        # 선택된 음표들의 바운딩 박스 계산 (+여백 45px)
+        min_x = max(0, int(min(n.mapped_x for n in valid_notes) - 45))
+        max_x = min(img_w, int(max(n.mapped_x for n in valid_notes) + 45))
+        min_y = max(0, int(min(n.mapped_y for n in valid_notes) - 45))
+        max_y = min(img_h, int(max(n.mapped_y for n in valid_notes) + 45))
 
         if max_x <= min_x or max_y <= min_y:
             return 0
@@ -228,32 +228,55 @@ class AutoAligner:
         gray = cv2.cvtColor(crop, cv2.COLOR_BGR2GRAY)
         _, thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
 
-        # 전체 페이지 기준 이진화 이미지 (수평선 스냅용)
-        gray_full = cv2.cvtColor(bgr_img, cv2.COLOR_BGR2GRAY)
-        _, thresh_full = cv2.threshold(gray_full, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+        # 1. 얇은 세로 기둥(1~2px) 및 노이즈 제거 모폴로지 (타원 음표 머리 분리)
+        k_el = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
+        noteheads_img = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, k_el)
 
-        # 수평선 제거 모폴로지 (순수 음표 머리 타원 분리)
-        k_h = cv2.getStructuringElement(cv2.MORPH_RECT, (15, 1))
-        h_lines = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, k_h)
-        no_lines = cv2.subtract(thresh, h_lines)
-
-        # 연결 요소 분석으로 타원 중심 검출
-        num_labels, labels, stats, centroids = cv2.connectedComponentsWithStats(no_lines)
+        # 2. 타원(Notehead) 윤곽선 검출 및 서브픽셀 타원 피팅 (cv2.fitEllipse)
+        contours, _ = cv2.findContours(noteheads_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         detected_centers: List[Tuple[float, float]] = []
 
-        for i in range(1, num_labels):
-            area = stats[i, cv2.CC_STAT_AREA]
-            bw = stats[i, cv2.CC_STAT_WIDTH]
-            bh = stats[i, cv2.CC_STAT_HEIGHT]
-            # 악보의 표준 검은색 타원 음표 머리 크기 필터링 (동일한 크기의 타원)
-            if 12 <= area <= 480 and 4 <= bw <= 38 and 4 <= bh <= 38:
-                cx, cy = centroids[i]
-                abs_cx = float(min_x + cx)
-                abs_cy = float(min_y + cy)
-                detected_centers.append((abs_cx, abs_cy))
+        for c in contours:
+            area = cv2.contourArea(c)
+            if 25 <= area <= 450:
+                if len(c) >= 5:
+                    box_center, box_size, angle = cv2.fitEllipse(c)
+                    cx, cy = float(box_center[0]), float(box_center[1])
+                    ma, MA = float(box_size[0]), float(box_size[1])
+                    if 6 <= ma <= 22 and 9 <= MA <= 35:
+                        abs_cx = float(min_x + cx)
+                        abs_cy = float(min_y + cy)
+                        detected_centers.append((abs_cx, abs_cy))
+                else:
+                    M = cv2.moments(c)
+                    if M['m00'] > 0:
+                        abs_cx = float(min_x + float(M['m10'] / M['m00']))
+                        abs_cy = float(min_y + float(M['m01'] / M['m00']))
+                        detected_centers.append((abs_cx, abs_cy))
+
+        # 만약 타원 피팅으로 검출이 부족한 경우 연결 요소 분석(Connected Components) 폴백 보강
+        if len(detected_centers) < len(valid_notes):
+            k_h = cv2.getStructuringElement(cv2.MORPH_RECT, (15, 1))
+            h_lines = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, k_h)
+            no_lines = cv2.subtract(thresh, h_lines)
+            num_labels, labels, stats, centroids = cv2.connectedComponentsWithStats(no_lines)
+            for i in range(1, num_labels):
+                area = stats[i, cv2.CC_STAT_AREA]
+                bw = stats[i, cv2.CC_STAT_WIDTH]
+                bh = stats[i, cv2.CC_STAT_HEIGHT]
+                if 15 <= area <= 480 and 4 <= bw <= 38 and 4 <= bh <= 38:
+                    cx, cy = centroids[i]
+                    abs_cx = float(min_x + cx)
+                    abs_cy = float(min_y + cy)
+                    if not any(math.hypot(abs_cx - dcx, abs_cy - dcy) < 8.0 for dcx, dcy in detected_centers):
+                        detected_centers.append((abs_cx, abs_cy))
 
         if not detected_centers:
             return 0
+
+        # 전체 페이지 기준 이진화 이미지 (피치 계산용)
+        gray_full = cv2.cvtColor(bgr_img, cv2.COLOR_BGR2GRAY)
+        _, thresh_full = cv2.threshold(gray_full, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
 
         # 각 선택된 음표에 대해 가장 가까운 타원 중심을 1:1 매칭 & 중심 좌표 대입
         used_centers = set()
@@ -264,12 +287,12 @@ class AutoAligner:
             ny = float(note.mapped_y)
 
             best_c_idx = None
-            min_dist = 45.0  # 반경 45px 이내의 가장 가까운 음표 머리 매칭
+            min_dist = 50.0  # 반경 50px 이내의 가장 가까운 음표 머리 매칭
 
             for c_idx, (cx, cy) in enumerate(detected_centers):
                 if c_idx in used_centers:
                     continue
-                dist = math.hypot(cx - nx, (cy - ny) * 1.5)
+                dist = math.hypot(cx - nx, cy - ny)
                 if dist < min_dist:
                     min_dist = dist
                     best_c_idx = c_idx
@@ -278,7 +301,11 @@ class AutoAligner:
                 used_centers.add(best_c_idx)
                 cx, cy = detected_centers[best_c_idx]
 
-                # 해당 음표가 속한 system_region 탐색
+                # 1. 음표 머리 타원 정중앙 좌표(X, Y) 100% 직접 대입!
+                note.mapped_x = float(cx)
+                note.mapped_y = float(cy)
+
+                # 2. 해당 음표가 속한 system_region 탐색
                 sys_region = None
                 for sys in systems:
                     if sys.y_min - 40 <= cy <= sys.y_max + 40:
@@ -287,14 +314,10 @@ class AutoAligner:
                 if not sys_region and systems:
                     sys_region = systems[0]
 
-                # 1. 음표 머리 타원 정중앙 X좌표 대입
-                note.mapped_x = float(cx)
-
-                # 2. 음표 머리 타원 정중앙 Y좌표 대입 및 오선지 선/칸 자석 스냅 + 음계 계산
-                snapped_y, pitch_str, staff, _ = snap_notehead_to_local_staff_line(
+                # 3. 대입된 타원 정중앙 Y좌표 기준으로 음계(Pitch) 및 건반(Staff) 계산
+                _, pitch_str, staff, _ = snap_notehead_to_local_staff_line(
                     cx, cy, thresh_full, sys_region
                 )
-                note.mapped_y = float(snapped_y)
                 note.pitch = pitch_str
                 note.staff = staff
                 aligned_count += 1
