@@ -232,48 +232,33 @@ class AutoAligner:
         k_el = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (4, 4))
         noteheads_img = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, k_el)
 
-        # 2. 타원(Notehead) 윤곽선 검출 및 서브픽셀 타원 피팅
+        # 2. 타원(Notehead) 윤곽선 검출 및 서브픽셀 타원 피팅 (코드 텍스트 F/C/G 및 잡음 100% 원천 배제)
         contours, _ = cv2.findContours(noteheads_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         detected_centers: List[Tuple[float, float]] = []
 
         for c in contours:
             area = cv2.contourArea(c)
-            if 10 <= area <= 750:
+            if 45 <= area <= 450:
                 if len(c) >= 5:
                     box_center, box_size, angle = cv2.fitEllipse(c)
                     cx, cy = float(box_center[0]), float(box_center[1])
                     ma, MA = float(box_size[0]), float(box_size[1])
-                    if MA > 32:
+                    ratio = ma / MA if MA > 0 else 0
+                    abs_cx = float(min_x + cx)
+                    abs_cy = float(min_y + cy)
+
+                    # 오선지 시스템 범위(위/아래 덧줄 포함) 내부인지 확인
+                    in_sys = any((sys.y_min - 30 <= abs_cy <= sys.y_max + 30) for sys in systems) if systems else True
+
+                    # 진짜 음표 머리 타원 기하학적 조건 (코드명 'F', 'C', 가사 문자 배제)
+                    if in_sys and 6 <= ma <= 20 and 11 <= MA <= 28 and (35 <= angle <= 85) and 0.40 <= ratio <= 0.88:
+                        detected_centers.append((abs_cx, abs_cy))
+                    elif in_sys and MA > 28 and area >= 80:
                         M = cv2.moments(c)
                         if M['m00'] > 0:
-                            cx = float(M['m10'] / M['m00'])
-                            cy = float(M['m01'] / M['m00'])
-                    if 4 <= ma <= 32 and 6 <= MA <= 55:
-                        abs_cx = float(min_x + cx)
-                        abs_cy = float(min_y + cy)
-                        detected_centers.append((abs_cx, abs_cy))
-                else:
-                    M = cv2.moments(c)
-                    if M['m00'] > 0:
-                        abs_cx = float(min_x + float(M['m10'] / M['m00']))
-                        abs_cy = float(min_y + float(M['m01'] / M['m00']))
-                        detected_centers.append((abs_cx, abs_cy))
-
-        # 3. 폴백: 연결 요소 분석으로 누락된 타원 보강
-        k_h = cv2.getStructuringElement(cv2.MORPH_RECT, (15, 1))
-        h_lines = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, k_h)
-        no_lines = cv2.subtract(thresh, h_lines)
-        num_labels, labels, stats, centroids = cv2.connectedComponentsWithStats(no_lines)
-        for i in range(1, num_labels):
-            area = stats[i, cv2.CC_STAT_AREA]
-            bw = stats[i, cv2.CC_STAT_WIDTH]
-            bh = stats[i, cv2.CC_STAT_HEIGHT]
-            if 12 <= area <= 600 and 4 <= bw <= 42 and 4 <= bh <= 42:
-                cx, cy = centroids[i]
-                abs_cx = float(min_x + cx)
-                abs_cy = float(min_y + cy)
-                if not any(math.hypot(abs_cx - dcx, abs_cy - dcy) < 7.0 for dcx, dcy in detected_centers):
-                    detected_centers.append((abs_cx, abs_cy))
+                            mcx = float(min_x + float(M['m10'] / M['m00']))
+                            mcy = float(min_y + float(M['m01'] / M['m00']))
+                            detected_centers.append((mcx, mcy))
 
         # 타원 중심들을 X좌표(좌 -> 우) 순서로 정렬 및 근접 중복 제거 (반경 6px)
         unique_centers: List[Tuple[float, float]] = []
