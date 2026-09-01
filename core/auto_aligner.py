@@ -232,7 +232,7 @@ class AutoAligner:
         k_el = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (4, 4))
         noteheads_img = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, k_el)
 
-        # 2. 타원(Notehead) 윤곽선 검출 및 서브픽셀 타원 피팅 (코드 텍스트 F/C/G 및 잡음 100% 원천 배제)
+        # 2. 타원(Notehead) 윤곽선 검출 및 서브픽셀 타원 피팅 (코드 텍스트 F/C/G 및 세로 기둥 잡음 100% 원천 배제)
         contours, _ = cv2.findContours(noteheads_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         detected_centers: List[Tuple[float, float]] = []
 
@@ -249,8 +249,10 @@ class AutoAligner:
                     # 오선지 시스템 범위(위/아래 덧줄 2~3개 포함) 내부인지 확인
                     in_sys = any((sys.y_min - 40 <= abs_cy <= sys.y_max + 40) for sys in systems) if systems else True
 
-                    # 덧줄 관통 음표 및 일반 타원 음표 머리 기하학적 조건
-                    if in_sys and 3.5 <= ma <= 28 and 6 <= MA <= 52:
+                    # 덧줄 관통 음표 및 일반 타원 음표 머리 기하학적 조건 (기둥 빔 세로선 배제: angle 35~85도, MA <= 35)
+                    if in_sys and 3.5 <= ma <= 28 and 6 <= MA <= 35 and (35 <= angle <= 85):
+                        detected_centers.append((abs_cx, abs_cy))
+                    elif in_sys and 4.0 <= ma <= 20 and 8 <= MA <= 28:
                         detected_centers.append((abs_cx, abs_cy))
                 else:
                     M = cv2.moments(c)
@@ -278,28 +280,40 @@ class AutoAligner:
         gray_full = cv2.cvtColor(bgr_img, cv2.COLOR_BGR2GRAY)
         _, thresh_full = cv2.threshold(gray_full, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
 
-        # 1:1 최적 매칭: 각 음표에 대해 가장 타당한 2D 타원 중심을 1:1로 매칭
+        # 1:1 최적 매칭: 선택된 음표 영역 내의 타원들과 1:1 매칭
+        min_nx = min(float(n.mapped_x) for n in sorted_notes) - 30.0
+        max_nx = max(float(n.mapped_x) for n in sorted_notes) + 30.0
+        roi_centers = [c for c in unique_centers if min_nx <= c[0] <= max_nx]
+        roi_centers.sort(key=lambda p: p[0])
+
         matched_pairs: List[Tuple[NoteData, Tuple[float, float]]] = []
-        used_center_indices = set()
 
-        for note in sorted_notes:
-            nx = float(note.mapped_x)
-            ny = float(note.mapped_y)
+        if len(roi_centers) == len(sorted_notes):
+            # 타원 개수와 음표 개수가 일치하면 X 순서대로 완벽 1:1 직결 매칭!
+            for note, center in zip(sorted_notes, roi_centers):
+                matched_pairs.append((note, center))
+        else:
+            # 거리 기반 매칭
+            target_centers = roi_centers if len(roi_centers) >= len(sorted_notes) else unique_centers
+            used_center_indices = set()
+            for note in sorted_notes:
+                nx = float(note.mapped_x)
+                ny = float(note.mapped_y)
 
-            best_idx = None
-            min_dist = 110.0  # 탐색 반경 110px
+                best_idx = None
+                min_dist = 110.0
 
-            for c_idx, (cx, cy) in enumerate(unique_centers):
-                if c_idx in used_center_indices:
-                    continue
-                dist = math.hypot(cx - nx, (cy - ny) * 1.3)
-                if dist < min_dist:
-                    min_dist = dist
-                    best_idx = c_idx
+                for c_idx, (cx, cy) in enumerate(target_centers):
+                    if c_idx in used_center_indices:
+                        continue
+                    dist = math.hypot(cx - nx, (cy - ny) * 1.3)
+                    if dist < min_dist:
+                        min_dist = dist
+                        best_idx = c_idx
 
-            if best_idx is not None:
-                used_center_indices.add(best_idx)
-                matched_pairs.append((note, unique_centers[best_idx]))
+                if best_idx is not None:
+                    used_center_indices.add(best_idx)
+                    matched_pairs.append((note, target_centers[best_idx]))
 
         aligned_count = 0
         for note, (cx, cy) in matched_pairs:
