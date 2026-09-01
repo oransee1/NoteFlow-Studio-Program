@@ -239,40 +239,47 @@ class AutoAligner:
 
         for c in contours:
             area = cv2.contourArea(c)
-            # 음표 옆 작은 부점(Dot: area < 60) 및 거대 빔(area > 350) 원천 배제
-            if 60 <= area <= 350:
+            bx, by, bw, bh = cv2.boundingRect(c)
+            abs_cx = min_x + bx + bw / 2.0
+            abs_cy = min_y + by + bh / 2.0
+
+            # 오선지 시스템 범위(위/아래 덧줄 포함) 내부인지 확인
+            in_sys = False
+            is_clef_column = False
+            for sys in systems:
+                if sys.y_min - 40 <= abs_cy <= sys.y_max + 40:
+                    in_sys = True
+                    sys_x_start = float(sys.x_min if hasattr(sys, 'x_min') and sys.x_min is not None else 80.0)
+                    if abs_cx < sys_x_start + 65.0 or abs_cx < 165.0:
+                        is_clef_column = True
+                    break
+            if not systems:
+                in_sys = True
+
+            if not in_sys or is_clef_column:
+                continue
+
+            # 1. 수직 화음 덩어리(2개 이상 음표 머리가 위아래로 맞닿은 경우: bh >= 25) 자동 분할
+            if (area >= 300 or bh >= 25) and 10 <= bw <= 28 and bh <= 65:
+                n_split = max(2, int(round(bh / 16.0)))
+                step = bh / float(n_split)
+                for i in range(n_split):
+                    split_cy = min_y + by + step * (i + 0.5)
+                    detected_centers.append((abs_cx, split_cy))
+            # 2. 일반 단일 타원 음표 머리
+            elif 50 <= area <= 360:
                 if len(c) >= 5:
                     box_center, box_size, angle = cv2.fitEllipse(c)
                     cx, cy = float(box_center[0]), float(box_center[1])
                     ma, MA = float(box_size[0]), float(box_size[1])
-                    ratio = ma / MA if MA > 0 else 0
-                    abs_cx = float(min_x + cx)
-                    abs_cy = float(min_y + cy)
-
-                    # 오선지 시스템 범위(위/아래 덧줄 포함) 내부인지 확인
-                    in_sys = False
-                    is_clef_column = False
-                    for sys in systems:
-                        if sys.y_min - 40 <= abs_cy <= sys.y_max + 40:
-                            in_sys = True
-                            # 시스템 좌측 끝단의 높은음자리표/낮은음자리표 클레프 및 박자표 기호 영역 (좌측 65px)
-                            sys_x_start = float(sys.x_min if hasattr(sys, 'x_min') and sys.x_min is not None else 80.0)
-                            if abs_cx < sys_x_start + 65.0 or abs_cx < 165.0:
-                                is_clef_column = True
-                            break
-                    if not systems:
-                        in_sys = True
-
-                    # 표준 음표 머리 정밀 기하학적 조건 (클레프 기호 및 부점 배제)
-                    if in_sys and not is_clef_column and 7.0 <= ma <= 19.0 and 13.0 <= MA <= 27.0 and (35.0 <= angle <= 85.0):
-                        detected_centers.append((abs_cx, abs_cy))
+                    if 7.0 <= ma <= 19.0 and 13.0 <= MA <= 27.0 and (35.0 <= angle <= 85.0):
+                        detected_centers.append((min_x + cx, min_y + cy))
                 else:
                     M = cv2.moments(c)
                     if M['m00'] > 0:
                         mcx = float(min_x + float(M['m10'] / M['m00']))
                         mcy = float(min_y + float(M['m01'] / M['m00']))
-                        in_sys = any((sys.y_min - 40 <= mcy <= sys.y_max + 40) for sys in systems) if systems else True
-                        if in_sys and mcx >= 165.0 and area >= 100:
+                        if area >= 100:
                             detected_centers.append((mcx, mcy))
 
         # 타원 중심들을 X좌표(좌 -> 우) 순서로 정렬 및 근접 중복 제거 (반경 6px)
