@@ -232,27 +232,29 @@ class AutoAligner:
         k_el = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (4, 4))
         noteheads_img = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, k_el)
 
-        # 2. 타원(Notehead) 윤곽선 검출 및 서브픽셀 타원 피팅 (코드 텍스트 F/C/G 및 세로 기둥 잡음 100% 원천 배제)
+        # 2. 타원(Notehead) 윤곽선 검출 및 서브픽셀 타원 피팅 (음표 옆 부점 Dot, 코드 텍스트, 세로 기둥 잡음 100% 원천 배제)
         contours, _ = cv2.findContours(noteheads_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         detected_centers: List[Tuple[float, float]] = []
 
         for c in contours:
             area = cv2.contourArea(c)
-            if 10 <= area <= 550:
+            # 음표 옆 작은 부점(Dot: area < 45) 및 거대 빔(area > 380) 원천 배제
+            if 45 <= area <= 380:
                 if len(c) >= 5:
                     box_center, box_size, angle = cv2.fitEllipse(c)
                     cx, cy = float(box_center[0]), float(box_center[1])
                     ma, MA = float(box_size[0]), float(box_size[1])
+                    ratio = ma / MA if MA > 0 else 0
                     abs_cx = float(min_x + cx)
                     abs_cy = float(min_y + cy)
 
-                    # 오선지 시스템 범위(위/아래 덧줄 2~3개 포함) 내부인지 확인
+                    # 오선지 시스템 범위(위/아래 덧줄 포함) 내부인지 확인
                     in_sys = any((sys.y_min - 40 <= abs_cy <= sys.y_max + 40) for sys in systems) if systems else True
 
-                    # 덧줄 관통 음표 및 일반 타원 음표 머리 기하학적 조건 (기둥 빔 세로선 배제: angle 35~85도, MA <= 35)
-                    if in_sys and 3.5 <= ma <= 28 and 6 <= MA <= 35 and (35 <= angle <= 85):
+                    # 표준 음표 머리 타원 기하학적 조건 (부점 Dot 배제: ma >= 6.5, MA >= 12, angle 35~85도)
+                    if in_sys and 6.5 <= ma <= 22.0 and 11.5 <= MA <= 28.0 and (35.0 <= angle <= 85.0) and (0.38 <= ratio <= 0.90):
                         detected_centers.append((abs_cx, abs_cy))
-                    elif in_sys and 4.0 <= ma <= 20 and 8 <= MA <= 28:
+                    elif in_sys and 7.0 <= ma <= 20.0 and 12.0 <= MA <= 26.0:
                         detected_centers.append((abs_cx, abs_cy))
                 else:
                     M = cv2.moments(c)
@@ -260,7 +262,7 @@ class AutoAligner:
                         mcx = float(min_x + float(M['m10'] / M['m00']))
                         mcy = float(min_y + float(M['m01'] / M['m00']))
                         in_sys = any((sys.y_min - 40 <= mcy <= sys.y_max + 40) for sys in systems) if systems else True
-                        if in_sys:
+                        if in_sys and area >= 60:
                             detected_centers.append((mcx, mcy))
 
         # 타원 중심들을 X좌표(좌 -> 우) 순서로 정렬 및 근접 중복 제거 (반경 6px)
