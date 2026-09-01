@@ -191,12 +191,13 @@ class AutoAligner:
         update_progress(100, "✨ 싱크 맞추기 100% 완료!")
         return score, stats
 
-    def align_selected_notes_to_noteheads(self, notes: List[NoteData], page_idx: int, dpi: int = 200) -> int:
+    def align_selected_notes_to_noteheads(self, notes: List[NoteData], page_idx: int, dpi: int = 200, score: Optional[ParsedScore] = None) -> int:
         """
         사용자가 마우스로 드래그 선택한 음표(동일한 크기의 타원) 영역을 정밀 분석하여:
         1. 해당 영역의 실제 악보 흑색 음표 머리 타원(Notehead ellipse)의 정확한 중심 좌표(x, y)를 서브픽셀 단위로 검출
         2. 검출된 타원 정중앙 좌표를 선택된 음표 데이터(mapped_x, mapped_y)에 1:1 직접 대입 (정중앙 100% 착 붙임)
-        3. 오선지 선/칸 기준 음계(Pitch), 건반 위치(Staff)를 100% 정밀 재계산
+        3. 만약 악보 상의 음표 머리 개수 > 음표점 개수인 경우, 부족한 음표점을 새로 생성(Auto-Create)하여 모든 음표 머리에 100% 완벽 매칭
+        4. 오선지 선/칸 기준 음계(Pitch), 건반 위치(Staff)를 100% 정밀 재계산
         """
         if not notes or not self.pdf_renderer.doc:
             return 0
@@ -294,15 +295,23 @@ class AutoAligner:
         # 1:1 단조 증가 순서 보존 전역 최적 매칭 (Monotonic Order-Preserving Global Matching)
         matched_pairs: List[Tuple[NoteData, Tuple[float, float]]] = []
         import itertools
+        import uuid
 
         N = len(sorted_notes)
         M = len(unique_centers)
+
+        base_note = sorted_notes[0]
+        target_measure = None
+        if score:
+            matching_ms = [m for m in score.measures if m.number == base_note.measure_number]
+            if matching_ms:
+                target_measure = matching_ms[0]
 
         if N == M:
             for note, center in zip(sorted_notes, unique_centers):
                 matched_pairs.append((note, center))
         elif M > N:
-            # 타원이 음표보다 많은 경우: 단조 증가하는 N개 타원 부분조합 중 총 거리 최소 선택
+            # 타원이 음표보다 많은 경우: 기존 음표들을 단조 증가 최적 타원에 매칭
             best_comb = None
             min_total_cost = float('inf')
 
@@ -312,14 +321,41 @@ class AutoAligner:
                     min_total_cost = cost
                     best_comb = comb
 
+            matched_center_indices = set()
             if best_comb:
                 for i in range(N):
-                    matched_pairs.append((sorted_notes[i], unique_centers[best_comb[i]]))
+                    c_idx = best_comb[i]
+                    matched_pairs.append((sorted_notes[i], unique_centers[c_idx]))
+                    matched_center_indices.add(c_idx)
             else:
                 for i in range(N):
                     matched_pairs.append((sorted_notes[i], unique_centers[i]))
+                    matched_center_indices.add(i)
+
+            # 음표점이 부족한 나머지 타원 음표 머리들에 대해 새 음표(NoteData) 자동 생성!
+            for c_idx in range(M):
+                if c_idx not in matched_center_indices:
+                    ucx, ucy = unique_centers[c_idx]
+                    new_note = NoteData(
+                        id=str(uuid.uuid4())[:8],
+                        measure_number=base_note.measure_number,
+                        note_index=(len(target_measure.notes) + 1) if target_measure else 99,
+                        pitch="C4",
+                        is_rest=False,
+                        duration=base_note.duration if base_note.duration else 1,
+                        beat_position=base_note.beat_position if base_note.beat_position is not None else 0.0,
+                        voice=base_note.voice,
+                        staff=base_note.staff or 1,
+                        mapped_x=float(ucx),
+                        mapped_y=float(ucy),
+                        mapped_page=page_idx
+                    )
+                    if target_measure:
+                        target_measure.notes.append(new_note)
+                        target_measure.notes.sort(key=lambda n: n.mapped_x if n.mapped_x is not None else 0.0)
+                    matched_pairs.append((new_note, (ucx, ucy)))
         else:
-            # 음표가 타원보다 많은 경우 (일부 쉼표나 중복): 앞에서부터 1:1 대입
+            # 음표가 타원보다 많은 경우: 앞에서부터 1:1 대입
             for i in range(M):
                 matched_pairs.append((sorted_notes[i], unique_centers[i]))
 

@@ -624,7 +624,7 @@ class MainWindow(QMainWindow):
             self.setCursor(Qt.CursorShape.WaitCursor)
             try:
                 aligned_cnt = self.auto_aligner.align_selected_notes_to_noteheads(
-                    selected_notes, self.current_page_idx, dpi=200
+                    selected_notes, self.current_page_idx, dpi=200, score=self.score
                 )
                 self.render_current_page()
                 self.setCursor(Qt.CursorShape.ArrowCursor)
