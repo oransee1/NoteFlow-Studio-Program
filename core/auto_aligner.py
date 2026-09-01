@@ -215,11 +215,11 @@ class AutoAligner:
         import cv2
         img_h, img_w, _ = bgr_img.shape
 
-        # 선택된 음표들의 바운딩 박스 계산 (+여백 45px)
-        min_x = max(0, int(min(n.mapped_x for n in valid_notes) - 45))
-        max_x = min(img_w, int(max(n.mapped_x for n in valid_notes) + 45))
-        min_y = max(0, int(min(n.mapped_y for n in valid_notes) - 45))
-        max_y = min(img_h, int(max(n.mapped_y for n in valid_notes) + 45))
+        # 선택된 음표들의 바운딩 박스 계산 (덧줄 및 옥타브 고음/저음 음표 포함 위해 여백 65px 확보)
+        min_x = max(0, int(min(n.mapped_x for n in valid_notes) - 65))
+        max_x = min(img_w, int(max(n.mapped_x for n in valid_notes) + 65))
+        min_y = max(0, int(min(n.mapped_y for n in valid_notes) - 65))
+        max_y = min(img_h, int(max(n.mapped_y for n in valid_notes) + 65))
 
         if max_x <= min_x or max_y <= min_y:
             return 0
@@ -228,22 +228,27 @@ class AutoAligner:
         gray = cv2.cvtColor(crop, cv2.COLOR_BGR2GRAY)
         _, thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
 
-        # 1. 얇은 세로 기둥(1~2px) 및 노이즈 제거 모폴로지 (타원 음표 머리 분리)
-        k_el = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
+        # 1. 타원형 열림 모폴로지 (기둥 분리 및 타원 음표 머리 추출)
+        k_el = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (4, 4))
         noteheads_img = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, k_el)
 
-        # 2. 타원(Notehead) 윤곽선 검출 및 서브픽셀 타원 피팅 (cv2.fitEllipse)
+        # 2. 타원(Notehead) 윤곽선 검출 및 서브픽셀 타원 피팅
         contours, _ = cv2.findContours(noteheads_img, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         detected_centers: List[Tuple[float, float]] = []
 
         for c in contours:
             area = cv2.contourArea(c)
-            if 25 <= area <= 450:
+            if 10 <= area <= 750:
                 if len(c) >= 5:
                     box_center, box_size, angle = cv2.fitEllipse(c)
                     cx, cy = float(box_center[0]), float(box_center[1])
                     ma, MA = float(box_size[0]), float(box_size[1])
-                    if 6 <= ma <= 22 and 9 <= MA <= 35:
+                    if MA > 32:
+                        M = cv2.moments(c)
+                        if M['m00'] > 0:
+                            cx = float(M['m10'] / M['m00'])
+                            cy = float(M['m01'] / M['m00'])
+                    if 4 <= ma <= 32 and 6 <= MA <= 55:
                         abs_cx = float(min_x + cx)
                         abs_cy = float(min_y + cy)
                         detected_centers.append((abs_cx, abs_cy))
@@ -254,22 +259,21 @@ class AutoAligner:
                         abs_cy = float(min_y + float(M['m01'] / M['m00']))
                         detected_centers.append((abs_cx, abs_cy))
 
-        # 만약 타원 피팅으로 검출이 부족한 경우 연결 요소 분석(Connected Components) 폴백 보강
-        if len(detected_centers) < len(valid_notes):
-            k_h = cv2.getStructuringElement(cv2.MORPH_RECT, (15, 1))
-            h_lines = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, k_h)
-            no_lines = cv2.subtract(thresh, h_lines)
-            num_labels, labels, stats, centroids = cv2.connectedComponentsWithStats(no_lines)
-            for i in range(1, num_labels):
-                area = stats[i, cv2.CC_STAT_AREA]
-                bw = stats[i, cv2.CC_STAT_WIDTH]
-                bh = stats[i, cv2.CC_STAT_HEIGHT]
-                if 15 <= area <= 480 and 4 <= bw <= 38 and 4 <= bh <= 38:
-                    cx, cy = centroids[i]
-                    abs_cx = float(min_x + cx)
-                    abs_cy = float(min_y + cy)
-                    if not any(math.hypot(abs_cx - dcx, abs_cy - dcy) < 8.0 for dcx, dcy in detected_centers):
-                        detected_centers.append((abs_cx, abs_cy))
+        # 3. 폴백: 연결 요소 분석으로 누락된 타원 보강
+        k_h = cv2.getStructuringElement(cv2.MORPH_RECT, (15, 1))
+        h_lines = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, k_h)
+        no_lines = cv2.subtract(thresh, h_lines)
+        num_labels, labels, stats, centroids = cv2.connectedComponentsWithStats(no_lines)
+        for i in range(1, num_labels):
+            area = stats[i, cv2.CC_STAT_AREA]
+            bw = stats[i, cv2.CC_STAT_WIDTH]
+            bh = stats[i, cv2.CC_STAT_HEIGHT]
+            if 12 <= area <= 600 and 4 <= bw <= 42 and 4 <= bh <= 42:
+                cx, cy = centroids[i]
+                abs_cx = float(min_x + cx)
+                abs_cy = float(min_y + cy)
+                if not any(math.hypot(abs_cx - dcx, abs_cy - dcy) < 7.0 for dcx, dcy in detected_centers):
+                    detected_centers.append((abs_cx, abs_cy))
 
         # 타원 중심들을 X좌표(좌 -> 우) 순서로 정렬 및 근접 중복 제거 (반경 6px)
         unique_centers: List[Tuple[float, float]] = []
@@ -288,32 +292,28 @@ class AutoAligner:
         gray_full = cv2.cvtColor(bgr_img, cv2.COLOR_BGR2GRAY)
         _, thresh_full = cv2.threshold(gray_full, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
 
-        # 1:1 최적 매칭: 타원 수와 음표 수가 같으면 X 순서대로 1:1 직결 매칭
+        # 1:1 최적 매칭: 각 음표에 대해 가장 타당한 2D 타원 중심을 1:1로 매칭
         matched_pairs: List[Tuple[NoteData, Tuple[float, float]]] = []
         used_center_indices = set()
 
-        if len(unique_centers) == len(sorted_notes):
-            for note, center in zip(sorted_notes, unique_centers):
-                matched_pairs.append((note, center))
-        else:
-            for note in sorted_notes:
-                nx = float(note.mapped_x)
-                ny = float(note.mapped_y)
+        for note in sorted_notes:
+            nx = float(note.mapped_x)
+            ny = float(note.mapped_y)
 
-                best_idx = None
-                min_dist = 90.0
+            best_idx = None
+            min_dist = 110.0  # 탐색 반경 110px
 
-                for c_idx, (cx, cy) in enumerate(unique_centers):
-                    if c_idx in used_center_indices:
-                        continue
-                    dist = math.hypot(cx - nx, cy - ny)
-                    if dist < min_dist:
-                        min_dist = dist
-                        best_idx = c_idx
+            for c_idx, (cx, cy) in enumerate(unique_centers):
+                if c_idx in used_center_indices:
+                    continue
+                dist = math.hypot(cx - nx, (cy - ny) * 1.3)
+                if dist < min_dist:
+                    min_dist = dist
+                    best_idx = c_idx
 
-                if best_idx is not None:
-                    used_center_indices.add(best_idx)
-                    matched_pairs.append((note, unique_centers[best_idx]))
+            if best_idx is not None:
+                used_center_indices.add(best_idx)
+                matched_pairs.append((note, unique_centers[best_idx]))
 
         aligned_count = 0
         for note, (cx, cy) in matched_pairs:
