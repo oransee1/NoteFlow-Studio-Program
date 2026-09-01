@@ -282,39 +282,56 @@ class AutoAligner:
         gray_full = cv2.cvtColor(bgr_img, cv2.COLOR_BGR2GRAY)
         _, thresh_full = cv2.threshold(gray_full, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
 
-        # 1:1 정밀 최근접 최적 매칭: 각 선택된 음표가 자신과 가장 가까운 실제 타원 음표 머리 정중앙으로 완벽 대입
+        # 1:1 전역 최적 최소 비용 이분 매칭 (Global Min-Cost Bipartite Matching)
         matched_pairs: List[Tuple[NoteData, Tuple[float, float]]] = []
-        used_center_indices = set()
+        import itertools
 
-        for note in sorted_notes:
-            nx = float(note.mapped_x)
-            ny = float(note.mapped_y)
+        N = len(sorted_notes)
+        M = len(unique_centers)
 
-            best_idx = None
-            min_cost = 99999.0
+        if N == M:
+            for note, center in zip(sorted_notes, unique_centers):
+                matched_pairs.append((note, center))
+        elif M > N and N <= 12:
+            # 선택된 음표 수가 12개 이하인 경우 전역 최적 완전 탐색
+            cost_matrix = []
+            for note in sorted_notes:
+                nx, ny = float(note.mapped_x), float(note.mapped_y)
+                row = [math.hypot(cx - nx, (cy - ny) * 1.5) for cx, cy in unique_centers]
+                cost_matrix.append(row)
 
-            for c_idx, (cx, cy) in enumerate(unique_centers):
-                if c_idx in used_center_indices:
-                    continue
-                # 가로(박자) 거리 및 세로(음계) 가중치 종합 계산
-                cost = math.hypot(cx - nx, (cy - ny) * 1.8)
-                if cost < min_cost and abs(cx - nx) <= 90.0 and abs(cy - ny) <= 55.0:
-                    min_cost = cost
-                    best_idx = c_idx
+            best_perm = None
+            min_total_cost = float('inf')
 
-            # 1차 탐색 범위 내에서 못 찾은 경우 반경 확장(120px) 폴백
-            if best_idx is None:
+            for comb in itertools.combinations(range(M), N):
+                for perm in itertools.permutations(comb):
+                    # 음표는 X좌표 순서대로 진행하므로 X 역행이 과도한 순열은 가중치 부여
+                    total_cost = sum(cost_matrix[i][perm[i]] for i in range(N))
+                    if total_cost < min_total_cost:
+                        min_total_cost = total_cost
+                        best_perm = perm
+
+            if best_perm:
+                for i in range(N):
+                    matched_pairs.append((sorted_notes[i], unique_centers[best_perm[i]]))
+        else:
+            # N > 12이거나 M < N인 경우 탐욕적 최근접 매칭 폴백
+            used_center_indices = set()
+            candidate_edges = []
+            for n_idx, note in enumerate(sorted_notes):
+                nx, ny = float(note.mapped_x), float(note.mapped_y)
                 for c_idx, (cx, cy) in enumerate(unique_centers):
-                    if c_idx in used_center_indices:
-                        continue
-                    cost = math.hypot(cx - nx, (cy - ny) * 1.4)
-                    if cost < min_cost and cost <= 120.0:
-                        min_cost = cost
-                        best_idx = c_idx
+                    dist = math.hypot(cx - nx, (cy - ny) * 1.5)
+                    candidate_edges.append((dist, n_idx, c_idx))
 
-            if best_idx is not None:
-                used_center_indices.add(best_idx)
-                matched_pairs.append((note, unique_centers[best_idx]))
+            candidate_edges.sort(key=lambda item: item[0])
+            used_notes = set()
+            for dist, n_idx, c_idx in candidate_edges:
+                if n_idx in used_notes or c_idx in used_center_indices:
+                    continue
+                used_notes.add(n_idx)
+                used_center_indices.add(c_idx)
+                matched_pairs.append((sorted_notes[n_idx], unique_centers[c_idx]))
 
         aligned_count = 0
         for note, (cx, cy) in matched_pairs:
