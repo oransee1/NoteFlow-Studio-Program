@@ -259,14 +259,28 @@ class AutoAligner:
             if not in_sys or is_clef_column:
                 continue
 
-            # 1. 수직 화음 덩어리(2개 이상 음표 머리가 위아래로 맞닿은 경우: bh >= 25) 자동 분할
+            # 1. 2도 대각선 화음 덩어리 (두 음표 머리가 비스듬히 맞닿아 긴 타원 형성: MA >= 30, area >= 270)
+            if len(c) >= 5:
+                box_center, box_size, angle = cv2.fitEllipse(c)
+                ma, MA = float(box_size[0]), float(box_size[1])
+                ecx, ecy = min_x + float(box_center[0]), min_y + float(box_center[1])
+
+                if (MA >= 30.0 or area >= 270) and 9.0 <= ma <= 25.0 and (35.0 <= angle <= 85.0):
+                    rad = math.radians(angle)
+                    dx = (MA * 0.28) * math.sin(rad)
+                    dy = (MA * 0.28) * math.cos(rad)
+                    detected_centers.append((ecx - dx, ecy + dy))  # 좌하단 음표
+                    detected_centers.append((ecx + dx, ecy - dy))  # 우상단 음표
+                    continue
+
+            # 2. 수직 화음 덩어리(2개 이상 음표 머리가 위아래로 맞닿은 경우: bh >= 25) 자동 분할
             if (area >= 300 or bh >= 25) and 10 <= bw <= 28 and bh <= 65:
                 n_split = max(2, int(round(bh / 16.0)))
                 step = bh / float(n_split)
                 for i in range(n_split):
                     split_cy = min_y + by + step * (i + 0.5)
                     detected_centers.append((abs_cx, split_cy))
-            # 2. 일반 단일 타원 음표 머리
+            # 3. 일반 단일 타원 음표 머리
             elif 50 <= area <= 360:
                 if len(c) >= 5:
                     box_center, box_size, angle = cv2.fitEllipse(c)
