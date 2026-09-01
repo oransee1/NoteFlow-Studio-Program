@@ -271,56 +271,72 @@ class AutoAligner:
                     if not any(math.hypot(abs_cx - dcx, abs_cy - dcy) < 8.0 for dcx, dcy in detected_centers):
                         detected_centers.append((abs_cx, abs_cy))
 
-        if not detected_centers:
+        # 타원 중심들을 X좌표(좌 -> 우) 순서로 정렬 및 근접 중복 제거 (반경 6px)
+        unique_centers: List[Tuple[float, float]] = []
+        detected_centers.sort(key=lambda p: (p[0], p[1]))
+        for c in detected_centers:
+            if not any(math.hypot(c[0] - uc[0], c[1] - uc[1]) < 6.0 for uc in unique_centers):
+                unique_centers.append(c)
+
+        if not unique_centers:
             return 0
+
+        # 선택된 음표들도 X좌표/박자 순서(좌 -> 우)로 정렬
+        sorted_notes = sorted(valid_notes, key=lambda n: (n.mapped_x if n.mapped_x is not None else 0.0, n.beat_position or 0.0))
 
         # 전체 페이지 기준 이진화 이미지 (피치 계산용)
         gray_full = cv2.cvtColor(bgr_img, cv2.COLOR_BGR2GRAY)
         _, thresh_full = cv2.threshold(gray_full, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
 
-        # 각 선택된 음표에 대해 가장 가까운 타원 중심을 1:1 매칭 & 중심 좌표 대입
-        used_centers = set()
+        # 1:1 최적 매칭: 타원 수와 음표 수가 같으면 X 순서대로 1:1 직결 매칭
+        matched_pairs: List[Tuple[NoteData, Tuple[float, float]]] = []
+        used_center_indices = set()
+
+        if len(unique_centers) == len(sorted_notes):
+            for note, center in zip(sorted_notes, unique_centers):
+                matched_pairs.append((note, center))
+        else:
+            for note in sorted_notes:
+                nx = float(note.mapped_x)
+                ny = float(note.mapped_y)
+
+                best_idx = None
+                min_dist = 90.0
+
+                for c_idx, (cx, cy) in enumerate(unique_centers):
+                    if c_idx in used_center_indices:
+                        continue
+                    dist = math.hypot(cx - nx, cy - ny)
+                    if dist < min_dist:
+                        min_dist = dist
+                        best_idx = c_idx
+
+                if best_idx is not None:
+                    used_center_indices.add(best_idx)
+                    matched_pairs.append((note, unique_centers[best_idx]))
+
         aligned_count = 0
+        for note, (cx, cy) in matched_pairs:
+            # 1. 음표 머리 타원 정중앙 좌표(X, Y) 100% 직접 대입!
+            note.mapped_x = float(cx)
+            note.mapped_y = float(cy)
 
-        for note in valid_notes:
-            nx = float(note.mapped_x)
-            ny = float(note.mapped_y)
+            # 2. 해당 음표가 속한 system_region 탐색
+            sys_region = None
+            for sys in systems:
+                if sys.y_min - 40 <= cy <= sys.y_max + 40:
+                    sys_region = sys
+                    break
+            if not sys_region and systems:
+                sys_region = systems[0]
 
-            best_c_idx = None
-            min_dist = 50.0  # 반경 50px 이내의 가장 가까운 음표 머리 매칭
-
-            for c_idx, (cx, cy) in enumerate(detected_centers):
-                if c_idx in used_centers:
-                    continue
-                dist = math.hypot(cx - nx, cy - ny)
-                if dist < min_dist:
-                    min_dist = dist
-                    best_c_idx = c_idx
-
-            if best_c_idx is not None:
-                used_centers.add(best_c_idx)
-                cx, cy = detected_centers[best_c_idx]
-
-                # 1. 음표 머리 타원 정중앙 좌표(X, Y) 100% 직접 대입!
-                note.mapped_x = float(cx)
-                note.mapped_y = float(cy)
-
-                # 2. 해당 음표가 속한 system_region 탐색
-                sys_region = None
-                for sys in systems:
-                    if sys.y_min - 40 <= cy <= sys.y_max + 40:
-                        sys_region = sys
-                        break
-                if not sys_region and systems:
-                    sys_region = systems[0]
-
-                # 3. 대입된 타원 정중앙 Y좌표 기준으로 음계(Pitch) 및 건반(Staff) 계산
-                _, pitch_str, staff, _ = snap_notehead_to_local_staff_line(
-                    cx, cy, thresh_full, sys_region
-                )
-                note.pitch = pitch_str
-                note.staff = staff
-                aligned_count += 1
+            # 3. 대입된 타원 정중앙 Y좌표 기준으로 음계(Pitch) 및 건반(Staff) 계산
+            _, pitch_str, staff, _ = snap_notehead_to_local_staff_line(
+                cx, cy, thresh_full, sys_region
+            )
+            note.pitch = pitch_str
+            note.staff = staff
+            aligned_count += 1
 
         return aligned_count
 
