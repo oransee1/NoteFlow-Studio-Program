@@ -327,99 +327,128 @@ class AutoAligner:
         gray_full = cv2.cvtColor(bgr_img, cv2.COLOR_BGR2GRAY)
         _, thresh_full = cv2.threshold(gray_full, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
 
-        # 1:1 단조 증가 순서 보존 전역 최적 매칭 (Monotonic Order-Preserving Global Matching)
-        matched_pairs: List[Tuple[NoteData, Tuple[float, float]]] = []
+        # 파트(Staff 1: 높은음자리 vs Staff 2: 낮은음자리)별로 그룹 분리하여 각각 독립 매칭 & 정밀 생성
         import itertools
         import uuid
 
-        N = len(sorted_notes)
-        M = len(unique_centers)
-
-        base_note = sorted_notes[0]
-        target_measure = None
-        if score:
-            matching_ms = [m for m in score.measures if m.number == base_note.measure_number]
-            if matching_ms:
-                target_measure = matching_ms[0]
-
-        if N == M:
-            for note, center in zip(sorted_notes, unique_centers):
-                matched_pairs.append((note, center))
-        elif M > N:
-            # 타원이 음표보다 많은 경우: 기존 음표들을 단조 증가 최적 타원에 매칭
-            best_comb = None
-            min_total_cost = float('inf')
-
-            for comb in itertools.combinations(range(M), N):
-                cost = sum(math.hypot(unique_centers[comb[i]][0] - sorted_notes[i].mapped_x, (unique_centers[comb[i]][1] - sorted_notes[i].mapped_y) * 1.5) for i in range(N))
-                if cost < min_total_cost:
-                    min_total_cost = cost
-                    best_comb = comb
-
-            matched_center_indices = set()
-            if best_comb:
-                for i in range(N):
-                    c_idx = best_comb[i]
-                    matched_pairs.append((sorted_notes[i], unique_centers[c_idx]))
-                    matched_center_indices.add(c_idx)
-            else:
-                for i in range(N):
-                    matched_pairs.append((sorted_notes[i], unique_centers[i]))
-                    matched_center_indices.add(i)
-
-            # 음표점이 부족한 나머지 타원 음표 머리들에 대해 새 음표(NoteData) 자동 생성!
-            for c_idx in range(M):
-                if c_idx not in matched_center_indices:
-                    ucx, ucy = unique_centers[c_idx]
-                    new_note = NoteData(
-                        id=str(uuid.uuid4())[:8],
-                        measure_number=base_note.measure_number,
-                        note_index=(len(target_measure.notes) + 1) if target_measure else 99,
-                        pitch="C4",
-                        is_rest=False,
-                        duration=base_note.duration if base_note.duration else 1,
-                        beat_position=base_note.beat_position if base_note.beat_position is not None else 0.0,
-                        voice=base_note.voice,
-                        staff=base_note.staff or 1,
-                        mapped_x=float(ucx),
-                        mapped_y=float(ucy),
-                        mapped_page=page_idx
-                    )
-                    if target_measure:
-                        target_measure.notes.append(new_note)
-                        target_measure.notes.sort(key=lambda n: n.mapped_x if n.mapped_x is not None else 0.0)
-                    matched_pairs.append((new_note, (ucx, ucy)))
-        else:
-            # 음표가 타원보다 많은 경우: 앞에서부터 1:1 대입
-            for i in range(M):
-                matched_pairs.append((sorted_notes[i], unique_centers[i]))
-
         aligned_count = 0
-        for note, (cx, cy) in matched_pairs:
-            # 1. 음표 머리 타원 정중앙 좌표(X, Y) 100% 직접 대입!
-            note.mapped_x = float(cx)
-            note.mapped_y = float(cy)
+        staff_groups = {}
+        for n in valid_notes:
+            st = n.staff if n.staff in (1, 2) else 1
+            staff_groups.setdefault(st, []).append(n)
 
-            # 2. 해당 음표가 속한 system_region 탐색
-            sys_region = None
-            for sys in systems:
-                if sys.y_min - 40 <= cy <= sys.y_max + 40:
-                    sys_region = sys
-                    break
-            if not sys_region and systems:
-                sys_region = systems[0]
+        for staff_val, s_notes in staff_groups.items():
+            sorted_notes = sorted(s_notes, key=lambda n: (n.mapped_x if n.mapped_x is not None else 0.0, n.beat_position or 0.0))
+            base_note = sorted_notes[0]
+            target_measure = None
+            if score:
+                matching_ms = [m for m in score.measures if m.number == base_note.measure_number]
+                if matching_ms:
+                    target_measure = matching_ms[0]
 
-            # 3. 대입된 타원 정중앙 Y좌표 기준으로 음계(Pitch) 계산 (원래 note.staff 파트/색상 100% 영구 보존!)
-            orig_staff = note.staff if (note.staff in (1, 2)) else None
-            _, pitch_str, staff, _ = snap_notehead_to_local_staff_line(
-                cx, cy, thresh_full, sys_region, note_staff=orig_staff
-            )
-            note.pitch = pitch_str
-            if orig_staff is not None:
-                note.staff = orig_staff  # 색상 변경 원천 방지 (낮은음자리=파란색, 높은음자리=녹색 완벽 유지)
+            # 해당 파트에 속하는 타원 중심들만 필터링 (높은음자리 vs 낮은음자리 줄 기준)
+            part_centers = []
+            for cx, cy in unique_centers:
+                # 해당 타원의 오선지 시스템 및 파트 판별
+                sys_reg = None
+                for sys in systems:
+                    if sys.y_min - 40 <= cy <= sys.y_max + 40:
+                        sys_reg = sys
+                        break
+                if not sys_reg and systems:
+                    sys_reg = systems[0]
+
+                if sys_reg:
+                    # 높은음자리(staff 1) vs 낮은음자리(staff 2) 경계
+                    has_treble = sys_reg.treble_staff and getattr(sys_reg.treble_staff, 'y_lines', None)
+                    has_bass = sys_reg.bass_staff and getattr(sys_reg.bass_staff, 'y_lines', None)
+                    if has_treble and has_bass:
+                        mid_y = (sys_reg.treble_staff.y_lines[-1] + sys_reg.bass_staff.y_lines[0]) / 2.0
+                    else:
+                        mid_y = (sys_reg.y_min + sys_reg.y_max) / 2.0
+                    c_staff = 1 if cy < mid_y else 2
+                    if c_staff == staff_val:
+                        part_centers.append((cx, cy))
+                else:
+                    part_centers.append((cx, cy))
+
+            part_centers.sort(key=lambda p: p[0])
+            if not part_centers:
+                part_centers = unique_centers
+
+            N = len(sorted_notes)
+            M = len(part_centers)
+            matched_pairs: List[Tuple[NoteData, Tuple[float, float]]] = []
+
+            if N == M:
+                for note, center in zip(sorted_notes, part_centers):
+                    matched_pairs.append((note, center))
+            elif M > N:
+                best_comb = None
+                min_total_cost = float('inf')
+
+                for comb in itertools.combinations(range(M), N):
+                    cost = sum(math.hypot(part_centers[comb[i]][0] - sorted_notes[i].mapped_x, (part_centers[comb[i]][1] - sorted_notes[i].mapped_y) * 1.5) for i in range(N))
+                    if cost < min_total_cost:
+                        min_total_cost = cost
+                        best_comb = comb
+
+                matched_center_indices = set()
+                if best_comb:
+                    for i in range(N):
+                        c_idx = best_comb[i]
+                        matched_pairs.append((sorted_notes[i], part_centers[c_idx]))
+                        matched_center_indices.add(c_idx)
+                else:
+                    for i in range(N):
+                        matched_pairs.append((sorted_notes[i], part_centers[i]))
+                        matched_center_indices.add(i)
+
+                # 부족한 타원들에 대해 해당 파트(Staff)의 새 음표 자동 생성!
+                for c_idx in range(M):
+                    if c_idx not in matched_center_indices:
+                        ucx, ucy = part_centers[c_idx]
+                        new_note = NoteData(
+                            id=str(uuid.uuid4())[:8],
+                            measure_number=base_note.measure_number,
+                            note_index=(len(target_measure.notes) + 1) if target_measure else 99,
+                            pitch="C4",
+                            is_rest=False,
+                            duration=base_note.duration if base_note.duration else 1,
+                            beat_position=base_note.beat_position if base_note.beat_position is not None else 0.0,
+                            voice=base_note.voice,
+                            staff=staff_val,
+                            mapped_x=float(ucx),
+                            mapped_y=float(ucy),
+                            mapped_page=page_idx
+                        )
+                        if target_measure:
+                            target_measure.notes.append(new_note)
+                            target_measure.notes.sort(key=lambda n: n.mapped_x if n.mapped_x is not None else 0.0)
+                        matched_pairs.append((new_note, (ucx, ucy)))
             else:
-                note.staff = staff
-            aligned_count += 1
+                for i in range(M):
+                    matched_pairs.append((sorted_notes[i], part_centers[i]))
+
+            for note, (cx, cy) in matched_pairs:
+                note.mapped_x = float(cx)
+                note.mapped_y = float(cy)
+
+                sys_region = None
+                for sys in systems:
+                    if sys.y_min - 40 <= cy <= sys.y_max + 40:
+                        sys_region = sys
+                        break
+                if not sys_region and systems:
+                    sys_region = systems[0]
+
+                orig_staff = note.staff if (note.staff in (1, 2)) else staff_val
+                _, pitch_str, staff, _ = snap_notehead_to_local_staff_line(
+                    cx, cy, thresh_full, sys_region, note_staff=orig_staff
+                )
+                note.pitch = pitch_str
+                note.staff = orig_staff
+                aligned_count += 1
 
         return aligned_count
 
