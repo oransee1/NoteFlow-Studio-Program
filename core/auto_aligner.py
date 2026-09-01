@@ -238,26 +238,27 @@ class AutoAligner:
 
         for c in contours:
             area = cv2.contourArea(c)
-            if 45 <= area <= 450:
+            if 10 <= area <= 550:
                 if len(c) >= 5:
                     box_center, box_size, angle = cv2.fitEllipse(c)
                     cx, cy = float(box_center[0]), float(box_center[1])
                     ma, MA = float(box_size[0]), float(box_size[1])
-                    ratio = ma / MA if MA > 0 else 0
                     abs_cx = float(min_x + cx)
                     abs_cy = float(min_y + cy)
 
-                    # 오선지 시스템 범위(위/아래 덧줄 포함) 내부인지 확인
-                    in_sys = any((sys.y_min - 30 <= abs_cy <= sys.y_max + 30) for sys in systems) if systems else True
+                    # 오선지 시스템 범위(위/아래 덧줄 2~3개 포함) 내부인지 확인
+                    in_sys = any((sys.y_min - 40 <= abs_cy <= sys.y_max + 40) for sys in systems) if systems else True
 
-                    # 진짜 음표 머리 타원 기하학적 조건 (코드명 'F', 'C', 가사 문자 배제)
-                    if in_sys and 6 <= ma <= 20 and 11 <= MA <= 28 and (35 <= angle <= 85) and 0.40 <= ratio <= 0.88:
+                    # 덧줄 관통 음표 및 일반 타원 음표 머리 기하학적 조건
+                    if in_sys and 3.5 <= ma <= 28 and 6 <= MA <= 52:
                         detected_centers.append((abs_cx, abs_cy))
-                    elif in_sys and MA > 28 and area >= 80:
-                        M = cv2.moments(c)
-                        if M['m00'] > 0:
-                            mcx = float(min_x + float(M['m10'] / M['m00']))
-                            mcy = float(min_y + float(M['m01'] / M['m00']))
+                else:
+                    M = cv2.moments(c)
+                    if M['m00'] > 0:
+                        mcx = float(min_x + float(M['m10'] / M['m00']))
+                        mcy = float(min_y + float(M['m01'] / M['m00']))
+                        in_sys = any((sys.y_min - 40 <= mcy <= sys.y_max + 40) for sys in systems) if systems else True
+                        if in_sys:
                             detected_centers.append((mcx, mcy))
 
         # 타원 중심들을 X좌표(좌 -> 우) 순서로 정렬 및 근접 중복 제거 (반경 6px)
