@@ -282,40 +282,39 @@ class AutoAligner:
         gray_full = cv2.cvtColor(bgr_img, cv2.COLOR_BGR2GRAY)
         _, thresh_full = cv2.threshold(gray_full, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
 
-        # 1:1 최적 매칭: 선택된 음표 영역 내의 타원들과 1:1 매칭
-        min_nx = min(float(n.mapped_x) for n in sorted_notes) - 30.0
-        max_nx = max(float(n.mapped_x) for n in sorted_notes) + 30.0
-        roi_centers = [c for c in unique_centers if min_nx <= c[0] <= max_nx]
-        roi_centers.sort(key=lambda p: p[0])
-
+        # 1:1 정밀 최근접 최적 매칭: 각 선택된 음표가 자신과 가장 가까운 실제 타원 음표 머리 정중앙으로 완벽 대입
         matched_pairs: List[Tuple[NoteData, Tuple[float, float]]] = []
+        used_center_indices = set()
 
-        if len(roi_centers) == len(sorted_notes):
-            # 타원 개수와 음표 개수가 일치하면 X 순서대로 완벽 1:1 직결 매칭!
-            for note, center in zip(sorted_notes, roi_centers):
-                matched_pairs.append((note, center))
-        else:
-            # 거리 기반 매칭
-            target_centers = roi_centers if len(roi_centers) >= len(sorted_notes) else unique_centers
-            used_center_indices = set()
-            for note in sorted_notes:
-                nx = float(note.mapped_x)
-                ny = float(note.mapped_y)
+        for note in sorted_notes:
+            nx = float(note.mapped_x)
+            ny = float(note.mapped_y)
 
-                best_idx = None
-                min_dist = 110.0
+            best_idx = None
+            min_cost = 99999.0
 
-                for c_idx, (cx, cy) in enumerate(target_centers):
+            for c_idx, (cx, cy) in enumerate(unique_centers):
+                if c_idx in used_center_indices:
+                    continue
+                # 가로(박자) 거리 및 세로(음계) 가중치 종합 계산
+                cost = math.hypot(cx - nx, (cy - ny) * 1.8)
+                if cost < min_cost and abs(cx - nx) <= 90.0 and abs(cy - ny) <= 55.0:
+                    min_cost = cost
+                    best_idx = c_idx
+
+            # 1차 탐색 범위 내에서 못 찾은 경우 반경 확장(120px) 폴백
+            if best_idx is None:
+                for c_idx, (cx, cy) in enumerate(unique_centers):
                     if c_idx in used_center_indices:
                         continue
-                    dist = math.hypot(cx - nx, (cy - ny) * 1.3)
-                    if dist < min_dist:
-                        min_dist = dist
+                    cost = math.hypot(cx - nx, (cy - ny) * 1.4)
+                    if cost < min_cost and cost <= 120.0:
+                        min_cost = cost
                         best_idx = c_idx
 
-                if best_idx is not None:
-                    used_center_indices.add(best_idx)
-                    matched_pairs.append((note, target_centers[best_idx]))
+            if best_idx is not None:
+                used_center_indices.add(best_idx)
+                matched_pairs.append((note, unique_centers[best_idx]))
 
         aligned_count = 0
         for note, (cx, cy) in matched_pairs:
