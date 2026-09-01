@@ -599,10 +599,41 @@ class MainWindow(QMainWindow):
         self.status_bar.showMessage(f"동기화 페이지 이동: {page_index + 1} / {self.pdf_renderer.page_count}{m_range_str}")
 
     def run_auto_sync(self):
-        """사용자가 싱크 맞추기(Auto-Align) 버튼을 눌렀을 때 진행되는 100% 완전 자동 워크플로우"""
+        """사용자가 싱크 맞추기(Auto-Align) 버튼을 눌렀을 때 진행되는 100% 완전 자동 워크플로우 (선택 영역 지원)"""
         if not self.pdf_loaded or not self.xml_loaded or not self.score:
             QMessageBox.warning(self, "경고", "PDF 악보 파일과 MusicXML 파일을 먼저 불러와 주세요.")
             return
+
+        # 0. 마우스 드래그로 선택된 음표(InteractiveNoteItem)가 있는지 확인
+        selected_items = self.canvas_view.scene_obj.selectedItems()
+        selected_note_items = [item for item in selected_items if isinstance(item, InteractiveNoteItem)]
+        selected_notes = [item.note_data for item in selected_note_items]
+
+        if selected_notes:
+            # 선택된 영역의 음표들만 실제 악보 타원 정중앙에 1:1 대입 & 자석 스냅
+            self.undo_manager.push_snapshot(self.score, f"{len(selected_notes)}개 선택 음표 타원 중심 정밀 싱크 맞춤")
+            self.status_bar.showMessage(f"🎯 선택된 {len(selected_notes)}개 음표의 악보 타원 정중앙 좌표를 스캔하여 1:1 대입 중...")
+            self.setCursor(Qt.CursorShape.WaitCursor)
+            try:
+                aligned_cnt = self.auto_aligner.align_selected_notes_to_noteheads(
+                    selected_notes, self.current_page_idx, dpi=200
+                )
+                self.render_current_page()
+                self.setCursor(Qt.CursorShape.ArrowCursor)
+
+                msg = f"✨ 선택된 {aligned_cnt}개 음표를 실제 악보 음표 머리(타원) 정중앙에 100% 완벽 싱크 맞춤 완료!"
+                self.status_bar.showMessage(msg)
+                QMessageBox.information(
+                    self, "선택 영역 음표 타원 정밀 맞춤 완료",
+                    f"선택하신 영역의 음표 {aligned_cnt}개가 실제 악보 상의 검은색 타원 음표 머리 정중앙 좌표에 1:1 대입되었습니다!\n\n"
+                    f"• 검출된 타원 정중앙 서브픽셀 좌표(X, Y) 100% 대입 완료\n"
+                    f"• 오선지 줄/칸 자석 스냅 및 음계·건반 위치 정밀 갱신 완료"
+                )
+                return
+            except Exception as e:
+                self.setCursor(Qt.CursorShape.ArrowCursor)
+                QMessageBox.critical(self, "오류", f"선택 영역 음표 맞춤 중 오류가 발생했습니다:\n{str(e)}")
+                return
 
         self.undo_manager.push_snapshot(self.score, "전체 자동 싱크 맞추기")
 

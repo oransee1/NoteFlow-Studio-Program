@@ -14,6 +14,7 @@ def exception_hook(exctype, value, tb):
     except Exception:
         pass
 
+
 def main():
     # High-DPI 지원 및 Qt 디버그 로깅 억제 환경 변수
     os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
