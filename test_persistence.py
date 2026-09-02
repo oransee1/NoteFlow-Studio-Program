@@ -1,8 +1,8 @@
 import os
 import sys
 
-# Add workspace to path
-sys.path.append(r"c:\Users\DiCiA\PycharmProjects\NoteFlow Studio-Program")
+base_dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(base_dir)
 
 from core.musicxml_parser import MusicXMLParser
 from core.musicxml_exporter import MusicXMLExporter
@@ -12,7 +12,7 @@ def test_save_load():
     exporter = MusicXMLExporter()
     
     # Check if Save/01.musicxml exists
-    test_file = r"c:\Users\DiCiA\PycharmProjects\NoteFlow Studio-Program\Save\01.musicxml"
+    test_file = os.path.join(base_dir, "Save", "01.musicxml")
     if not os.path.exists(test_file):
         print(f"Test file not found: {test_file}")
         # Use whatever xml we have, or exit
@@ -37,7 +37,7 @@ def test_save_load():
     print(f"Modified Measure 1 bbox_x1 to: {m1_bbox_new}")
     
     # 4. Save to a temporary file
-    temp_out = r"c:\Users\DiCiA\PycharmProjects\NoteFlow Studio-Program\Save\test_output.musicxml"
+    temp_out = os.path.join(base_dir, "Save", "test_output.musicxml")
     exporter.export_musicxml(score1, temp_out)
     print(f"Exported to {temp_out}")
     

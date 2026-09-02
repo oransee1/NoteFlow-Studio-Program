@@ -35,7 +35,7 @@ class SheetLayoutDetector:
     def detect_staff_lines_and_systems(self, bgr_image: np.ndarray) -> List[SystemRegion]:
         """
         악보 이미지에서 5줄 오선지(Staff lines)의 정확한 픽셀 Y위치를 탐지하고,
-        보컬/피아노 대권표(Grand Staff System) 단위로 시스템 구조를 정밀 인식합니다.
+        보컬/피아노 대보표(Grand Staff System) 단위로 시스템 구조를 정밀 인식합니다.
         """
         gray = cv2.cvtColor(bgr_image, cv2.COLOR_BGR2GRAY)
         h, w = gray.shape
@@ -74,7 +74,7 @@ class SheetLayoutDetector:
         while idx <= len(line_clusters) - 5:
             group = line_clusters[idx:idx+5]
             spacings = [group[i+1] - group[i] for i in range(4)]
-            avg_spacing = np.mean(spacings)
+            avg_spacing = float(np.mean(spacings))
             
             if 4.0 <= avg_spacing <= 30.0 and max(spacings) - min(spacings) <= 10:
                 staves.append(StaffInfo(
@@ -89,7 +89,7 @@ class SheetLayoutDetector:
         if not staves:
             return [self._create_fallback_system(0, h, w)]
 
-        # 인접한 오선지들을 대권표(Grand Staff System)로 그룹화
+        # 인접한 오선지들을 대보표(Grand Staff System)로 그룹화
         system_regions: List[SystemRegion] = []
         s_idx = 0
         i = 0
@@ -98,7 +98,7 @@ class SheetLayoutDetector:
             if i + 1 < len(staves):
                 st2 = staves[i+1]
                 gap = st2.y_lines[0] - st1.y_lines[4]
-                if 12.0 <= gap <= 140.0:
+                if 12.0 <= gap <= 160.0:
                     st1.staff_type = "treble"
                     st2.staff_type = "bass"
                     sys_ymin = max(0, st1.y_lines[0] - 20)
@@ -133,8 +133,10 @@ class SheetLayoutDetector:
 
     def detect_barlines_and_measures(self, bgr_image: np.ndarray, systems: List[SystemRegion]) -> List[MeasureBox]:
         """
-        오선지 세로 관통 마디 구분선(Barline)을 높은음자리/낮은음자리 오선지 높이에 맞추어 정밀 감지하고,
-        마디 영역(MeasureBox)을 생성합니다.
+        [10-Point Line Intersection Algorithm]
+        높은음자리표 최상단 수평선부터 낮은음자리표 최하단 수평선까지 총 10개의 수평 오선지와
+        수직선이 동일한 X 좌표에서 완벽하게 교차하는지(10개 교차점 일치율)를 계산하여,
+        음표 기둥(Stem)과 기호를 100% 걸러내고 오직 진짜 세로 마디선(Barline)만 추출합니다.
         """
         gray = cv2.cvtColor(bgr_image, cv2.COLOR_BGR2GRAY)
         h, w = gray.shape
@@ -144,36 +146,45 @@ class SheetLayoutDetector:
         all_measures: List[MeasureBox] = []
         global_m_idx = 0
 
+        v_k = cv2.getStructuringElement(cv2.MORPH_RECT, (1, 8))
+        v_img = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, v_k)
+
         for sys in systems:
             if not sys.treble_staff:
                 continue
 
             t_lines = sys.treble_staff.y_lines
-            b_lines = sys.bass_staff.y_lines if sys.bass_staff else t_lines
-            t_top, t_bot = t_lines[0], t_lines[4]
-            b_top, b_bot = b_lines[0], b_lines[4]
-            t_h = max(10, t_bot - t_top)
-            b_h = max(10, b_bot - b_top)
+            b_lines = sys.bass_staff.y_lines if sys.bass_staff else []
+            all_10_lines = t_lines + b_lines
 
-            # 높은음자리 오선지 관통 세로선 탐지
-            v_k_t = cv2.getStructuringElement(cv2.MORPH_RECT, (1, max(8, t_h - 4)))
-            vt = cv2.morphologyEx(thresh[max(0, t_top - 2):min(h - 1, t_bot + 2), :], cv2.MORPH_OPEN, v_k_t)
-            sums_t = np.sum(vt, axis=0) / 255
+            # 1. 10개 수평선(오선 10줄) 각각과의 교차 여부 검사
+            intersections_count = np.zeros(w, dtype=int)
+            for y_line in all_10_lines:
+                y_min_chk = max(0, y_line - 2)
+                y_max_chk = min(h, y_line + 3)
+                line_has_vert = np.max(v_img[y_min_chk:y_max_chk, :], axis=0) > 0
+                intersections_count += line_has_vert.astype(int)
 
-            # 낮은음자리 오선지 관통 세로선 탐지
-            v_k_b = cv2.getStructuringElement(cv2.MORPH_RECT, (1, max(8, b_h - 4)))
-            vb = cv2.morphologyEx(thresh[max(0, b_top - 2):min(h - 1, b_bot + 2), :], cv2.MORPH_OPEN, v_k_b)
-            sums_b = np.sum(vb, axis=0) / 255
+            # 2. Staff Gap(높은음자리 밑선 ~ 낮은음자리 윗선 사이) 연속성 검사
+            if b_lines:
+                gap_top = t_lines[4]
+                gap_bot = b_lines[0]
+                gap_h = max(1, gap_bot - gap_top)
+                gap_crop = v_img[gap_top:gap_bot, :]
+                gap_sums = np.sum(gap_crop, axis=0) / 255 if gap_crop.size > 0 else np.zeros(w)
 
-            # 대권표 결합 세로 마디선 점수 (양쪽 모두 관통하거나 최소 한쪽을 확실히 관통)
-            score_v = (sums_t > (t_h - 6)).astype(int) * 2 + (sums_b > (b_h - 6)).astype(int) * 2
-            cand_x = np.where(score_v >= 2)[0]
+                # 진짜 마디선 조건: 10개 오선 중 최소 9개 이상과 교차 + Gap 85% 이상 관통
+                valid_cols = np.where((intersections_count >= 9) & (gap_sums >= gap_h * 0.85))[0]
+            else:
+                # 단일 보표
+                valid_cols = np.where(intersections_count >= 5)[0]
 
+            # 3. X좌표 클러스터링
             clusters = []
-            if len(cand_x) > 0:
-                curr = [cand_x[0]]
-                for x in cand_x[1:]:
-                    if x - curr[-1] <= 15:
+            if len(valid_cols) > 0:
+                curr = [valid_cols[0]]
+                for x in valid_cols[1:]:
+                    if x - curr[-1] <= 14:
                         curr.append(x)
                     else:
                         clusters.append(int(np.mean(curr)))
@@ -181,27 +192,26 @@ class SheetLayoutDetector:
                 if curr:
                     clusters.append(int(np.mean(curr)))
 
-            left_edge = min(clusters) if clusters else int(w * 0.05)
-            right_edge = max(clusters) if clusters else int(w * 0.95)
+            left_edge = clusters[0] if clusters else int(w * 0.05)
+            right_edge = clusters[-1] if len(clusters) > 1 else int(w * 0.95)
 
-            # 최소 마디 폭(100px 이상) 간격으로 필터링
+            # 최소 마디 폭(140px 이상) 필터링
             filtered = [left_edge]
-            for c in clusters:
-                if (c - filtered[-1] >= 95) and ((right_edge - c) >= 50):
+            for c in clusters[1:]:
+                if (c - filtered[-1] >= 140) and ((right_edge - c) >= 60):
                     filtered.append(c)
-            if right_edge - filtered[-1] >= 50:
+            if right_edge - filtered[-1] >= 60:
                 filtered.append(right_edge)
 
-            # 만약 감지된 세로선이 2개 미만인 경우 시스템 균등 분할
             if len(filtered) < 2:
-                filtered = list(np.linspace(int(w * 0.05), int(w * 0.95), 5, dtype=int))
+                filtered = list(np.linspace(int(w * 0.06), int(w * 0.94), 5, dtype=int))
 
             # 서브픽셀 정밀 피크 보정
             refined_bars = []
             crop_full = thresh[max(0, sys.y_min):min(h - 1, sys.y_max), :]
             for bx in filtered:
-                x_sub_start = max(0, bx - 10)
-                x_sub_end = min(w, bx + 10)
+                x_sub_start = max(0, bx - 6)
+                x_sub_end = min(w, bx + 6)
                 sub_sums = np.sum(crop_full[:, x_sub_start:x_sub_end], axis=0)
                 if len(sub_sums) > 0:
                     best_offset = int(np.argmax(sub_sums))

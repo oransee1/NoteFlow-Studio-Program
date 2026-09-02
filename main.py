@@ -15,8 +15,9 @@ def exception_hook(exctype, value, tb):
         pass
 
 def main():
-    # High-DPI 지원 환경 변수
+    # High-DPI 지원 및 Qt 디버그 로깅 억제 환경 변수
     os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
+    os.environ["QT_LOGGING_RULES"] = "*.debug=false;qt.qpa.*=false;qt.text.*=false"
     sys.excepthook = exception_hook
     
     app = QApplication(sys.argv)
