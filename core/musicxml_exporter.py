@@ -46,6 +46,11 @@ class MusicXMLExporter:
                     m.bbox_y1 = 200.0 + (idx // 3) * 250.0
                     m.bbox_y2 = m.bbox_y1 + 220.0
 
+        # 0-1. 내보내기 전 마디 내 동일 위치 중복 음표 최종 정제 (중복 쓰레기 점 원천 제거)
+        from core.musicxml_parser import MusicXMLParser
+        for m in score.measures:
+            MusicXMLParser.deduplicate_measure_notes(m)
+
         # 마디 맵핑 룩업 파서
         measure_map = {m.number: m for m in score.measures}
 
@@ -131,19 +136,23 @@ class MusicXMLExporter:
                     prev_m_data = m_data
 
                     # 3. 음표 default-x, default-y 보정 및 커스텀 메타데이터 주입
-                    note_nodes = m_elem.findall("note")
+                    note_nodes = list(m_elem.findall("note"))
+                    matched_note_ids = set()
                     
-                    # 3-1. 기존 XML 노드 업데이트 및 화면에서 삭제된 노드 제거
+                    # 3-1. 기존 XML 노드 업데이트 및 화면에서 삭제/중복된 노드 제거
                     for idx, n_elem in enumerate(note_nodes):
                         n_id = n_elem.get("nf-id")
                         matching_note = None
-                        if n_id:
+                        if n_id and n_id not in matched_note_ids:
                             matching_note = next((n for n in m_data.notes if n.id == n_id), None)
                         elif idx < len(m_data.notes):
-                            matching_note = m_data.notes[idx]
-                            n_elem.set("nf-id", matching_note.id)
+                            cand = m_data.notes[idx]
+                            if cand.id not in matched_note_ids:
+                                matching_note = cand
+                                n_elem.set("nf-id", matching_note.id)
                         
                         if matching_note:
+                            matched_note_ids.add(matching_note.id)
                             if matching_note.mapped_x is not None:
                                 # default-x는 마디 시작 x1 기준 상대 오프셋
                                 rel_x = (matching_note.mapped_x - (m_data.bbox_x1 or 0)) * (72.0 / 200.0)
@@ -343,6 +352,10 @@ class MusicXMLExporter:
         """
         NoteFlow Studio 비디오 생성 엔진에서 즉시 로드할 수 있는 싱크 JSON 데이터를 생성합니다.
         """
+        from core.musicxml_parser import MusicXMLParser
+        for m in score.measures:
+            MusicXMLParser.deduplicate_measure_notes(m)
+
         export_data: Dict[str, Any] = {
             "title": score.title,
             "composer": score.composer,
@@ -383,6 +396,10 @@ class MusicXMLExporter:
         """
         현재 작업 세션(PDF 경로, MusicXML 경로, 현재 페이지 및 보정된 모든 마디/음표 2D 좌표)을 세션 파일(.nfsp / .json)로 저장합니다.
         """
+        from core.musicxml_parser import MusicXMLParser
+        for m in score.measures:
+            MusicXMLParser.deduplicate_measure_notes(m)
+
         session_data = {
             "version": "1.0",
             "pdf_path": pdf_path,

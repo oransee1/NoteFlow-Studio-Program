@@ -16,8 +16,9 @@ def exception_hook(exctype, value, tb):
 
 
 def main():
-    # High-DPI 지원 및 Qt 디버그 로깅 억제 환경 변수
-    os.environ["QT_AUTO_SCREEN_SCALE_FACTOR"] = "1"
+    # High-DPI 및 소프트웨어 렌더러 안전 환경 변수 (GPU 드라이버 충돌 및 멈춤 방지)
+    os.environ["QT_ENABLE_HIGHDPI_SCALING"] = "1"
+    os.environ["QSG_RHI_PREFER_SOFTWARE_RENDERER"] = "1"
     os.environ["QT_LOGGING_RULES"] = "*.debug=false;qt.qpa.*=false;qt.text.*=false"
     sys.excepthook = exception_hook
     
@@ -51,10 +52,7 @@ def main():
     window = MainWindow()
     window.show()
 
-    exit_code = app.exec()
-    del window
-    del app
-    sys.exit(exit_code)
+    sys.exit(app.exec())
 
 if __name__ == "__main__":
     main()

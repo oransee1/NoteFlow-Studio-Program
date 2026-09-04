@@ -56,6 +56,119 @@ class MusicXMLParser:
     def __init__(self):
         self.parsed_score: Optional[ParsedScore] = None
 
+    @staticmethod
+    def is_duplicate_note(n1: NoteData, n2: NoteData) -> bool:
+        """
+        두 음표가 물리적으로 동일한 위치(쓰레기 중복 점)인지 판별합니다.
+        화음(동일 X축, 다른 Y축/피치)은 100% 정상 보존합니다.
+        """
+        # 1. 동일 고유 ID인 경우 무조건 중복
+        if n1.id and n2.id and n1.id == n2.id:
+            return True
+
+        # 2. 픽셀 좌표계(mapped_x, mapped_y)가 존재하는 경우
+        if n1.mapped_x is not None and n2.mapped_x is not None and n1.mapped_y is not None and n2.mapped_y is not None:
+            dx = abs(n1.mapped_x - n2.mapped_x)
+            dy = abs(n1.mapped_y - n2.mapped_y)
+            dist = math.hypot(dx, dy)
+
+            # 4.8px 이내 초밀착: 물리적으로 동일한 음표 머리(타원 직경 11~13px) 중심 영역 내의 중복 점
+            if dist <= 4.8 or (dx <= 2.5 and dy <= 4.8):
+                return True
+
+            # 동일 피치인데 6.0px 이내인 경우 (단일 음표의 다중 스냅 잔재)
+            if dist <= 6.0 and n1.pitch == n2.pitch:
+                return True
+
+            # 한쪽이 쉼표(Rest)이고 6.0px 이내 겹치는 경우
+            if dist <= 6.0 and (n1.is_rest or n2.is_rest or n1.pitch == "Rest" or n2.pitch == "Rest"):
+                return True
+
+        # 3. default-x, default-y 기준 (픽셀 좌표 매핑 전인 경우)
+        elif n1.default_x is not None and n2.default_x is not None and n1.default_y is not None and n2.default_y is not None:
+            scale = 200.0 / 72.0
+            dx = abs(n1.default_x - n2.default_x) * scale
+            dy = abs(n1.default_y - n2.default_y) * scale
+            dist = math.hypot(dx, dy)
+            if dist <= 4.8 or (dist <= 6.0 and n1.pitch == n2.pitch):
+                return True
+            if dist <= 6.0 and (n1.is_rest or n2.is_rest or n1.pitch == "Rest" or n2.pitch == "Rest"):
+                return True
+
+        # 4. 박자(beat_position) 및 오선/피치 기준
+        if abs(n1.beat_position - n2.beat_position) < 0.02 and n1.staff == n2.staff:
+            if n1.pitch == n2.pitch:
+                if n1.default_x is None or n2.default_x is None or abs(n1.default_x - n2.default_x) < 2.0:
+                    return True
+            elif (n1.is_rest or n1.pitch == "Rest") or (n2.is_rest or n2.pitch == "Rest"):
+                if n1.default_x is None or n2.default_x is None or abs(n1.default_x - n2.default_x) < 2.0:
+                    return True
+
+        return False
+
+    @classmethod
+    def deduplicate_measure_notes(cls, m_data: MeasureData, m_elem: Optional[ET.Element] = None) -> int:
+        """
+        마디 내의 중복 음표를 정리하여 동일 위치에 1개만 남기고 삭제합니다.
+        화음(다른 피치/Y좌표)은 안전하게 보존하며, 쉼표 위에 실제 음표가 겹칠 경우 실제 음표를 유지합니다.
+        m_elem(XML 엘리먼트)이 제공되면 XML 트리에서도 삭제된 음표 엘리먼트를 즉시 제거합니다.
+        제거된 중복 음표 개수를 반환합니다.
+        """
+        if not m_data or not m_data.notes:
+            return 0
+
+        measure_beats = float(getattr(m_data, 'beats', 4) or 4)
+        unique_notes: List[NoteData] = []
+        removed_ids = set()
+
+        for note in m_data.notes:
+            dup_idx = -1
+            for idx, u_note in enumerate(unique_notes):
+                if cls.is_duplicate_note(note, u_note):
+                    dup_idx = idx
+                    break
+
+            if dup_idx >= 0:
+                u_note = unique_notes[dup_idx]
+                u_is_rest = u_note.is_rest or u_note.pitch == "Rest"
+                n_is_rest = note.is_rest or note.pitch == "Rest"
+
+                # 1. 쉼표 vs 실제 음표: 실제 음표 우선 보존
+                if u_is_rest and not n_is_rest:
+                    removed_ids.add(u_note.id)
+                    unique_notes[dup_idx] = note
+                elif not u_is_rest and n_is_rest:
+                    removed_ids.add(note.id)
+                else:
+                    # 2. 둘 다 음표이거나 둘 다 쉼표인 경우:
+                    # 마디 박자 범위(measure_beats) 초과 여부 확인 (비정상 박자의 추가 점은 우선 삭제)
+                    u_out = u_note.beat_position > measure_beats + 0.05
+                    n_out = note.beat_position > measure_beats + 0.05
+                    if u_out and not n_out:
+                        removed_ids.add(u_note.id)
+                        unique_notes[dup_idx] = note
+                    else:
+                        removed_ids.add(note.id)
+            else:
+                unique_notes.append(note)
+
+        removed_count = len(m_data.notes) - len(unique_notes)
+        for i, n in enumerate(unique_notes):
+            n.note_index = i
+        m_data.notes = unique_notes
+
+        # XML 엘리먼트 동기화 (전달된 경우)
+        if m_elem is not None:
+            seen_ids = set()
+            for note_elem in list(m_elem.findall("note")):
+                nid = note_elem.get("nf-id")
+                if nid in removed_ids or nid in seen_ids:
+                    m_elem.remove(note_elem)
+                elif nid:
+                    seen_ids.add(nid)
+
+        return removed_count
+
     def parse(self, xml_path: str) -> ParsedScore:
         """MusicXML 파일 (.xml, .musicxml, .mxl)을 읽고 구조화된 데이터로 파싱합니다."""
         target_path = xml_path
@@ -282,6 +395,27 @@ class MusicXMLParser:
                     measure_obj.notes.append(note_obj)
                     note_idx += 1
 
+        # 마디별 동일 위치 중복 음표 정제 및 XML 트리 동기화 (불러올 때 동일 위치 음표 1개만 남기고 삭제)
+        for m in measures_dict.values():
+            self.deduplicate_measure_notes(m)
+
+        # XML 엘리먼트에서도 삭제된 음표 동기화 제거
+        for part in root.findall("part"):
+            for m_elem in part.findall("measure"):
+                try:
+                    mn = int(m_elem.get("number", "0"))
+                except ValueError:
+                    continue
+                if mn in measures_dict:
+                    valid_ids = {n.id for n in measures_dict[mn].notes}
+                    seen_ids = set()
+                    for n_elem in list(m_elem.findall("note")):
+                        nid = n_elem.get("nf-id")
+                        if nid and (nid not in valid_ids or nid in seen_ids):
+                            m_elem.remove(n_elem)
+                        elif nid:
+                            seen_ids.add(nid)
+
         sorted_measures = [measures_dict[k] for k in sorted(measures_dict.keys())]
 
         # 모든 음표가 staff == 1인 경우, 피치(Octave < 4) 기반으로 낮은음자리표(staff = 2) 자동 분할
@@ -470,6 +604,28 @@ class MusicXMLParser:
                     val = getattr(note, attr)
                     if val is not None and (math.isinf(val) or math.isnan(val)):
                         setattr(note, attr, 0.0)
+
+        # 5. 좌표 매핑 완료 후 동일 위치 중복 음표 재정제 (불러오기 시 쓰레기 잔재 완벽 제거)
+        for m in score.measures:
+            self.deduplicate_measure_notes(m)
+
+        if score.root_element is not None:
+            m_map = {m.number: {n.id for n in m.notes} for m in score.measures}
+            for part in score.root_element.findall("part"):
+                for m_elem in part.findall("measure"):
+                    try:
+                        mn = int(m_elem.get("number", "0"))
+                    except ValueError:
+                        continue
+                    if mn in m_map:
+                        valid_ids = m_map[mn]
+                        seen_ids = set()
+                        for n_elem in list(m_elem.findall("note")):
+                            nid = n_elem.get("nf-id")
+                            if nid and (nid not in valid_ids or nid in seen_ids):
+                                m_elem.remove(n_elem)
+                            elif nid:
+                                seen_ids.add(nid)
 
     def _extract_mxl(self, mxl_path: str) -> str:
         """MXL 파일 압축을 임시 해제하여 첫번째 xml 파일 경로를 반환합니다."""

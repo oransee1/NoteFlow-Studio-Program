@@ -27,6 +27,24 @@ class PDFRenderer:
         rect = page.rect
         return (rect.width, rect.height)
 
+    def render_page_bgr(self, page_index: int, dpi: int = 200) -> Tuple[np.ndarray, float]:
+        """
+        지정한 페이지를 OpenCV용 BGR NumPy 이미지로 렌더링합니다.
+        (QPixmap을 생성하지 않으므로 비-GUI 백그라운드 스레드에서 완전히 안전함)
+        """
+        if not self.doc or page_index < 0 or page_index >= len(self.doc):
+            raise ValueError(f"유효하지 않은 페이지 인덱스입니다: {page_index}")
+
+        page = self.doc[page_index]
+        zoom = dpi / 72.0  # 72 DPI가 기본 포인트 기준
+        mat = fitz.Matrix(zoom, zoom)
+        pix = page.get_pixmap(matrix=mat, alpha=False)
+
+        img_np = np.frombuffer(pix.samples, dtype=np.uint8).reshape((pix.height, pix.width, 3))
+        import cv2
+        img_bgr = cv2.cvtColor(img_np, cv2.COLOR_RGB2BGR)
+        return img_bgr, zoom
+
     def render_page_pixmap(self, page_index: int, dpi: int = 200) -> Tuple[QPixmap, np.ndarray, float]:
         """
         지정한 페이지를 QPixmap 및 OpenCV용 BGR NumPy 이미지로 렌더링합니다.

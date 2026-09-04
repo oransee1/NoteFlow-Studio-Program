@@ -176,6 +176,83 @@ class TestSheetSyncStudio(unittest.TestCase):
         self.assertAlmostEqual(score.measures[0].notes[0].beat_position, 0.0, delta=0.2)
         self.assertTrue(score.measures[0].notes[0].duration >= 1)
 
+    def test_duplicate_note_removal_and_chord_preservation(self):
+        """동일 위치 중복 음표가 불러올 때 1개만 남고 삭제되며, 화음(Chord)은 안전하게 보존되는지 검증"""
+        dup_xml_path = os.path.join(self.test_dir, "dup_test.musicxml")
+        root = ET.Element("score-partwise")
+        part = ET.SubElement(root, "part", id="P1")
+        m1 = ET.SubElement(part, "measure", number="1", width="300.0")
+        attr = ET.SubElement(m1, "attributes")
+        ET.SubElement(attr, "divisions").text = "1"
+        time_sig = ET.SubElement(attr, "time")
+        ET.SubElement(time_sig, "beats").text = "4"
+        ET.SubElement(time_sig, "beat-type").text = "4"
+
+        # 1. 정상 C4 음표 (X=100.0, Y=150.0)
+        n1 = ET.SubElement(m1, "note", {"nf-id": "note_c4_1", "nf-mapped-x": "100.0", "nf-mapped-y": "150.0", "default-x": "20.0", "default-y": "10.0"})
+        p1 = ET.SubElement(n1, "pitch")
+        ET.SubElement(p1, "step").text = "C"
+        ET.SubElement(p1, "octave").text = "4"
+        ET.SubElement(n1, "duration").text = "1"
+
+        # 2. C4와 동일 위치(X=100.5, Y=150.3)에 들어간 중복 쓰레기 C4 음표 (삭제되어야 함)
+        n2 = ET.SubElement(m1, "note", {"nf-id": "note_c4_dup", "nf-mapped-x": "100.5", "nf-mapped-y": "150.3", "default-x": "20.2", "default-y": "10.1"})
+        p2 = ET.SubElement(n2, "pitch")
+        ET.SubElement(p2, "step").text = "C"
+        ET.SubElement(p2, "octave").text = "4"
+        ET.SubElement(n2, "duration").text = "1"
+
+        # 3. 화음: 동일 X=100.0이지만 Y=120.0인 E4 음표 (화음이므로 반드시 보존되어야 함!)
+        n3 = ET.SubElement(m1, "note", {"nf-id": "note_e4_chord", "nf-mapped-x": "100.0", "nf-mapped-y": "120.0", "default-x": "20.0", "default-y": "30.0"})
+        p3 = ET.SubElement(n3, "pitch")
+        ET.SubElement(p3, "step").text = "E"
+        ET.SubElement(p3, "octave").text = "4"
+        ET.SubElement(n3, "duration").text = "1"
+
+        # 4. 동일 위치에 겹친 쉼표 (X=200.0, Y=140.0) vs 실제 G4 음표 (X=200.0, Y=140.0) -> 실제 음표가 남아야 함
+        n4_rest = ET.SubElement(m1, "note", {"nf-id": "note_rest", "nf-mapped-x": "200.0", "nf-mapped-y": "140.0"})
+        ET.SubElement(n4_rest, "rest")
+        ET.SubElement(n4_rest, "duration").text = "1"
+
+        n4_note = ET.SubElement(m1, "note", {"nf-id": "note_g4", "nf-mapped-x": "200.0", "nf-mapped-y": "140.0"})
+        p4 = ET.SubElement(n4_note, "pitch")
+        ET.SubElement(p4, "step").text = "G"
+        ET.SubElement(p4, "octave").text = "4"
+        ET.SubElement(n4_note, "duration").text = "1"
+
+        tree = ET.ElementTree(root)
+        tree.write(dup_xml_path, encoding="utf-8", xml_declaration=True)
+
+        try:
+            parser = MusicXMLParser()
+            score = parser.parse(dup_xml_path)
+
+            # 파싱 후 검증: 원래 5개였던 음표 중 중복 2개가 제거되고 3개만 남아 있어야 함
+            notes = score.measures[0].notes
+            self.assertEqual(len(notes), 3, f"중복 제거 후 3개 음표가 남아야 하나 {len(notes)}개 남음")
+
+            pitches = [n.pitch for n in notes]
+            self.assertIn("C4", pitches)
+            self.assertIn("E4", pitches)
+            self.assertIn("G4", pitches)
+            self.assertNotIn("Rest", pitches, "쉼표와 겹친 실제 음표가 보존되고 쉼표는 제거되어야 함")
+
+            # XML 트리에서도 중복 note 태그가 삭제되었는지 확인
+            xml_notes = score.root_element.findall(".//note")
+            self.assertEqual(len(xml_notes), 3)
+
+            # 저장 후 재로드해도 여전히 중복 0개인지 확인
+            out_xml = os.path.join(self.test_dir, "dup_out.musicxml")
+            exporter = MusicXMLExporter()
+            exporter.export_musicxml(score, out_xml)
+
+            reloaded_score = parser.parse(out_xml)
+            self.assertEqual(len(reloaded_score.measures[0].notes), 3)
+            if os.path.exists(out_xml): os.remove(out_xml)
+        finally:
+            if os.path.exists(dup_xml_path):
+                os.remove(dup_xml_path)
+
     def tearDown(self):
         if os.path.exists(self.sample_xml_path):
             os.remove(self.sample_xml_path)

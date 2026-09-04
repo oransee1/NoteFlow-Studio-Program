@@ -35,7 +35,7 @@ class PrecisionCalculator:
         page_systems_map: Dict[int, Tuple[np.ndarray, np.ndarray, List[SystemRegion]]] = {}
         for p_idx in range(page_count):
             if self.pdf_renderer.doc and p_idx < self.pdf_renderer.page_count:
-                _, bgr_img, _ = self.pdf_renderer.render_page_pixmap(p_idx, dpi=dpi)
+                bgr_img, _ = self.pdf_renderer.render_page_bgr(p_idx, dpi=dpi)
                 import cv2
                 gray = cv2.cvtColor(bgr_img, cv2.COLOR_BGR2GRAY)
                 _, thresh_full = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
@@ -106,7 +106,7 @@ class PrecisionCalculator:
         thresh_full = None
         systems = []
         if self.pdf_renderer.doc and p_idx < self.pdf_renderer.page_count:
-            _, bgr_img, _ = self.pdf_renderer.render_page_pixmap(p_idx, dpi=dpi)
+            bgr_img, _ = self.pdf_renderer.render_page_bgr(p_idx, dpi=dpi)
             import cv2
             gray = cv2.cvtColor(bgr_img, cv2.COLOR_BGR2GRAY)
             _, thresh_full = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)

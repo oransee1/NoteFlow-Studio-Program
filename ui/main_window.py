@@ -7,7 +7,7 @@ from PyQt6.QtWidgets import (
     QMainWindow, QWidget, QHBoxLayout, QVBoxLayout, QFileDialog, QMessageBox,
     QStatusBar, QToolBar, QSplitter, QFrame, QLabel, QPushButton, QDialog, QProgressBar, QApplication
 )
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QThread, pyqtSignal
 from PyQt6.QtGui import QIcon, QAction
 
 from core.pdf_renderer import PDFRenderer
@@ -84,7 +84,59 @@ class AutoAlignProgressDialog(QDialog):
         self.lbl_status.setText(message)
         elapsed = time.time() - self.start_time
         self.lbl_time.setText(f"⏱️ 경과 시간: {elapsed:.1f}초 | 1~n 페이지 0%~100% 정밀 동기화 진행 중")
-        QApplication.processEvents()
+
+
+class AutoAlignWorker(QThread):
+    """비동기 백그라운드 악보 자동 싱크 연산 스레드 (메인 GUI 멈춤 및 Windows Hang 원천 차단)"""
+    progress_changed = pyqtSignal(int, str)
+    finished = pyqtSignal(object, dict)
+    failed = pyqtSignal(str)
+
+    def __init__(self, auto_aligner: AutoAligner, score: ParsedScore, dpi: int = 200):
+        super().__init__()
+        self.auto_aligner = auto_aligner
+        self.score = score
+        self.dpi = dpi
+
+    def run(self):
+        try:
+            def on_progress(pct: int, msg: str):
+                self.progress_changed.emit(pct, msg)
+
+            result = self.auto_aligner.align_score(
+                self.score, dpi=self.dpi, progress_callback=on_progress
+            )
+            if isinstance(result, tuple):
+                res_score, stats = result
+            else:
+                res_score = result
+                stats = {"status": "success"}
+            self.finished.emit(res_score, stats)
+        except Exception as e:
+            import traceback
+            self.failed.emit(f"{str(e)}\n\n{traceback.format_exc()}")
+
+
+class PrecisionWorker(QThread):
+    """비동기 백그라운드 정밀 계산 연산 스레드 (GUI 블로킹 방지)"""
+    finished = pyqtSignal(dict)
+    failed = pyqtSignal(str)
+
+    def __init__(self, precision_calculator: PrecisionCalculator, score: ParsedScore, dpi: int = 200):
+        super().__init__()
+        self.precision_calculator = precision_calculator
+        self.score = score
+        self.dpi = dpi
+
+    def run(self):
+        try:
+            stats = self.precision_calculator.recalculate_score(
+                self.score, dpi=self.dpi, snap_notehead_pixels=True
+            )
+            self.finished.emit(stats)
+        except Exception as e:
+            import traceback
+            self.failed.emit(f"{str(e)}\n\n{traceback.format_exc()}")
 
 
 class MainWindow(QMainWindow):
@@ -101,6 +153,10 @@ class MainWindow(QMainWindow):
         self.precision_calculator = PrecisionCalculator(self.pdf_renderer, self.layout_detector)
         self.xml_exporter = MusicXMLExporter()
         self.undo_manager = UndoManager()
+
+        # Background threads
+        self.align_worker: Optional[AutoAlignWorker] = None
+        self.precision_worker: Optional[PrecisionWorker] = None
 
         # State
         self.score: Optional[ParsedScore] = None
@@ -453,7 +509,8 @@ class MainWindow(QMainWindow):
 
     def load_pdf_dialog(self):
         file_path, _ = QFileDialog.getOpenFileName(
-            self, "PDF 악보 파일 열기", "", "PDF Files (*.pdf)"
+            self, "PDF 악보 파일 열기", "", "PDF Files (*.pdf)",
+            options=QFileDialog.Option.DontUseNativeDialog
         )
         if file_path:
             self.load_pdf_file(file_path)
@@ -503,15 +560,6 @@ class MainWindow(QMainWindow):
                             else:
                                 next_m.bbox_x1 = cur_m.bbox_x2
 
-    def _on_mode_toggled(self, checked: bool):
-        if checked:
-            self.canvas_view.setDragMode(QGraphicsView.DragMode.RubberBandDrag)
-            self.btn_mode_toggle.setText("🔲 마퀴 드래그 선택 모드 (ON)")
-            self.status_bar.showMessage("마퀴 드래그 선택 모드: 마우스 왼쪽 버튼으로 원하는 음표 영역을 드래그하여 선택하세요.")
-        else:
-            self.canvas_view.setDragMode(QGraphicsView.DragMode.ScrollHandDrag)
-            self.btn_mode_toggle.setText("✋ 화면 이동(스크롤) 모드")
-            self.status_bar.showMessage("화면 이동 모드: 마우스 드래그로 악보 화면을 자유롭게 이동하세요.")
 
     def load_pdf_file(self, path: str):
         try:
@@ -521,26 +569,29 @@ class MainWindow(QMainWindow):
             self.current_page_idx = 0
             self.control_panel.lbl_pdf_info.setText(os.path.basename(path))
 
+            needs_sync = False
             if self.score:
                 has_custom = any(m.bbox_x1 is not None for m in self.score.measures)
-                if not has_custom:
-                    res = self.auto_aligner.align_score(self.score, dpi=200)
-                    self.score = res[0] if isinstance(res, tuple) else res
-                else:
-                    self.xml_parser.distribute_measures_across_pages(
-                        self.score, page_count, dpi=200, pdf_renderer=self.pdf_renderer
-                    )
+                self.xml_parser.distribute_measures_across_pages(
+                    self.score, page_count, dpi=200, pdf_renderer=self.pdf_renderer
+                )
                 self._sanitize_measure_overlaps(self.score)
+                if not has_custom:
+                    needs_sync = True
 
             self.control_panel.update_page_info(0, page_count, self.score)
             self.render_current_page()
             self.status_bar.showMessage(f"PDF 로드 완료 ({page_count} 페이지): {path}")
+
+            if needs_sync:
+                self.run_auto_sync()
         except Exception as e:
             QMessageBox.critical(self, "오류", f"PDF 파일을 읽는 도중 오류가 발생했습니다:\n{str(e)}")
 
     def load_xml_dialog(self):
         file_path, _ = QFileDialog.getOpenFileName(
-            self, "MusicXML 파일 열기", "", "MusicXML Files (*.xml *.musicxml *.mxl)"
+            self, "MusicXML 파일 열기", "", "MusicXML Files (*.xml *.musicxml *.mxl)",
+            options=QFileDialog.Option.DontUseNativeDialog
         )
         if file_path:
             self.load_xml_file(file_path)
@@ -552,23 +603,25 @@ class MainWindow(QMainWindow):
             self.current_xml_path = path
             self.control_panel.lbl_xml_info.setText(f"{os.path.basename(path)}\n({self.score.total_measures} 마디)")
 
+            needs_sync = False
             if self.pdf_loaded:
                 has_custom = any(m.bbox_x1 is not None for m in self.score.measures)
-                if not has_custom:
-                    res = self.auto_aligner.align_score(self.score, dpi=200)
-                    self.score = res[0] if isinstance(res, tuple) else res
-                else:
-                    self.xml_parser.distribute_measures_across_pages(
-                        self.score, self.pdf_renderer.page_count, dpi=200, pdf_renderer=self.pdf_renderer
-                    )
+                self.xml_parser.distribute_measures_across_pages(
+                    self.score, self.pdf_renderer.page_count, dpi=200, pdf_renderer=self.pdf_renderer
+                )
                 self._sanitize_measure_overlaps(self.score)
                 self.control_panel.update_page_info(self.current_page_idx, self.pdf_renderer.page_count, self.score)
+                if not has_custom:
+                    needs_sync = True
 
             self.status_bar.showMessage(f"MusicXML 로드 완료 ({self.score.total_measures} 마디): {self.score.title}")
             
             # PDF가 이미 들어와 있다면 초기 오버레이 렌더링
             if self.pdf_loaded and self.score:
                 self.render_current_page()
+
+            if needs_sync:
+                self.run_auto_sync()
         except Exception as e:
             QMessageBox.critical(self, "오류", f"MusicXML 파싱 중 오류가 발생했습니다:\n{str(e)}")
 
@@ -647,75 +700,74 @@ class MainWindow(QMainWindow):
 
         # 1. 프로세스 바(프로그레스 모달 다이얼로그) 표시
         prog_dlg = AutoAlignProgressDialog(self, "✨ NoteFlow 지능형 악보 자동 싱크 프로세스")
-        prog_dlg.show()
-        QApplication.processEvents()
-
         self.setCursor(Qt.CursorShape.WaitCursor)
-        self.status_bar.showMessage("악보 이미지를 스캔하여 음표 및 마디 좌표를 자동으로 매칭 중입니다...")
+        self.status_bar.showMessage("악보 이미지를 스캔하여 음표 및 마디 좌표를 비동기로 자동 매칭 중입니다...")
 
-        try:
-            # 2. 자동 싱크 연산 수행 (프로그레스 콜백 연동)
-            result = self.auto_aligner.align_score(self.score, dpi=200, progress_callback=prog_dlg.update_progress)
-            if isinstance(result, tuple):
-                self.score, stats = result
-            else:
-                self.score = result
-                stats = {"status": "success"}
+        # 2. 비동기 백그라운드 워커 스레드 시작 (메인 GUI 멈춤 방지)
+        self.align_worker = AutoAlignWorker(self.auto_aligner, self.score, dpi=200)
+        self.align_worker.progress_changed.connect(prog_dlg.update_progress)
 
+        def on_sync_finished(res_score, stats):
+            self.score = res_score
             self._sanitize_measure_overlaps(self.score)
             self.control_panel.update_page_info(self.current_page_idx, self.pdf_renderer.page_count, self.score)
             self.render_current_page()
-
-            prog_dlg.close()
             self.setCursor(Qt.CursorShape.ArrowCursor)
+            prog_dlg.accept()
+            self._show_sync_complete_dialog(stats)
 
-            # 3. 싱크맞추기 완성 상세 결과 메시지 창 표시
-            p_cnt = stats.get("total_pages", self.pdf_renderer.page_count)
-            s_cnt = stats.get("total_grand_systems", 25)
-            m_cnt = stats.get("total_measures", len(self.score.measures))
-            tn_cnt = stats.get("treble_notes", sum(1 for m in self.score.measures for n in m.notes if n.staff == 1 and not n.is_rest))
-            bn_cnt = stats.get("bass_notes", sum(1 for m in self.score.measures for n in m.notes if n.staff == 2 and not n.is_rest))
-            tr_cnt = stats.get("treble_rests", sum(1 for m in self.score.measures for n in m.notes if n.staff == 1 and n.is_rest))
-            br_cnt = stats.get("bass_rests", sum(1 for m in self.score.measures for n in m.notes if n.staff == 2 and n.is_rest))
-            r_cnt = tr_cnt + br_cnt
-            err_fixed = stats.get("validation_errors_fixed", 0)
-
-            self.status_bar.showMessage(f"✨ 자동 싱크 맵핑 100% 완성! (총 {m_cnt}마디, {tn_cnt+bn_cnt+r_cnt}개 음표·쉼표 동기화 완료)")
-
-            msg_box = QMessageBox(self)
-            msg_box.setWindowTitle("🎉 싱크맞추기 완성")
-            msg_box.setIcon(QMessageBox.Icon.Information)
-
-            html_report = f"""
-            <h3 style='color: #0284C7; margin-bottom: 6px;'>🎉 싱크맞추기 100% 완성!</h3>
-            <p style='color: #334155; margin-bottom: 10px; font-size: 13px;'>
-                PDF 악보 이미지와 MusicXML 음표·쉼표 데이터가 <b>100% 완벽하게 싱크 매핑</b>되었습니다.
-            </p>
-            <table border='1' cellspacing='0' cellpadding='6' style='border-collapse: collapse; width: 100%; border-color: #CBD5E1; font-size: 12px;'>
-              <tr style='background-color: #F1F5F9; color: #1E293B; font-weight: bold;'><th>항목</th><th>분석 및 매핑 결과</th></tr>
-              <tr><td>📄 악보 총 페이지 수</td><td><b>{p_cnt} 페이지</b></td></tr>
-              <tr><td>🎼 탐지된 대보표(Grand Staff) 수</td><td><b>{s_cnt} 개 시스템</b></td></tr>
-              <tr><td>📏 매핑된 총 마디(Measure) 수</td><td><b>{m_cnt} 마디</b></td></tr>
-              <tr><td>🟢 높은음자리표 (오른손) 음표</td><td><b>{tn_cnt} 개</b> (연두색 점 매핑 완료)</td></tr>
-              <tr><td>🔵 낮은음자리표 (왼손) 음표</td><td><b>{bn_cnt} 개</b> (파란색 점 매핑 완료)</td></tr>
-              <tr><td>🟡 쉼표 (Rest)</td><td><b>{r_cnt} 개</b> (높은음자리 {tr_cnt}개 / 낮은음자리 {br_cnt}개, 노란색 점)</td></tr>
-              <tr><td>🎹 음계(Pitch) 및 피아노 건반(MIDI)</td><td><b>100% 정확도 매칭 완료</b></td></tr>
-              <tr><td>🛡️ 자체 검사 (Self-Validation)</td><td><b>100% 무결성 통과 (오차 {err_fixed}건 완벽 정제)</b></td></tr>
-            </table>
-            <p style='color: #16A34A; margin-top: 10px; font-weight: bold;'>
-                모든 음표와 쉼표의 이미지 중심 좌표값(X, Y, 음계, 건반)이 100% 일치하도록 정렬되었습니다.
-            </p>
-            """
-            msg_box.setText(html_report)
-            msg_box.setStandardButtons(QMessageBox.StandardButton.Ok)
-            msg_box.exec()
-
-        except Exception as e:
-            prog_dlg.close()
+        def on_sync_failed(err_msg):
             self.setCursor(Qt.CursorShape.ArrowCursor)
-            import traceback
-            err_details = traceback.format_exc()
-            QMessageBox.critical(self, "오류", f"자동 싱크 연산 중 오류가 발생했습니다:\\n{str(e)}\\n\\n{err_details}")
+            prog_dlg.reject()
+            QMessageBox.critical(self, "오류", f"자동 싱크 연산 중 오류가 발생했습니다:\n{err_msg}")
+
+        self.align_worker.finished.connect(on_sync_finished)
+        self.align_worker.failed.connect(on_sync_failed)
+        self.align_worker.start()
+
+        prog_dlg.exec()
+
+    def _show_sync_complete_dialog(self, stats: dict):
+        p_cnt = stats.get("total_pages", self.pdf_renderer.page_count)
+        s_cnt = stats.get("total_grand_systems", 25)
+        m_cnt = stats.get("total_measures", len(self.score.measures) if self.score else 0)
+        tn_cnt = stats.get("treble_notes", sum(1 for m in self.score.measures for n in m.notes if n.staff == 1 and not n.is_rest) if self.score else 0)
+        bn_cnt = stats.get("bass_notes", sum(1 for m in self.score.measures for n in m.notes if n.staff == 2 and not n.is_rest) if self.score else 0)
+        tr_cnt = stats.get("treble_rests", sum(1 for m in self.score.measures for n in m.notes if n.staff == 1 and n.is_rest) if self.score else 0)
+        br_cnt = stats.get("bass_rests", sum(1 for m in self.score.measures for n in m.notes if n.staff == 2 and n.is_rest) if self.score else 0)
+        r_cnt = tr_cnt + br_cnt
+        err_fixed = stats.get("validation_errors_fixed", 0)
+
+        self.status_bar.showMessage(f"✨ 자동 싱크 맵핑 100% 완성! (총 {m_cnt}마디, {tn_cnt+bn_cnt+r_cnt}개 음표·쉼표 동기화 완료)")
+
+        msg_box = QMessageBox(self)
+        msg_box.setWindowTitle("🎉 싱크맞추기 완성")
+        msg_box.setIcon(QMessageBox.Icon.Information)
+
+        html_report = f"""
+        <h3 style='color: #0284C7; margin-bottom: 6px;'>🎉 싱크맞추기 100% 완성!</h3>
+        <p style='color: #334155; margin-bottom: 10px; font-size: 13px;'>
+            PDF 악보 이미지와 MusicXML 음표·쉼표 데이터가 <b>100% 완벽하게 싱크 매핑</b>되었습니다.
+        </p>
+        <table border='1' cellspacing='0' cellpadding='6' style='border-collapse: collapse; width: 100%; border-color: #CBD5E1; font-size: 12px;'>
+          <tr style='background-color: #F1F5F9; color: #1E293B; font-weight: bold;'><th>항목</th><th>분석 및 매핑 결과</th></tr>
+          <tr><td>📄 악보 총 페이지 수</td><td><b>{p_cnt} 페이지</b></td></tr>
+          <tr><td>🎼 탐지된 대보표(Grand Staff) 수</td><td><b>{s_cnt} 개 시스템</b></td></tr>
+          <tr><td>📏 매핑된 총 마디(Measure) 수</td><td><b>{m_cnt} 마디</b></td></tr>
+          <tr><td>🟢 높은음자리표 (오른손) 음표</td><td><b>{tn_cnt} 개</b> (연두색 점 매핑 완료)</td></tr>
+          <tr><td>🔵 낮은음자리표 (왼손) 음표</td><td><b>{bn_cnt} 개</b> (파란색 점 매핑 완료)</td></tr>
+          <tr><td>🟡 쉼표 (Rest)</td><td><b>{r_cnt} 개</b> (높은음자리 {tr_cnt}개 / 낮은음자리 {br_cnt}개, 노란색 점)</td></tr>
+          <tr><td>🎹 음계(Pitch) 및 피아노 건반(MIDI)</td><td><b>100% 정확도 매칭 완료</b></td></tr>
+          <tr><td>🛡️ 자체 검사 (Self-Validation)</td><td><b>100% 무결성 통과 (오차 {err_fixed}건 완벽 정제)</b></td></tr>
+        </table>
+        <p style='color: #16A34A; margin-top: 10px; font-weight: bold;'>
+            모든 음표와 쉼표의 이미지 중심 좌표값(X, Y, 음계, 건반)이 100% 일치하도록 정렬되었습니다.
+        </p>
+        """
+        msg_box.setText(html_report)
+        msg_box.setStandardButtons(QMessageBox.StandardButton.Ok)
+        msg_box.exec()
+
 
     def auto_align_single_measure(self, m_data: MeasureData):
         """마디 세로 영역을 맞추고 우클릭 시 해당 마디 내 음표 점들을 높은/낮은/쉼표 오선지에 자동 착 붙이고 미배치 음표를 새로 감지해 채워줍니다."""
@@ -754,42 +806,60 @@ class MainWindow(QMainWindow):
             return
 
         self.undo_manager.push_snapshot(self.score, "전체 악보 정밀 계산")
-        self.status_bar.showMessage("🔬 오선지 줄/칸 음계, 건반 위치, 박자 및 MusicXML 정밀 계산 중...")
+        self.status_bar.showMessage("🔬 오선지 줄/칸 음계, 건반 위치, 박자 및 MusicXML 비동기 정밀 계산 중...")
         self.setCursor(Qt.CursorShape.WaitCursor)
 
-        try:
-            stats = self.precision_calculator.recalculate_score(self.score, dpi=200, snap_notehead_pixels=True)
+        prog_dlg = AutoAlignProgressDialog(self, "🔬 NoteFlow 정밀 계산 프로세스")
+        prog_dlg.lbl_title.setText("🔬 오선지 줄/칸 음계 & 피아노 건반 정밀 계산")
+        prog_dlg.lbl_status.setText("음표 좌표 및 박자 데이터를 전역 정밀 재계산 중입니다...")
+        prog_dlg.progress_bar.setRange(0, 0)
+
+        self.precision_worker = PrecisionWorker(self.precision_calculator, self.score, dpi=200)
+
+        def on_prec_finished(stats):
             self.render_current_page()
             self.setCursor(Qt.CursorShape.ArrowCursor)
+            prog_dlg.accept()
+            self._show_precision_complete_dialog(stats)
 
-            m_cnt = stats.get("measures_count", 0)
-            n_cnt = stats.get("notes_count", 0)
-            t_cnt = stats.get("treble_count", 0)
-            b_cnt = stats.get("bass_count", 0)
-            r_cnt = stats.get("rests_count", 0)
-            p_chg = stats.get("pitch_changes", 0)
-
-            msg = f"✨ 정밀 계산 완료! (총 {m_cnt}마디, {n_cnt}개 음표/쉼표 동기화)"
-            self.status_bar.showMessage(msg)
-
-            summary_text = (
-                f"<h3>🔬 정밀 계산 및 MusicXML 동기화 완료</h3>"
-                f"<table border='1' cellspacing='0' cellpadding='5' style='border-collapse:collapse; width:100%;'>"
-                f"<tr style='background-color:#F1F5F9;'><th>항목</th><th>수치</th></tr>"
-                f"<tr><td>계산된 총 마디 수</td><td><b>{m_cnt} 마디</b></td></tr>"
-                f"<tr><td>계산된 총 음표/쉼표 수</td><td><b>{n_cnt} 개</b></td></tr>"
-                f"<tr><td>🟢 높은음자리표 (오른손) 음표</td><td><b>{t_cnt} 개</b></td></tr>"
-                f"<tr><td>🔵 낮은음자리표 (왼손) 음표</td><td><b>{b_cnt} 개</b></td></tr>"
-                f"<tr><td>🟡 쉼표 (Rest)</td><td><b>{r_cnt} 개</b></td></tr>"
-                f"<tr><td>🎵 위치 기반 음계(피치) 보정</td><td><b>{p_chg} 개 음표</b></td></tr>"
-                f"</table>"
-                f"<p style='color:#16A34A; margin-top:8px;'><b>모든 음표의 피아노 건반(MIDI 번호), 오선지 줄/칸 음계, 박자 및 MusicXML DOM 트리가 100% 완벽 동기화되었습니다.</b></p>"
-            )
-
-            QMessageBox.information(self, "정밀 계산 완료", summary_text)
-        except Exception as e:
+        def on_prec_failed(err_msg):
             self.setCursor(Qt.CursorShape.ArrowCursor)
-            QMessageBox.critical(self, "오류", f"정밀 계산 도중 오류가 발생했습니다:\n{str(e)}")
+            prog_dlg.reject()
+            QMessageBox.critical(self, "오류", f"정밀 계산 도중 오류가 발생했습니다:\n{err_msg}")
+
+        self.precision_worker.finished.connect(on_prec_finished)
+        self.precision_worker.failed.connect(on_prec_failed)
+        self.precision_worker.start()
+
+        prog_dlg.exec()
+
+    def _show_precision_complete_dialog(self, stats: dict):
+        m_cnt = stats.get("measures_count", 0)
+        n_cnt = stats.get("notes_count", 0)
+        t_cnt = stats.get("treble_count", 0)
+        b_cnt = stats.get("bass_count", 0)
+        r_cnt = stats.get("rests_count", 0)
+        p_chg = stats.get("pitch_changes", 0)
+
+        msg = f"✨ 정밀 계산 완료! (총 {m_cnt}마디, {n_cnt}개 음표/쉼표 동기화)"
+        self.status_bar.showMessage(msg)
+
+        summary_text = (
+            f"<h3>🔬 정밀 계산 및 MusicXML 동기화 완료</h3>"
+            f"<table border='1' cellspacing='0' cellpadding='5' style='border-collapse:collapse; width:100%;'>"
+            f"<tr style='background-color:#F1F5F9;'><th>항목</th><th>수치</th></tr>"
+            f"<tr><td>계산된 총 마디 수</td><td><b>{m_cnt} 마디</b></td></tr>"
+            f"<tr><td>계산된 총 음표/쉼표 수</td><td><b>{n_cnt} 개</b></td></tr>"
+            f"<tr><td>🟢 높은음자리표 (오른손) 음표</td><td><b>{t_cnt} 개</b></td></tr>"
+            f"<tr><td>🔵 낮은음자리표 (왼손) 음표</td><td><b>{b_cnt} 개</b></td></tr>"
+            f"<tr><td>🟡 쉼표 (Rest)</td><td><b>{r_cnt} 개</b></td></tr>"
+            f"<tr><td>🎵 위치 기반 음계(피치) 보정</td><td><b>{p_chg} 개 음표</b></td></tr>"
+            f"</table>"
+            f"<p style='color:#16A34A; margin-top:8px;'><b>모든 음표의 피아노 건반(MIDI 번호), 오선지 줄/칸 음계, 박자 및 MusicXML DOM 트리가 100% 완벽 동기화되었습니다.</b></p>"
+        )
+
+        QMessageBox.information(self, "정밀 계산 완료", summary_text)
+
 
     def run_page_precision_calculation(self):
         """현재 페이지에 속한 마디 및 음표들의 음계, 건반, 박자를 정밀 재계산합니다."""
@@ -1188,7 +1258,8 @@ class MainWindow(QMainWindow):
             return
 
         file_path, _ = QFileDialog.getSaveFileName(
-            self, "프로젝트 세션 저장", "sync_project.nfsp", "NoteFlow Project Files (*.nfsp *.json)"
+            self, "프로젝트 세션 저장", "sync_project.nfsp", "NoteFlow Project Files (*.nfsp *.json)",
+            options=QFileDialog.Option.DontUseNativeDialog
         )
         if file_path:
             try:
@@ -1205,7 +1276,8 @@ class MainWindow(QMainWindow):
     def load_project_dialog(self):
         """저장된 프로젝트 세션 파일(.nfsp)을 불러와 이전 작업 상태를 100% 복원합니다."""
         file_path, _ = QFileDialog.getOpenFileName(
-            self, "프로젝트 세션 불러오기", "", "NoteFlow Project Files (*.nfsp *.json)"
+            self, "프로젝트 세션 불러오기", "", "NoteFlow Project Files (*.nfsp *.json)",
+            options=QFileDialog.Option.DontUseNativeDialog
         )
         if file_path:
             self.load_project_file(file_path)
@@ -1254,6 +1326,25 @@ class MainWindow(QMainWindow):
                                 if "staff" in sn: note.staff = sn["staff"]
                                 if "pitch" in sn: note.pitch = sn["pitch"]
                                 if "is_rest" in sn: note.is_rest = sn["is_rest"]
+                        self.xml_parser.deduplicate_measure_notes(m)
+
+                if self.score.root_element is not None:
+                    m_map = {m.number: {n.id for n in m.notes} for m in self.score.measures}
+                    for part in self.score.root_element.findall("part"):
+                        for m_elem in part.findall("measure"):
+                            try:
+                                mn = int(m_elem.get("number", "0"))
+                            except ValueError:
+                                continue
+                            if mn in m_map:
+                                valid_ids = m_map[mn]
+                                seen_ids = set()
+                                for n_elem in list(m_elem.findall("note")):
+                                    nid = n_elem.get("nf-id")
+                                    if nid and (nid not in valid_ids or nid in seen_ids):
+                                        m_elem.remove(n_elem)
+                                    elif nid:
+                                        seen_ids.add(nid)
 
             page_count = self.pdf_renderer.page_count if self.pdf_loaded else 1
             self.change_page(min(saved_page, page_count - 1))
@@ -1269,7 +1360,8 @@ class MainWindow(QMainWindow):
 
         default_path = getattr(self, 'current_xml_path', '') or "synced_score.musicxml"
         file_path, _ = QFileDialog.getSaveFileName(
-            self, "완성된 MusicXML 저장", default_path, "MusicXML Files (*.musicxml *.xml)"
+            self, "완성된 MusicXML 저장", default_path, "MusicXML Files (*.musicxml *.xml)",
+            options=QFileDialog.Option.DontUseNativeDialog
         )
         if file_path:
             try:
@@ -1287,7 +1379,8 @@ class MainWindow(QMainWindow):
             return
 
         file_path, _ = QFileDialog.getSaveFileName(
-            self, "비디오 싱크 JSON 저장", "sync_data.json", "JSON Files (*.json)"
+            self, "비디오 싱크 JSON 저장", "sync_data.json", "JSON Files (*.json)",
+            options=QFileDialog.Option.DontUseNativeDialog
         )
         if file_path:
             try:
@@ -1300,10 +1393,35 @@ class MainWindow(QMainWindow):
     def _update_coords_status(self, x: float, y: float):
         self.status_bar.showMessage(f"페이지 {self.current_page_idx + 1} | 좌표: X={int(x)}, Y={int(y)}")
 
-    # Drag and Drop 지원
+    # Drag and Drop 완벽 지원 (OLE COM 교차 프로세스 프리즈 방지)
     def dragEnterEvent(self, event):
         if event.mimeData().hasUrls():
             event.acceptProposedAction()
+        else:
+            event.ignore()
+
+    def dragMoveEvent(self, event):
+        if event.mimeData().hasUrls():
+            event.acceptProposedAction()
+        else:
+            event.ignore()
+
+    def dropEvent(self, event):
+        if event.mimeData().hasUrls():
+            event.acceptProposedAction()
+            for url in event.mimeData().urls():
+                file_path = url.toLocalFile()
+                if not file_path or not os.path.exists(file_path):
+                    continue
+                ext = os.path.splitext(file_path)[1].lower()
+                if ext == ".pdf":
+                    self.load_pdf_file(file_path)
+                elif ext in (".xml", ".musicxml", ".mxl"):
+                    self.load_xml_file(file_path)
+                elif ext in (".nfsp", ".json"):
+                    self.load_project_file(file_path)
+        else:
+            event.ignore()
 
     def keyPressEvent(self, event):
         """키보드 Del 키로 선택 음표 삭제, 좌/우 방향키 및 PageUp/PageDown 키로 동기화 페이지 이동 지원"""
@@ -1322,3 +1440,20 @@ class MainWindow(QMainWindow):
             event.accept()
         else:
             super().keyPressEvent(event)
+
+    def closeEvent(self, event):
+        """윈도우 종료 시 실행 중인 비동기 워커 스레드 및 PDF 핸들 등 리소스를 안전하게 릴리즈합니다."""
+        if hasattr(self, 'align_worker') and self.align_worker and self.align_worker.isRunning():
+            self.align_worker.requestInterruption()
+            self.align_worker.quit()
+            self.align_worker.wait(1000)
+        if hasattr(self, 'precision_worker') and self.precision_worker and self.precision_worker.isRunning():
+            self.precision_worker.requestInterruption()
+            self.precision_worker.quit()
+            self.precision_worker.wait(1000)
+        try:
+            if hasattr(self, 'pdf_renderer') and self.pdf_renderer:
+                self.pdf_renderer.close()
+        except Exception:
+            pass
+        event.accept()

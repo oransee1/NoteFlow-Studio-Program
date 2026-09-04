@@ -56,7 +56,7 @@ class AutoAligner:
             sub_pct = 15 + int((p_idx / max(1, page_count)) * 25)
             update_progress(sub_pct, f"[{p_idx + 1}/{page_count} 페이지] 대보표 및 세로 마디선 스캔 중...")
 
-            _, bgr_img, _ = self.pdf_renderer.render_page_pixmap(p_idx, dpi=dpi)
+            bgr_img, _ = self.pdf_renderer.render_page_bgr(p_idx, dpi=dpi)
             systems = self.layout_detector.detect_staff_lines_and_systems(bgr_img)
             all_page_systems[p_idx] = systems
             total_grand_systems += len(systems)
@@ -191,6 +191,39 @@ class AutoAligner:
         update_progress(100, "✨ 싱크 맞추기 100% 완료!")
         return score, stats
 
+    def align_single_measure(self, m_data: MeasureData, dpi: int = 200) -> Tuple[int, int]:
+        """단일 마디(Measure) 영역 내의 음표들을 오선지에 맞추어 1:1 정렬합니다."""
+        if not self.pdf_renderer.doc or not m_data:
+            return 0, 0
+
+        p_idx = m_data.mapped_page if m_data.mapped_page is not None else 0
+        bgr_img, _ = self.pdf_renderer.render_page_bgr(p_idx, dpi=dpi)
+        if bgr_img is None:
+            return 0, 0
+
+        systems = self.layout_detector.detect_staff_lines_and_systems(bgr_img)
+        best_sys = systems[0] if systems else self.layout_detector._create_fallback_system(0, bgr_img.shape[0], bgr_img.shape[1])
+        if m_data.bbox_y1 is not None and m_data.bbox_y2 is not None:
+            m_mid_y = (m_data.bbox_y1 + m_data.bbox_y2) / 2.0
+            min_dist = float("inf")
+            for s in systems:
+                s_mid_y = (s.y_min + s.y_max) / 2.0
+                dist = abs(m_mid_y - s_mid_y)
+                if dist < min_dist:
+                    min_dist = dist
+                    best_sys = s
+
+        bx1 = m_data.bbox_x1 if m_data.bbox_x1 is not None else 100.0
+        by1 = m_data.bbox_y1 if m_data.bbox_y1 is not None else float(best_sys.y_min)
+        bx2 = m_data.bbox_x2 if m_data.bbox_x2 is not None else 400.0
+        by2 = m_data.bbox_y2 if m_data.bbox_y2 is not None else float(best_sys.y_max)
+
+        box = MeasureBox(m_data.number, best_sys.system_index, int(bx1), int(by1), int(bx2), int(by2), best_sys)
+        self._align_notes_to_staff(m_data, p_idx, box, bgr_img)
+        self.deduplicate_notes_in_measure(m_data)
+
+        return len(m_data.notes), 0
+
     def align_selected_notes_to_noteheads(self, notes: List[NoteData], page_idx: int, dpi: int = 200, score: Optional[ParsedScore] = None) -> int:
         """
         사용자가 마우스로 드래그 선택한 음표(동일한 크기의 타원) 영역을 정밀 분석하여:
@@ -207,7 +240,7 @@ class AutoAligner:
             return 0
 
         # 페이지 BGR 렌더링 및 시스템 정보 획득
-        _, bgr_img, _ = self.pdf_renderer.render_page_pixmap(page_idx, dpi=dpi)
+        bgr_img, _ = self.pdf_renderer.render_page_bgr(page_idx, dpi=dpi)
         if bgr_img is None:
             return 0
 
@@ -563,35 +596,11 @@ class AutoAligner:
 
     def deduplicate_notes_in_measure(self, m_data: MeasureData):
         """
-        마디 내에 완전히 동일한 좌표(3.5px 이내) 또는 동일 스태프/동일 피치의 2중 복제 점만 정제하고,
+        마디 내에 완전히 동일한 좌표 또는 동일 스태프/동일 피치의 2중 복제 점만 정제하고,
         화음(Chord: 동일 X, 다른 Y/Pitch)은 100% 정상 보존합니다.
         """
-        if not m_data or not m_data.notes:
-            return
-
-        unique_notes: List[NoteData] = []
-        for note in m_data.notes:
-            nx = note.mapped_x if note.mapped_x is not None else 0.0
-            ny = note.mapped_y if note.mapped_y is not None else 0.0
-
-            is_duplicate = False
-            for idx, u_note in enumerate(unique_notes):
-                ux = u_note.mapped_x if u_note.mapped_x is not None else 0.0
-                uy = u_note.mapped_y if u_note.mapped_y is not None else 0.0
-
-                dist = math.hypot(nx - ux, ny - uy)
-                if dist <= 3.5 or (abs(nx - ux) <= 6.0 and abs(ny - uy) <= 5.0 and note.staff == u_note.staff and note.pitch == u_note.pitch):
-                    is_duplicate = True
-                    if u_note.is_rest and not note.is_rest:
-                        unique_notes[idx] = note
-                    break
-
-            if not is_duplicate:
-                unique_notes.append(note)
-
-        for i, n in enumerate(unique_notes):
-            n.note_index = i
-        m_data.notes = unique_notes
+        from core.musicxml_parser import MusicXMLParser
+        MusicXMLParser.deduplicate_measure_notes(m_data)
 
     def _align_notes_to_staff(
         self,
